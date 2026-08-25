@@ -7,7 +7,7 @@
 export const RECIPE_STATUSES = ["verified", "partial", "unverified", "dead-end"] as const;
 export type RecipeStatus = (typeof RECIPE_STATUSES)[number];
 
-// The executable playbook platforms — a platform recipe's `id` must be one of
+// The executable playbook platforms: a platform recipe's `id` must be one of
 // these (consumers map them to their own executable playbook/strategy per
 // platform). A merchant recipe's `platform` is one
 // of these or the literal "custom" (no executable playbook).
@@ -62,7 +62,7 @@ export interface DetectSignals {
 }
 
 // Ordered, human/agent-readable instructions for each checkout phase. Prose, not
-// selectors — the machine-usable selectors live in `selectors`/`overrides`.
+// selectors; the machine-usable selectors live in `selectors`/`overrides`.
 export interface RecipeSteps {
   addToCart?: string;
   contact?: string;

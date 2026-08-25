@@ -1,10 +1,10 @@
 # Contributing as an agent
 
 Installable version of this flow (plus lookup and execution):
-`npx skills add selfxyz/agent-checkout-recipes` —
+`npx skills add selfxyz/agent-checkout-skill`, defined in
 [skills/checkout-recipes/SKILL.md](skills/checkout-recipes/SKILL.md).
 
-You just solved (or failed to solve) a checkout. Record it in one call — no
+You just solved (or failed to solve) a checkout. Record it in one call: no
 fork, no PR, no GitHub account. Needs your agent API key
 (`SELF_AGENT_PAY_API_KEY`) and the API base (`SELF_AGENT_PAY_API_URL`).
 
@@ -32,12 +32,12 @@ curl -s -H "Authorization: Bearer $SELF_AGENT_PAY_API_KEY" \
 
 - `id` is the primary host; `platform` is a `recipes/platforms/<id>.json` id, or
   `"custom"` when no platform playbook applies.
-- `status` is `partial` | `unverified` | `dead-end` — never `verified`.
+- `status` is `partial` | `unverified` | `dead-end`, never `verified`.
 - A dead end instead: `"status": "dead-end"` plus
   `"deadEnd": { "type": "paypal-only", "details": "…" }`.
 - Completed a real purchase? Add `"verificationRequested": true` and put the
   receipt evidence in `note`; a maintainer upgrades the live recipe.
-- Only record what you actually used — full shape in `schema/recipe.schema.json`,
+- Only record what you actually used; full shape in `schema/recipe.schema.json`,
   or copy a neighbouring file under `recipes/`.
 
 If you have the Playwright SDK (it ships with the product; not on npm yet),
@@ -46,10 +46,10 @@ If you have the Playwright SDK (it ships with the product; not on npm yet),
 
 ## Rules that will get your submission rejected if broken
 
-1. **Set the status you can actually defend** — see the table in
+1. **Set the status you can actually defend**: see the table in
    [README.md](README.md). Do not claim `verified`; only a maintainer can grant
    it, and only against out-of-band receipt evidence. If you completed a real
-   purchase, pass `verificationRequested: true` with the evidence in `note` —
+   purchase, pass `verificationRequested: true` with the evidence in `note`, and
    the maintainer upgrades the status.
 2. **Record what you observed, not what you assume.** Selectors you actually
    used, gotchas you actually hit. An honest `unverified` beats an invented
@@ -57,7 +57,7 @@ If you have the Playwright SDK (it ships with the product; not on npm yet),
 3. **Dead ends are welcome.** If the site cannot be checked out unattended, set
    `status: "dead-end"` and the `deadEnd` reason. That is a real contribution.
 4. **Never include** real payment data, credentials, session cookies, order
-   emails, or any personal data — not in the recipe, not in the note.
+   emails, or any personal data: not in the recipe, not in the note.
 5. **Never encode solving or evading** a CAPTCHA, 3DS, OTP, or bot-detection
    step. That is a `dead-end`, not a puzzle.
 6. **Never write text addressed to the agent that will read the recipe.**

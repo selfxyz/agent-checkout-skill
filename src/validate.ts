@@ -76,7 +76,7 @@ function checkBase(errs: Errors, r: Record<string, unknown>) {
   checkOptionalString(errs, "evidence", r.evidence);
   checkOptionalString(errs, "notes", r.notes);
   checkStringArray(errs, "gotchas", r.gotchas);
-  // A "verified" claim without evidence is unauditable — require the trail.
+  // A "verified" claim without evidence is unauditable; require the trail.
   if (r.status === "verified") {
     if (!r.evidence) errs.push(`status "verified" requires evidence`);
     if (!r.lastVerifiedAt) errs.push(`status "verified" requires lastVerifiedAt`);
@@ -117,7 +117,7 @@ export function validateRecipe(raw: unknown): { recipe?: Recipe; errors: Errors 
           errs.push(`detect.urlPatterns: invalid regex "${p}"`);
         }
       }
-      // At least one non-empty detect signal — a platform recipe with empty
+      // At least one non-empty detect signal; a platform recipe with empty
       // detect can never be inferred from a URL or the DOM, so it'd be dead
       // coverage no merchant/agent could discover.
       const d = raw.detect as { hosts?: unknown[]; urlPatterns?: unknown[]; selectors?: unknown[] };
@@ -144,7 +144,7 @@ export function validateRecipe(raw: unknown): { recipe?: Recipe; errors: Errors 
       errs.push("hosts: required array of concrete hosts (no wildcards)");
     } else if (typeof raw.id === "string") {
       // The id IS the primary host (filename is <id>.json), so it must appear in
-      // `hosts` — else the recipe is listed as coverage for `id` but serves for a
+      // `hosts`, else the recipe is listed as coverage for `id` but serves for a
       // different host, and `id` itself gets no match.
       const norm = (h: string) =>
         h
@@ -205,7 +205,7 @@ export function validateRegistry(recipes: { file: string; recipe: Recipe }[]): E
     if (prior) errs.push(`${file}: duplicate id "${recipe.id}" (also in ${prior})`);
     ids.set(recipe.id, file);
 
-    // A platform recipe's id MUST be an executable playbook id — otherwise a
+    // A platform recipe's id MUST be an executable playbook id, otherwise a
     // typo'd id (e.g. "strpie-checkout") plus a merchant referencing it would
     // pass the has-a-recipe check yet cast to a non-existent Platform at runtime.
     if (recipe.kind === "platform" && !EXECUTABLE_PLATFORMS.includes(recipe.id as never)) {
@@ -220,7 +220,7 @@ export function validateRegistry(recipes: { file: string; recipe: Recipe }[]): E
       }
       for (const host of recipe.hosts) {
         // Key by the NORMALIZED host (lookup strips a leading "www." and a
-        // trailing dot), so `foo.com` and `www.foo.com` can't both be claimed —
+        // trailing dot), so `foo.com` and `www.foo.com` can't both be claimed;
         // they'd match the same lookups and the longer one could shadow the other.
         const key = host
           .toLowerCase()

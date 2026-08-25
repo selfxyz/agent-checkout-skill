@@ -4,7 +4,7 @@ Agents: [AGENTS.md](AGENTS.md) has the same rules as a copy-pasteable flow.
 
 **This repo is a read-only export of the live registry.** Recipes are
 contributed through the API with an agent API key, screened automatically, and
-exported back here daily — so please do not open recipe PRs; they will be
+exported back here daily, so please do not open recipe PRs; they will be
 closed with a pointer to this page. Fixes to the schema, tooling or docs are
 welcome as PRs.
 
@@ -15,30 +15,30 @@ welcome as PRs.
    per-phase steps, selector overrides, gotchas. Write steps as instructions an
    agent can follow, not marketing prose.
 3. **Be honest about status.**
-   - `unverified` — derived from the platform's known structure; not yet run.
-   - `partial` — you drove a real checkout to a filled card form (no purchase).
-   - `verified` — a real purchase, proven **out-of-band** (merchant email
-     receipt or card statement — a confirmation page is not proof). Requires
+   - `unverified`: derived from the platform's known structure; not yet run.
+   - `partial`: you drove a real checkout to a filled card form (no purchase).
+   - `verified`: a real purchase, proven **out-of-band** (merchant email
+     receipt or card statement; a confirmation page is not proof). Requires
      `evidence` and `lastVerifiedAt`. **Maintainer-gated:** contributors submit
      `unverified` / `partial` / `dead-end`; if a real purchase completed, pass
-     `verificationRequested: true` with the receipt evidence in `note` — the
+     `verificationRequested: true` with the receipt evidence in `note`; the
      recipe goes live as submitted and a maintainer upgrades it to `verified`.
-   - `dead-end` — unattended checkout is impossible; say why in `deadEnd`
+   - `dead-end`: unattended checkout is impossible; say why in `deadEnd`
      (`turnstile`, `paypal-only`, `login-wall`, `3ds`, `stripe-config`,
      `automation-blocked`, `captcha`).
 4. **Validate locally (optional):** `bun install && bun run validate` catches
    schema mistakes in seconds.
 5. **Submit.** `POST $SELF_AGENT_PAY_API_URL/v1/recipes` with the recipe as the
    JSON body (or `{ recipe, note }`) and `Authorization: Bearer <api key>`, then
-   `GET /v1/recipes/submissions/<id>` — see [AGENTS.md](AGENTS.md) for a
+   `GET /v1/recipes/submissions/<id>`; see [AGENTS.md](AGENTS.md) for a
    copy-pasteable call. With the Playwright SDK (it ships with the product; not
    on npm yet) `submitRecipe(recipe, { note })` and `recipeSubmission(id)` do the
    same, as does the `submit_checkout_recipe` MCP tool. Outcomes: `approved` (live),
    `merged` (combined with an existing recipe for the same store), `rejected`
-   (the verdict names the rule), `needs_human` (a maintainer decides — used for
+   (the verdict names the rule), `needs_human` (a maintainer decides; used for
    verification claims, edits to a stored recipe that drop data, platform
    recipes, and anything the screening could not settle). If it is still
-   `pending` after your wait, poll — do not resubmit. A clean
+   `pending` after your wait, poll; do not resubmit. A clean
    recipe is live within about a minute and appears here on the next export.
 
 ## What a recipe may not contain
@@ -46,17 +46,17 @@ welcome as PRs.
 Recipes are read and acted on by autonomous agents, so recipe text is an
 instruction channel. These are rejected:
 
-- **Instructions aimed at the reading agent** — anything telling it to ignore
+- **Instructions aimed at the reading agent**: anything telling it to ignore
   its rules, visit an unrelated URL, send data anywhere, reveal card or personal
   data, or do something other than complete this merchant's checkout. Selectors
   or URLs pointing at domains unrelated to the recipe's own hosts count too.
-- **Challenge solving or evasion** — CAPTCHA, 3DS/OTP, or bot detection. Those
+- **Challenge solving or evasion**: CAPTCHA, 3DS/OTP, or bot detection. Those
   are `dead-end` by design; record them, never defeat them.
 - **Real payment data, credentials, session cookies, order emails, or anyone's
   personal data**, anywhere in the recipe or the note.
-- **Spam or junk** — promotional copy, a "merchant" that is not a real store, or
+- **Spam or junk**: promotional copy, a "merchant" that is not a real store, or
   content unrelated to completing a checkout.
 - **`verified` status**, which is maintainer-gated (see step 3).
 
-A store that is already here under another host is not rejected — the
+A store that is already here under another host is not rejected; the
 submission is combined with the existing recipe.

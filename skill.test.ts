@@ -1,4 +1,4 @@
-// The skill is the front door of this repo — keep it honest. These tests pin
+// The skill is the front door of this repo; keep it honest. These tests pin
 // the SKILL.md to the registry it describes: real frontmatter, real endpoints,
 // real platform ids, and claims that match the schema.
 import { describe, expect, test } from "bun:test";
@@ -25,7 +25,7 @@ describe("skill", () => {
     expect(fm.name).toBe("checkout-recipes");
     const description = fm.description ?? "";
     expect(description.length).toBeGreaterThan(80);
-    // The description is what triggers auto-invocation — it must say when.
+    // The description is what triggers auto-invocation; it must say when.
     expect(description.toLowerCase()).toContain("checkout");
     expect(description.toLowerCase()).toContain("buy");
   });
@@ -53,7 +53,7 @@ describe("skill", () => {
   });
 
   test("only lets contributors claim statuses the guard accepts", () => {
-    // The skill must never teach an agent to claim `verified` — that is
+    // The skill must never teach an agent to claim `verified`; that is
     // maintainer-gated behind verificationRequested.
     const claim = skill.match(/`status` you may claim: (.*)/)?.[1] ?? "";
     expect(claim).toContain("partial");
@@ -64,7 +64,7 @@ describe("skill", () => {
 
   test("its raw-GitHub fallback template resolves to real files", () => {
     const template = skill.match(
-      /raw\.githubusercontent\.com\/selfxyz\/agent-checkout-recipes\/main\/(recipes\/merchants\/)<host>\.json/,
+      /raw\.githubusercontent\.com\/selfxyz\/agent-checkout-skill\/main\/(recipes\/merchants\/)<host>\.json/,
     );
     expect(template).toBeTruthy();
     // Substituting any registered primary host into the template must hit a
@@ -73,7 +73,7 @@ describe("skill", () => {
       const host = f.replace(/\.json$/, "");
       expect(existsSync(join(import.meta.dir, template![1]!, `${host}.json`))).toBe(true);
     }
-    const schema = skill.match(/raw\.githubusercontent\.com\/selfxyz\/agent-checkout-recipes\/main\/(schema\/recipe\.schema\.json)/);
+    const schema = skill.match(/raw\.githubusercontent\.com\/selfxyz\/agent-checkout-skill\/main\/(schema\/recipe\.schema\.json)/);
     expect(schema).toBeTruthy();
     expect(existsSync(join(import.meta.dir, schema![1]!))).toBe(true);
   });
@@ -89,7 +89,7 @@ describe("skill", () => {
   });
 });
 
-// Live smoke — only with LIVE=1 so CI stays hermetic. Proves the URL the skill
+// Live smoke: only with LIVE=1 so CI stays hermetic. Proves the URL the skill
 // hardcodes actually answers with the documented shape.
 describe.if(!!process.env.LIVE)("live API", () => {
   const base = skill.match(/https:\/\/[a-z0-9-]+\.convex\.site/)![0];

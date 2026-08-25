@@ -1,6 +1,6 @@
 // Build the distributable artifacts from the recipe files:
-//   dist/registry.json — the full RegistryBundle (what downstreams consume)
-//   dist/RECIPES.md    — one aggregated, agent-readable document of every recipe
+//   dist/registry.json: the full RegistryBundle (what downstreams consume)
+//   dist/RECIPES.md:    one aggregated, agent-readable document of every recipe
 // Usage: bun run scripts/build.ts
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,7 +20,7 @@ writeFileSync(join(ROOT, "dist/registry.json"), `${JSON.stringify(bundle, null, 
 
 function mdPlatform(p: PlatformRecipe): string {
   const lines = [
-    `### ${p.name} (\`${p.id}\`) — ${p.status}`,
+    `### ${p.name} (\`${p.id}\`): ${p.status}`,
     "",
     ...(p.notes ? [p.notes, ""] : []),
     `- **Detect:** ${[
@@ -49,7 +49,7 @@ function mdPlatform(p: PlatformRecipe): string {
 
 function mdMerchant(m: MerchantRecipe): string {
   const lines = [
-    `### ${m.id} — ${m.status}${m.platform !== "custom" ? ` (platform: ${m.platform})` : ""}`,
+    `### ${m.id}: ${m.status}${m.platform !== "custom" ? ` (platform: ${m.platform})` : ""}`,
   ];
   if (m.deadEnd) lines.push(`- **DEAD-END (${m.deadEnd.type}):** ${m.deadEnd.details ?? ""}`);
   if (m.evidence) lines.push(`- **Evidence:** ${m.evidence}`);
@@ -68,12 +68,12 @@ function mdMerchant(m: MerchantRecipe): string {
 const md = [
   "# Checkout recipes (aggregated)",
   "",
-  `_Generated from the registry (v${version}) — do not edit; edit the JSON files under recipes/ instead._`,
+  `_Generated from the registry (v${version}). Do not edit; edit the JSON files under recipes/ instead._`,
   "",
   "Every value you fill is an Agent Vault **mock token**; the proxy substitutes",
   "the real value. Fill order on card steps: everything else, then the card-number",
   "token, then the CVV token **immediately** after. On any detected challenge",
-  "(3DS/OTP/CAPTCHA), stop and hand off to the human — never solve or guess.",
+  "(3DS/OTP/CAPTCHA), stop and hand off to the human; never solve or guess.",
   "",
   "## Platforms",
   "",

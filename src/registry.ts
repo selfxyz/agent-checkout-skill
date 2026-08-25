@@ -13,7 +13,7 @@ export interface LoadedRecipe {
 }
 
 // Read every recipe under recipes/, validating each file and the registry-wide
-// invariants. Throws with a readable list of problems on any failure — loaders
+// invariants. Throws with a readable list of problems on any failure, so loaders
 // must never hand out a half-valid registry.
 export function loadRecipes(root = ROOT): LoadedRecipe[] {
   const out: LoadedRecipe[] = [];
@@ -81,7 +81,7 @@ export function hostMatches(host: string, pattern: string): boolean {
 }
 
 // Find the recipes that apply to a page URL: the merchant recipe whose host
-// matches (most specific wins), plus the platform recipe it names — or, with no
+// matches (most specific wins), plus the platform recipe it names, or, with no
 // merchant match, any platform recipe whose detect.hosts/urlPatterns match.
 export function recipesForUrl(
   bundle: RegistryBundle,
@@ -105,7 +105,7 @@ export function recipesForUrl(
     merchant?.platform && merchant.platform !== "custom" ? merchant.platform : undefined;
   let platform = platformId ? bundle.platforms.find((p) => p.id === platformId) : undefined;
 
-  // Infer a platform from URL fingerprints only when NO merchant matched — a
+  // Infer a platform from URL fingerprints only when NO merchant matched: a
   // matched merchant (including a "custom" one) is authoritative for its host.
   if (!platform && !merchant) {
     platform = bundle.platforms.find(

@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "store.steampowered.com",
+  "kind": "merchant",
+  "hosts": [
+    "store.steampowered.com",
+    "checkout.steampowered.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "cardSurface": "direct-inputs",
+  "deadEnd": {
+    "detail": "Order total is not readable before card entry. Steam splits checkout into (1) a payment-info page that collects card + billing and (2) a separate review+purchase step that is the FIRST place the order total is rendered. The total is therefore absent from the page where the card must be filled: on the payment page, ':has-text(\"Order summary\")', ':has-text(\"Order Total\")' and ':has-text(\"Total due\")' all return 0. This deadlocks any control that must read an order total in text before resolving a card - the total is gated behind the card, and the card is gated behind the total. fill_checkout is refused with 'the order total for this purchase could not be established'. NOT fixable by selector overrides or retries: the figure genuinely is not on that page. Note the payment page itself is otherwise fully automatable (direct inputs, no iframes) - only the total-before-card requirement is unsatisfiable. Unattended checkout is impossible here; hand back to the account owner to complete the review+purchase step.",
+    "type": "automation-blocked"
+  },
+  "exampleProductUrl": "https://store.steampowered.com/app/3287520/NINJA_GAIDEN_2_Black/",
+  "gotchas": [
+    "LOGIN SUBMIT TRAP (high cost): the login page contains TWO submit buttons - the login form's and the site-wide header search. 'button[type=\"submit\"]:visible' matches 2 and resolves to the SEARCH button, which silently navigates to /search/ and discards the filled credentials. The click tool reports success, no error text appears, and no login is submitted - so no Steam Guard prompt is ever generated and the failure looks like an unresponsive authenticator. Verify with count before clicking; prefer press Enter on the password field.",
+    "Login form structure is NOT stable across loads: 'form:has(input[type=\"password\"]) input[type=\"text\"]:visible' returned 1 on some loads and 0 on others. Select the username field by excluding the header search input instead of by form containment.",
+    "STEAM GUARD IS DEVICE APPROVAL, NOT A CODE: sign-in presents 'confirm your sign in' with NO code input (':has-text(\"code\")' = 0) and must be approved in the Steam Mobile App. detect_challenge correctly returns {detected:false} because this is not OTP/3DS/CAPTCHA. A stored tokens.totp CANNOT satisfy it - there is no field to fill. request_challenge_handoff is also refused here ('No challenge is present on this page'), so there is no way to stream the page to the owner; the approval must be requested from the user out of band.",
+    "Expiry inputs exist in the DOM but are NOT visible until the card number is entered ('input[id*=\"expir\"]:visible' = 0 initially) - the form reveals them progressively.",
+    "Cart page renders a wallet balance (0.00) near the totals area; a total-reader can latch onto it as a false candidate. It carries no currency-symbol prefix in the same text node, so matching on symbol-plus-amount will miss it, and other figures on the page (release dates, review counts) also match comma-grouped number patterns.",
+    "Store currency and price follow the ACCOUNT's registered region, not the browsing IP - a logged-out product page may quote USD while the signed-in cart and checkout use another currency entirely. Do not quote a logged-out price as the amount that will be charged.",
+    "'Continue to payment' matches 2 visible buttons (responsive duplicates of the same action) - use nth-match to stay deterministic.",
+    "Product pages carry many Add to Cart controls (10 observed) across editions and bundles. Isolate the base game by excluding blocks containing 'Bundle' before clicking."
+  ],
+  "overrides": {
+    "addToCart": ".game_area_purchase_game:not(:has-text(\"Bundle\")) a:has-text(\"Add to Cart\")",
+    "ageGate": "Mature titles redirect to /agecheck/app/<appid>/. Fill select#ageDay, select#ageMonth (option label e.g. 'January'), select#ageYear, then click #view_product_page_btn.",
+    "billing": "#first_name, #last_name, #billing_address, #billing_city, #billing_postal_code, #billing_state_select, #billing_country",
+    "cardNumber": "#card_number",
+    "cardSecurityCode": "input[id*=\"security\"]:visible",
+    "continueToPayment": ":nth-match(button:has-text(\"Continue to payment\"):visible, 1)",
+    "loginPassword": "input[type=\"password\"]:visible",
+    "loginSubmit": "DO NOT CLICK a submit button. Use press Enter on input[type=\"password\"]:visible instead - see gotchas.",
+    "loginUsername": "input[type=\"text\"]:visible:not([id*=\"search\"]):not([name*=\"search\"]):not([placeholder*=\"earch\"])"
+  }
+}

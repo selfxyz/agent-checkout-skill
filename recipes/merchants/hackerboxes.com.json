@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hackerboxes.com",
+  "kind": "merchant",
+  "hosts": [
+    "hackerboxes.com"
+  ],
+  "platform": "shopify",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Observed 2026-08-25. The store is unambiguously Shopify (serves meta[name=shopify-checkout-api-token] plus cdn.shopify.com references, and /products.json responds), but the cart permalink GET /cart/<variantId>:1 redirects to hackerboxes.com/account/login instead of to /checkouts/. Tested with variant 43712574980185 ($59.00, in stock). No unattended guest-card path. This is a per-store customer-accounts-required setting, not a platform limitation.",
+    "type": "login-wall"
+  },
+  "notes": "Contrast case: same platform and same cart-permalink route as onetreeplanted.org and heatonist.com, which both land straight on the payment page. Recorded so an agent does not spend a session rediscovering the wall. Determined over plain HTTP only; no checkout session was driven and no card data was involved."
+}

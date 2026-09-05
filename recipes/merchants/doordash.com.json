@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "doordash.com",
+  "kind": "merchant",
+  "hosts": [
+    "doordash.com",
+    "identity.doordash.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "reason": "Delivery-address gate cannot be satisfied by a proxy fill. Both address widgets (#HomeAddressAutocomplete on the home page, [data-testid=\"AddressAutocompleteField\"] in the post-add-to-cart dialog) are controlled React comboboxes backed by a places-autocomplete: a programmatic fill is cleared by the page's own re-render, so the field reads empty immediately after and no suggestion list is produced. Signing in does not bypass it - the same dialog reappears after add-to-cart on a logged-in account with no stored address. Checkout is unreachable, so the payment surface was never observed.",
+    "type": "automation-blocked"
+  },
+  "exampleProductUrl": "https://www.doordash.com/store/mcdonalds-san-francisco-653630/",
+  "gotchas": [
+    "Cloudflare Turnstile interstitial on first load of the storefront - full block, zero page content, cleared only via challenge handoff to the account owner. Direct /store/<slug>/ URLs loaded without a challenge afterwards.",
+    "Login works and is worth recording: email [data-anchor-id=\"IdentityLoginPageEmailField\"] plus input[type=\"password\"] ([data-anchor-id=\"IdentityLoginPagePasswordField\"]) on the same step, submitted with #login-submit-button. Enter on the password field does NOT submit. No MFA was presented.",
+    "Sign In controls on the storefront are not clickable (hit test times out); go straight to identity.doordash.com/auth instead.",
+    "Menu items expose no stable item selector. Reach one via its price text and take the nearest ancestor carrying @data-item-id / @data-anchor-id / @role=button. The dialog's add button is [data-anchor-id=\"AddToCartButtonSeoOptimization\"]."
+  ],
+  "notes": "Recon only - no payment attempted and no card token filled. Gateway is commonly reported as Stripe but this run never reached the card surface, so platform is recorded as custom rather than assumed.",
+  "preconditions": [
+    "account_required"
+  ]
+}

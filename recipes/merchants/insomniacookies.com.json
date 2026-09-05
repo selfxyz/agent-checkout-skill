@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "insomniacookies.com",
+  "kind": "merchant",
+  "hosts": [
+    "insomniacookies.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://insomniacookies.com/products/chocolate-chunk",
+  "gotchas": [
+    "A store MUST be selected before anything can be added to a cart. Until then every product page's add control reads 'Check Local Availability' and clicking it silently no-ops - the click reports success, nothing enters the cart. This is the most misleading failure on this site.",
+    "Selecting a store is gated by a VISIBLE reCAPTCHA v2 'I'm not a robot' checkbox inside the address modal. Delivery and Pickup tabs both lead to the same checkbox (different input ids: -delivery-address vs -pickup-address). A human must tick it - treat this as a challenge-handoff case, not a dead end.",
+    "Three routes that do NOT set the store, all verified: the store-specific /menu/{StoreName} URL renders prices but leaves the store unset in a clean profile; /bakery/{city} exists but its 'Order Now' only links to /menu; the Pickup tab hits the same modal. The address modal is the only door.",
+    "The OneTrust cookie banner intercepts pointer events on the add-to-cart control - Playwright reports '<div class=\"ot-sdk-row\"> from <div id=\"onetrust-consent-sdk\"> subtree intercepts pointer events'. Click #onetrust-reject-all-handler FIRST, before any other interaction.",
+    "The visible address control has a hidden duplicate in the markup (desktop/mobile nav pair), so a CSS selector resolves to the invisible one and the click times out. #deliveryWidget, div[class*=NavigationBar_address] and the orderNowButton class all failed this way over MCP. A raw coordinate click works in vanilla Playwright; MCP exposes no coordinate-click or key-press tool.",
+    "Ice cream items require a modifier choice before they can be added - /products/ice-cream-on-a-deluxe-cookie shows 'Select (1) Deluxe Cookie Flavor'. Plain cookies have no required modifier.",
+    "Card entry is a FreedomPay HPC hosted iframe (iframe#hpc--card-frame, src hpc.freedompay.com/api/v1.5/controls?sessionKey=...). Inner fields: #CardNumber, #ExpirationDate (MM/YY), #SecurityCode, #PostalCode. The cardholder-name field #cardHolderName sits OUTSIDE the iframe in page markup.",
+    "Guest checkout works - no account or sign-in needed to reach the payment form. reCAPTCHA Enterprise is also present on /checkout/review-order but was observed invisible/score-based and did not challenge.",
+    "Cart is session-bound; an item added in one session is absent in a fresh one. Add-to-cart and checkout must run in one unbroken session.",
+    "CSS-module class hashes differ by page: the product-page add control is CheckoutCartButton_* and the cart-page checkout control is CheckoutButton_* - note the missing 'Cart'. Match with class*= prefixes, never the full hashed name."
+  ],
+  "notes": "Fill the card form. Never press Place Order / Pay / Submit Order.",
+  "overrides": {
+    "addToCartButton": "div[class*=\"CheckoutCartButton_checkoutCartButton\"]",
+    "addressSuggestionRow": "div[class*=\"DeliveryLocationsListItem\"]",
+    "addressWidgetToggle": "#deliveryWidget",
+    "cardCvv": "#SecurityCode",
+    "cardExpiry": "#ExpirationDate",
+    "cardFrame": "iframe#hpc--card-frame",
+    "cardHolderName": "#cardHolderName",
+    "cardNumber": "#CardNumber",
+    "cardPostalCode": "#PostalCode",
+    "cartUrl": "https://insomniacookies.com/checkout/view-order",
+    "contactEmail": "#email",
+    "contactFirstName": "#first-name",
+    "contactLastName": "#last-name",
+    "contactPhone": "#phone-number",
+    "cookieBannerReject": "#onetrust-reject-all-handler",
+    "deliveryAddressInput": "#delivery-widget-enter-delivery-address",
+    "goToCheckoutButton": "div[class*=\"CheckoutButton_checkoutCartButton\"]",
+    "pickupAddressInput": "#delivery-widget-enter-pickup-address",
+    "storeMenuUrl": "https://insomniacookies.com/menu/{StoreName}"
+  }
+}

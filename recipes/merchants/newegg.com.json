@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "newegg.com",
+  "kind": "merchant",
+  "hosts": [
+    "newegg.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.newegg.com/p/pl?d=usb+cable",
+  "gotchas": [
+    "Custom checkout, not one of the executable platform playbooks. Guest cart at secure.newegg.com/shop/cart.",
+    "Product cards on a search results page use selector a.item-title; the product page's add-to-cart control is button:has-text(\"Add to cart\") (two matches observed: a sticky header copy and the main one)."
+  ]
+}

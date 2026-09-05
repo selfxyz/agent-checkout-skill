@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "cleanshot.com",
+  "kind": "merchant",
+  "hosts": [
+    "cleanshot.com",
+    "buy.paddle.com"
+  ],
+  "platform": "paddle",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://cleanshot.com/buy",
+  "gotchas": [
+    "The vendor page opens Paddle as an overlay iframe named paddle_frame. A driver whose click cannot reach into a frame is stuck there: read that iframe's src and open it top level instead, swapping display_mode=overlay for display_mode=inline. Every field and button is then in the top frame.",
+    "Checkout is two steps, not one. Step one is email, country select and postcode; a Continue button gates step two. The card inputs do not exist in the DOM until Continue succeeds, so waiting on #cardNumber is the reliable signal that step one was accepted.",
+    "Card fields are plain top-frame inputs (#cardNumber, #cardHolder, #expiry, #cvv) despite js.stripe.com frames being present on the page — those frames are only the Google Pay and browser-wallet buttons, not the card surface. Do not go looking for a Stripe payment element here.",
+    "Expiry is a single combined field with an MM / YY placeholder; four digits typed straight in are accepted.",
+    "Paddle is merchant of record, so tax is added at step two only: the $29.00 list price becomes $31.57 at the pay button. Any spending-limit check should use the step-two total, not the advertised price.",
+    "Paddle runs its own invisible hCaptcha and a human-security frame on the payment step. Neither asked for interaction on this run, but they are the thing to look at first if a fill starts failing silently."
+  ],
+  "overrides": {
+    "buyButton": "button.action-button.-large.-primary.buy",
+    "cardHolder": "#cardHolder",
+    "cardNumber": "#cardNumber",
+    "continue": "button:has-text(\"Continue\")",
+    "country": "#countryCode",
+    "cvv": "#cvv",
+    "email": "#email",
+    "expiry": "#expiry",
+    "overlayFrame": "iframe[name=paddle_frame]",
+    "placeOrder": "button:has-text(\"Pay \")",
+    "postcode": "#postcode"
+  }
+}

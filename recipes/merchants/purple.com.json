@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "purple.com",
+  "kind": "merchant",
+  "hosts": [
+    "purple.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "cvvTarget": "[data-testid='payment-form-credit-card'] iframe[title='Secure payment input frame']:input[name=cvc]",
+  "exampleProductUrl": "https://www.purple.com/softstretch-pillowcase",
+  "gotchas": [
+    "www.purple.com redirects to purple.com, and the storefront, /cart and /checkout are all on that host. Class names are hashed, so address things by id, name, data-testid and text.",
+    "A checkout URL on its own gets nothing, because the guest form is behind the cart's Proceed to Checkout button. An earlier drive that only opened /checkout reported no address form.",
+    "Add to Cart counts exactly 1 on a product page and the item is in the cart at once. The buy box is then replaced by an upsell panel offering to add more items, which is not a modal and needs no click; verify with the header cart count and go to /cart. A third-party widget error dialog can appear on the product page and can be ignored.",
+    "Guest is the default at checkout and the sign-in control is optional. Every shipping field has an id of the form shipping-<name>.",
+    "The street field has a places autocomplete: one suggestion appears after the fill, so press Escape and carry on, because the value stays. The state select takes two-letter values and its first option is blank.",
+    "Continue to Delivery does not go to the delivery step. About 10 seconds later the form is replaced by a Verify Your Shipping Address step comparing a normalized address with what was typed, and Use This Address is the way on. A script that waits only for Continue to Payment will time out here.",
+    "The delivery step has one free shipping option and nothing to choose.",
+    "The card is a Stripe Payment Element in card mode inside [data-testid='payment-form-credit-card'], holding number, expiry, CVC and a prefilled postal code, with no cardholder-name field because the name is passed as a billing default. Scope the frame by that container, since the express-checkout and bank-search frames are siblings with different titles. Through the proxy two frames matched inside the credit-card form where a local browser shows one, and the first held the inputs.",
+    "The order summary is a label-over-figure ladder with a discount row and figure-less rows between the subtotal and the total, so an automatic total reader can pick the pre-discount subtotal instead of the grand total. Read the Total row explicitly, and be careful with a spending cap set between the sale total and the subtotal.",
+    "Local checkout state persists in a reused browser profile, so a local rerun can land straight on the payment step while a fresh run starts from the beginning."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026 from the home page to the Stripe Payment Element: consent, add to cart, /cart, Proceed to Checkout, the guest form filled field by field, Continue to Delivery, the address verification step, Continue to Payment, then the card number, expiry, CVC and postal-code inputs inside the payment frame, each counting 1. The card was not filled, so the status is unverified. No wall was seen in either environment and the route took about 112 seconds through the proxy.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to Cart')",
+    "address1": "#shipping-streetAddress",
+    "address2": "#shipping-additionalStreetInfo",
+    "cardCvv": "input[name=cvc]",
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "[data-testid='payment-form-credit-card'] iframe[title='Secure payment input frame']",
+    "cardNumber": "input[name=number]",
+    "cartLink": "a[href='/cart']",
+    "city": "#shipping-city",
+    "consentAccept": "button:has-text('Accept All')",
+    "continueDelivery": "button:has-text('Continue to Delivery')",
+    "continuePayment": "button:has-text('Continue to Payment')",
+    "email": "#shipping-email",
+    "firstName": "#shipping-firstName",
+    "lastName": "#shipping-lastName",
+    "orderTotal": "#cart-summary [data-testid='pricing-subtotal-amount']",
+    "phone": "#shipping-phone",
+    "placeOrder": "#save-payment-button",
+    "proceedToCheckout": "button:has-text('Proceed to Checkout')",
+    "state": "select#shipping-state",
+    "useThisAddress": "button:has-text('Use This Address')",
+    "zip": "#shipping-postalCode"
+  }
+}

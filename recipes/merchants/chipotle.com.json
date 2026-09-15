@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "chipotle.com",
+  "kind": "merchant",
+  "hosts": [
+    "www.chipotle.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.chipotle.com/order/build/burrito-bowl?restaurant=87",
+  "gotchas": [
+    "Proxy egress was dead during this attempt (example.com also timed out) — agent-pay itself was never exercised against chipotle.com.",
+    "/order redirects to the homepage unless a restaurant is set. Deep link that sets it in one hop: https://www.chipotle.com/order/build/<item>?restaurant=<storeId> (e.g. restaurant=87 = 711 Church St, Evanston IL).",
+    "Store IDs are discoverable on locations.chipotle.com store pages, in the ORDER NOW links (?restaurant=NNN).",
+    "The Vue app exposes stable per-ingredient hooks: [data-qa-item-name=\"Chicken\"] .card, plus data-qa-item-id (CMG-101 chicken, CMG-5001 white rice, CMG-5051 black beans).",
+    "ADD TO BAG is a DIV, not a button: .add-to-bag .slot-wrapper (role=button, tabindex=0).",
+    "A 'PICKING UP FROM' tooltip overlays the protein cards on first load and swallows the first click — click once to dismiss, then click the card.",
+    "Synthetic JS .click() does not register on the ingredient cards or on ADD TO BAG; focus + Enter also did nothing. Needs a real trusted click (Playwright click by selector).",
+    "Console shows repeated HTTP 429 from the ordering backend plus 'Order does not exist at checkout' — the order API appears to rate-limit or block automated/datacenter IPs, which is the likely reason the bag never filled.",
+    "FullStory session recording and Datadog RUM are active site-wide; expect scrutiny at payment."
+  ],
+  "notes": "CORRECTION of an earlier accidental submission that claimed status 'partial'. Nothing was verified. 2026-08-25: agent-pay proxy egress was down (every open_page, including example.com, hit goto Timeout 45000ms), so agent-pay never drove this site at all. Scouting was done in a separate seeing browser only: the meal builder loads and a protein can be selected, but ADD TO BAG never fired and the bag stayed empty. Checkout and payment surfaces are UNMAPPED."
+}

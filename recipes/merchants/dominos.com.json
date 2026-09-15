@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dominos.com",
+  "kind": "merchant",
+  "hosts": [
+    "dominos.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.dominos.com/en/",
+  "gotchas": [
+    "Homepage shows Carryout/Delivery mode buttons before any address/store form; press \"Delivery\" first.",
+    "After choosing Delivery, an address form appears with a street-address input matched by input[name*=\"treet\" i], input[id*=\"treet\" i]; city/zip/state inputs did not match the generic selectors tried (input[id*=\"ity\" i] / input[id*=\"ostal\" i] / select[id*=\"tate\" i]) and need per-field recon."
+  ],
+  "preconditions": [
+    "delivery_location"
+  ]
+}

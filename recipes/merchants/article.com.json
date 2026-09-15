@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "article.com",
+  "kind": "merchant",
+  "hosts": [
+    "article.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "cvvTarget": "iframe[title='Secure payment input frame']:input[name=cvc]",
+  "exampleProductUrl": "https://www.article.com/product/29761/gabriola-small-pillow-ivory-boucle",
+  "gotchas": [
+    "Checkout lives at /cart, not /checkout. Opening /cart redirects to /cart/shipping, which is the guest address form itself. There is no separate cart page and no sign-in gate, and a /checkout URL is what made an earlier drive report no address form.",
+    "Categories are /browse/<id>/<slug> and product pages /product/<id>/<slug>. A guessed path such as /category/decor/pillows returns a 404 page that still lists products, so check for the text 404 ERROR rather than counting product links.",
+    "Three buttons on a product page carry name=addToCart: the buy box, a small add on the upsell rail and ADD BUNDLE TO CART. button.add-cart-button:has-text('add to cart') counts 1 and is the buy box.",
+    "Field names on the shipping form equal their autocomplete tokens while the ids are positional, so address every field by name. The phone is one masked field.",
+    "The street field raises a two-item suggestion popup after typing. Press Escape and carry on, the typed value is kept.",
+    "The state select has no name and no id, and its option values are numeric database ids with full-name labels, so selecting by value fails with a did-not-find-some-options error. Select by label instead, which is accepted in under a second.",
+    "Continue to payment is a submit button whose click was accepted twice through the proxy with nothing happening for a minute. Press Enter on it instead and the page advances in about 6 seconds. Success shows as input[name=given-name] counting 0 and the text 2. Payment appearing. Do not key off input[type=checkbox], which counts 2 even on the shipping page.",
+    "Opening /cart/payment without an address in the same browser session redirects back to /cart/shipping, and the address does not survive a restart, so fill the address and the card in one sitting.",
+    "The payment step holds one Stripe Payment Element in card-only mode with no method tabs. Scope by title: iframe[title='Secure payment input frame'] counts 0 before the step and 1 after, while the shipping page's express-checkout frame carries a different title. Billing country and postal code sit inside that same frame even though the main document's billing-same-as-shipping checkbox is checked."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026 from the product page to the Stripe Payment Element: add to cart, /cart redirecting to the guest shipping form, every field filled, Continue to payment by Enter, then the card number, expiry and CVC inputs inside the payment frame, each counting 1. The card was not filled, so the status is unverified. There is no wall and no sign-in gate anywhere on the route. The two environments agreed except that the proxy run needed Enter on Continue to payment and read a slightly different tax estimate.",
+  "overrides": {
+    "addToCart": "button.add-cart-button:has-text('add to cart')",
+    "address1": "input[name=address-line1]",
+    "cardCvv": "input[name=cvc]",
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[title='Secure payment input frame']",
+    "cardNumber": "input[name=number]",
+    "city": "input[name=address-level2]",
+    "continueShipping": "button.button-primary:has-text('Continue to payment')",
+    "country": "select[autocomplete=country-name]",
+    "email": "input[name=email]",
+    "firstName": "input[name=given-name]",
+    "lastName": "input[name=family-name]",
+    "miniCartCheckout": "button#checkout-btn",
+    "orderTotal": "div.row.total",
+    "phone": "input[name=tel]",
+    "placeOrder": "button.button-primary:has-text('Place order')",
+    "productLinks": "a[href*='/product/']",
+    "state": "select[autocomplete=address-level1]",
+    "zip": "input[name=postal-code]"
+  }
+}

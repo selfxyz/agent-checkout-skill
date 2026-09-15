@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "allbirds.com",
+  "kind": "merchant",
+  "hosts": [
+    "allbirds.com"
+  ],
+  "platform": "shopify",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.allbirds.com/products/mens-wool-runner-2",
+  "gotchas": [
+    "Custom domain, not *.myshopify.com — the shopify platform recipe's own notes flag a detect regression on custom-domain stores; on this run detect worked fine (script[src*=cdn.shopify.com] etc. matched, cart and checkout reached normally).",
+    "Add to cart via the /cart/<variantId>:1 permalink, then /cart, then the visible checkout button (button[name=\"checkout\"] / #cart-drawer-checkout-button — which one renders varies by entry path). A direct goto to /checkout can 302/abort depending on cart state; going through the cart page's own button is the reliable path.",
+    "Card surface is the split card-fields iframes (iframe[name*=\"card-fields-number\"] / -expiry / -verification / -name); all four mounted and the name/expiry frames accepted pressSequentially. Number/CVV were not attempted with a real value in this run (see note)."
+  ]
+}

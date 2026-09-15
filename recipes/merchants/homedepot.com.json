@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "homedepot.com",
+  "kind": "merchant",
+  "hosts": [
+    "homedepot.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every request except the home document answers HTTP 403 wrapped in the site's own error shell, titled Error Page and reading Oops!! Something went wrong. Please refresh page. Search paths, category paths, product paths and the cart were all refused, whether reached by direct navigation, by an in-page click carrying a referer, through the header search box, or after a 20-second dwell that graded the bot-detection cookie, and an accepted proxy egress got exactly the same across two sessions. The wall's Refresh button navigates to the home page rather than retrying the refused URL. Nothing below the home page was ever observed.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "Classify the wall by the response status and the server header rather than by the page text, because it is a 403 that comes dressed as the retailer's own something-went-wrong page and the text alone reads like an ordinary site error.",
+    "Only the home document renders, and it is a cached non-buyable render: a plain request for the same URL is refused outright. Do not expect a cheap in-page entry such as a deals listing, because there is no path that passes.",
+    "The home page carries 4 to 30 product tiles whose set changes per load, category links, and a search combobox that is input[type=search] rather than a typeahead id. Through the proxy the first count after the home page loaded took 40 to 60 seconds, while later counts and clicks took about 10.",
+    "Add to cart, the delivery versus pickup choice, guest checkout, the address form and the card surface are all unknown, so the whole route below the home page has to be mapped from an accepted egress."
+  ],
+  "notes": "Two proxy sessions and several local runs in September 2026 ended the same way, with the home page rendering and everything below it refused, so the recipe keeps the home page selectors only. Because the local and the proxy runs fail identically by the same four routes, this is a denial of the request class rather than a browser fingerprint problem.",
+  "overrides": {
+    "categoryLinks": "a[href*='/b/']",
+    "productLinks": "a[href*='/p/']",
+    "searchInput": "input[type=search]"
+  }
+}

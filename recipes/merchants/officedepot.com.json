@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "officedepot.com",
+  "kind": "merchant",
+  "hosts": [
+    "officedepot.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.officedepot.com/a/products/3865635/Office-Depot-Brand-Lined-Sticky-Notes/",
+  "gotchas": [
+    "Open the home page first, because that load sets the guest token and delivery-location cookies. A run that opened a product page directly rendered it without the fulfillment tiles, the add click timed out and the header cart link did not navigate.",
+    "Search is /a/search/?q=<terms>; the /a/search/<slug>/ shape is a 404. Typing into the header search box and pressing Enter produced a blank page with no product links, so navigate to the search URL or straight to the product page.",
+    "Delivery is already the default, so do not click the delivery tile on the product page. That click timed out in the preflight and it is unnecessary, because the delivery radio on the cart page is already checked.",
+    "The add raises a dialog saying one item was added, and the same dialog can carry a JSON parse error from a cart request that got HTML back. Ignore it: the header count goes to 1 and the checkout carries the item.",
+    "Skip the cart page. It renders the line item but never shows an order summary or a Checkout control, and the five matches for a checkout-looking attribute are header print-service links. Go straight to /cart/checkout.do.",
+    "The guest link's aria-label is misspelled: a[aria-label='Contine as guest'] counts 1 while a text match for Continue in the main region counts 0. Login is optional and there is no account wall.",
+    "Field names were not readable in this environment, so each field is addressed by a case-insensitive name substring and each of those counts exactly 1. The email field is input[type=email], because a name substring for email matches five hidden inputs.",
+    "The phone is three boxes of 3, 3 and 4 digits plus an extension, and a whole phone value is refused on each box because the mask is shorter than the value. Type the three groups separately; there is no single-field phone input to use instead.",
+    "Continue's accessible name is Continue to next step, so a text match on that full phrase counts 0 while button:has-text('Continue') is accepted. If the first-name field is still present and an alert is showing, a required field is missing, usually the phone.",
+    "The card number is an inline input in the main document and none of the nine iframes on the payment step is a payment frame. Expiration is two selects whose names are unknown, and there is no CVV field on this step, so expect it on the review step. Billing has a same-as-shipping checkbox and a second copy of the address form, which is why the first-name substring counts 2 there.",
+    "Locally the edge resets the HTTP/2 stream for an automated browser on every document and forcing HTTP/1.1 hangs, while a plain request from the same egress returns the full page. There is no wall page to match on, so classify by a navigation that never reaches the document-ready state."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from the home page to the inline card-number input: product page, add to cart, /cart/checkout.do, the guest link, the shipping form filled field by field with the phone typed as three groups, Continue, then the card-number input counting 1 on the payment step. The card was not filled, so the status is unverified. The expiration selects and the CVV field are the parts still unmapped, and the whole route took about 94 seconds.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to cart')",
+    "address1": "input[name*='ddress1' i]",
+    "cardNumber": "input[name*='ardNumber' i]",
+    "city": "input[name*='city' i]",
+    "continuePayment": "button:has-text('Continue to payment')",
+    "continueStep": "button:has-text('Continue')",
+    "email": "input[type=email]",
+    "firstName": "input[name*='irstName' i]",
+    "guestCheckout": "a[aria-label='Contine as guest']",
+    "lastName": "input[name*='astName' i]",
+    "orderTotal": "table tbody tr:nth-child(4) td",
+    "phoneAreaCode": "input[aria-label='Phone Number Area Code']",
+    "phonePrefix": "input[aria-label='Phone Number Prefix']",
+    "phoneSuffix": "input[aria-label='Phone Number Suffix']",
+    "productLinks": "a[href*='/a/products/']",
+    "state": "select[name*='state' i]",
+    "zip": "input[name*='zip' i]"
+  }
+}

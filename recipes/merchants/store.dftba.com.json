@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "store.dftba.com",
+  "kind": "merchant",
+  "hosts": [
+    "store.dftba.com"
+  ],
+  "platform": "shopify",
+  "status": "partial",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://store.dftba.com/products/horse-theme-song-ringtone",
+  "gotchas": [
+    "The /cart/<variantId>:1 permalink 302s straight into /checkouts/cn/<token> with skip_shop_pay=true — there is no cart page hop and no Shop Pay diversion; guest card checkout is the default.",
+    "Checkout renders a duplicate hidden autofill form whose inputs carry the same name attributes (autofill_firstName, autofill_city, ...). Plain input[name=firstName] matches two elements; scope every contact/billing selector with :not([id^=autofill]).",
+    "Visible billing field ids are randomised per render (TextFieldP0-734 etc.) except #billing-address1 and #email — select by name, not id.",
+    "The CVV iframe is named card-fields-verification_value-<rand>, not card-fields-verification-<rand>.",
+    "Digital products (e.g. the $1 ringtone) skip the shipping step entirely, so checkout is a single page: contact, billing, card.",
+    "Custom domain store: detection must key on cdn.shopify.com script/link references and meta[name=shopify-checkout-api-token], not on a *.myshopify.com host."
+  ],
+  "overrides": {
+    "address1": "#billing-address1",
+    "city": "input[name=city]:not([id^=autofill])",
+    "country": "select[name=countryCode]",
+    "cvvFrame": "iframe[name*=\"card-fields-verification_value\"]",
+    "email": "#email",
+    "firstName": "input[name=firstName]:not([id^=autofill])",
+    "lastName": "input[name=lastName]:not([id^=autofill])",
+    "phone": "input[name=phone]:not([id^=autofill])",
+    "placeOrder": "#checkout-pay-button",
+    "postalCode": "input[name=postalCode]:not([id^=autofill])",
+    "zone": "select[name=zone]"
+  }
+}

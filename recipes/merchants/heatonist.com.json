@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "heatonist.com",
+  "kind": "merchant",
+  "hosts": [
+    "heatonist.com"
+  ],
+  "platform": "shopify",
+  "status": "unverified",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://heatonist.com/cart/31552620527714:1",
+  "gotchas": [
+    "Use the eGift Card product (/products/gift-card): its variants report requires_shipping=false, so no shipping-address and no delivery step render, leaving email + card only. Physical hot-sauce variants DO require shipping and pull in the full address form.",
+    "eGift variants are tiered by value: 31552620527714 = $10, 31552620560482 = $20, 40534286729314 = $25. The $10 tier is the cheapest no-shipping line item on the store.",
+    "Expect the same Shop account verification code documented on onetreeplanted.org: on Shopify, filling an email that already has a Shop account triggers an out-of-band code to the shopper's phone, and skip_shop_pay=true does not prevent it. Not separately re-observed on this host.",
+    "Card fields are JS-injected; wait on iframe[name*=card-fields-number] before filling."
+  ],
+  "notes": "US retailer (the Hot Ones hot-sauce shop) on Shopify. Cart route and variant data confirmed over HTTP 2026-08-25; no checkout session was driven here, so unverified.",
+  "overrides": {
+    "addToCart": "GET /cart/<variantId>:1 — the permalink redirects straight to /checkouts/cn/<token>/en-us?skip_shop_pay=true, landing directly on the payment page. Confirmed 2026-08-25."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "onetreeplanted.org",
+  "kind": "merchant",
+  "hosts": [
+    "onetreeplanted.org"
+  ],
+  "platform": "shopify",
+  "status": "unverified",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://onetreeplanted.org/cart/41901153484862:1",
+  "gotchas": [
+    "Donation variants are digital: cart.js reports requires_shipping=false, so Shopify renders NO shipping-address and NO delivery-method step. Checkout is email + card only.",
+    "IMPORTANT — the digital/no-shipping shape does NOT avoid an out-of-band verification code. Observed 2026-08-25: filling the email field alone triggered a Shop account verification code delivered out-of-band to the shopper's phone (RCS Business Messaging, sender pattern shop_<id>_agent@rbm.goog, SMS fallback). skip_shop_pay=true in the redirect URL does NOT prevent this — that parameter only skips the accelerated Shop Pay checkout, not Shop account association from the email. Any agent filling an email that already has a Shop account should expect this on Shopify generally, not just here.",
+    "Whether the verification code is BLOCKING or merely offered alongside a guest path is unverified — the run stopped at the card step before that could be determined.",
+    "Variant 41901153484862 ('Ascot Hills Wildfire Resilience') is $1.00, the cheapest no-shipping variant on the store. A $0.00 'Processing Fees' variant also exists; do not use it, a zero total skips the card form.",
+    "The storefront is reachable as www.onetreeplanted.org but redirects to the bare apex during the cart-permalink hop.",
+    "Card fields are JS-injected — the card-fields-* iframes are absent from server-rendered HTML. Wait on iframe[name*=card-fields-number] before filling."
+  ],
+  "notes": "US tree-planting nonprofit on Shopify. Route to the payment page and all selectors confirmed working 2026-08-25; card fill was not completed, so status is unverified rather than partial. Kept in the registry mainly for the email-triggers-Shop-verification finding above, which generalizes to the Shopify platform recipe.",
+  "overrides": {
+    "addToCart": "Skip the product page entirely. GET /cart/<variantId>:1 — on this store the permalink redirects straight through to /checkouts/cn/<token>/en-us?skip_shop_pay=true, landing ON the payment page in one navigation. No add-to-cart click, no /cart page, no 'Check out' button. Verified 2026-08-25."
+  }
+}

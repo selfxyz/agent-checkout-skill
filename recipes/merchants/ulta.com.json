@@ -1,0 +1,49 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ulta.com",
+  "kind": "merchant",
+  "hosts": [
+    "ulta.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "#cvv iframe:input#securityCode",
+  "exampleProductUrl": "https://www.ulta.com/p/brush-on-nail-glue-pimprod2029293",
+  "gotchas": [
+    "The buy box add button is button.AddToBagButton__AddToBag and its label reads Add for ship rather than Add to bag. The 35 or more buttons whose text is Add to bag are all recommendation tiles, and the first one happens to add the same item only because the rail leads with it, so do not rely on it. A ship, pickup and same-day toggle above the button already has ship preselected.",
+    "A search URL is a be-right-back stub for every client, so browse a category listing instead of searching. That stub is not a wall.",
+    "Signed out, the bag's Checkout button does not navigate: it opens a right-hand flyout offering to create an account or to check out as a guest. The guest control is a link, a:has-text('Checkout as guest'), and a button match counts 0. Take a screenshot before blaming the click, because the flyout does not show up in page text.",
+    "Ids on the guest form are randomized, so address fields by name. Address line 2 sits behind a disclosure button, and the state select takes two-letter values with labels that pair the code and the name.",
+    "After Save and continue two alert nodes appear; they are the free-shipping nudge rather than errors, so check that input[name=firstName] counts 0 instead.",
+    "Choose the credit card radio and a hosted microform renders inline about 4 seconds later as two cross-origin frames that share a title and a source prefix. Scope them by parent: the card number is in #creditCardNumber iframe and the security code in #cvv iframe. Expiry is in the main document and there is no cardholder-name field.",
+    "Guest checkout state lives in the browser session, so a saved address is gone after a restart. Fill the address and the card in one sitting.",
+    "A direct visit to /checkout also renders the guest form once the bag has an item, within the same browser session."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026 from the product page to the card frames: Add for ship, the bag, Checkout, the guest link in the flyout, the guest form filled field by field, Save and continue, then the credit card radio and the card number and security code frames, each counting 1. The card was not filled, so the status is unverified. Every action was accepted first try, the route took about 113 seconds, and no wall was seen in either environment.",
+  "overrides": {
+    "addToCart": "button.AddToBagButton__AddToBag",
+    "addedDialog": "[role=dialog]:has-text('Added')",
+    "address1": "input[name=address1]",
+    "bagLink": "a[href='https://www.ulta.com/bag']",
+    "cardCvv": "input#securityCode",
+    "cardCvvFrame": "#cvv iframe",
+    "cardExpiry": "input[name=expirationDate]",
+    "cardFrame": "#creditCardNumber iframe",
+    "cardNumber": "input#number",
+    "cardRadio": "#payment-radio-creditCardV2",
+    "checkoutButton": "button[class*='CartActions__CheckoutButton']",
+    "city": "input[name=city]",
+    "email": "input[name=email]",
+    "firstName": "input[name=firstName]",
+    "guestCheckout": "a:has-text('Checkout as guest')",
+    "lastName": "input[name=lastName]",
+    "orderTotal": "li.OrderSummary__estimatedTotal",
+    "phone": "input[name=phoneNumber]",
+    "placeOrder": "button:has-text('Place order')",
+    "productLinks": "a[href*='/p/']",
+    "saveAddress": "button:has-text('Save & continue')",
+    "state": "select[name=state]",
+    "zip": "input[name=postalCode]"
+  }
+}

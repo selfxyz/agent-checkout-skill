@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "grubhub.com",
+  "kind": "merchant",
+  "hosts": [
+    "grubhub.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Checkout is a modal account wizard with no guest path. The create-account screen, the sign-in screen and the create-account form that follows the email step all lack any guest control: button:has-text('guest') matches only a hidden invite-guests button in the bag, and a:has-text('guest') and [data-testid*='guest' i] count 0 on every screen. The only exits are an account by email and password or a social sign-in, so there is no contact form, no delivery details page and no card surface for an unattended run. There is also no checkout page, since a direct visit to /checkout is a 404.",
+    "type": "login-wall"
+  },
+  "gotchas": [
+    "The site is address first. Click input[data-testid=address-input], type the street, wait about 4 seconds and click the single [role=option] suggestion. The listing at /lets-eat then shows restaurant tiles and the header shows the street. No city, state or zip fields exist, and the street alone was enough.",
+    "Add an item from the item modal, not from the card's quick-add button, which an earlier drive clicked with no bag change. Click the menu card to open the modal, use its footer button, then check the bag badge.",
+    "Proceed to Checkout is a modal rather than a navigation, so judge progress by the inputs inside [data-testid='modal-root'] and never by the URL. At a desktop width the first click swaps the bag popover for an upsell panel whose own button keeps the same id, so it takes two clicks; at a narrower width one Enter on #ghs-cart-checkout-button opened the wizard while a plain click timed out every time.",
+    "A match for text containing guest is not proof of a guest path. Here it was a hidden invite-guests button in the bag, so check the match's data-testid before clicking it.",
+    "Locally the wizard's email step redirects to a page reading Access to this page has been blocked with a human-verification iframe. That is a wall rather than a form, and it was not reached from the proxy egress.",
+    "Several clicks reported a timeout after the action had already taken effect, so re-check state by count before retrying a step."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 as far as the account wizard: address autocomplete, restaurant page, item modal, add to bag, the bag popover and Proceed to Checkout all worked, and the wizard's email step led to a create-account form asking for a first name, last name and password. That is where the route ends. Stripe.js loads on every page but the only payment-related frame is its metrics iframe, which holds no inputs, so the card surface is unknown.",
+  "overrides": {
+    "addToCart": "button[data-testid='emi-footer-cta']",
+    "addressInput": "input[data-testid=address-input]",
+    "addressSuggestion": "[role=option]",
+    "bagBadge": "[data-testid='toggleCart-bag-button-total-item-quantity']",
+    "bagToggle": "button[data-testid='toggleCart-bag-button']",
+    "menuItemButton": "button[data-testid=restaurant-menu-item-button]",
+    "proceedToCheckout": "#ghs-cart-checkout-button",
+    "restaurantTiles": "a[data-testid=restaurant-name]",
+    "wizardClose": "[data-testid='auth-wizard-cancel']",
+    "wizardRoot": "[data-testid='modal-root']"
+  }
+}

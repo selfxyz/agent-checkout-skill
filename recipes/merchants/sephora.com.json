@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "sephora.com",
+  "kind": "merchant",
+  "hosts": [
+    "sephora.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "The basket and catalog JSON endpoints are refused with a 403 while the documents render, so nothing can be added. Add to Basket is accepted and the site then opens a Sign In modal over an empty basket, and a client-side navigation to a product page ends in an error dialog saying something went wrong. Locally the refused calls are the basket-items POST, the basket GET and the catalog product GET, while other API calls on the same host return 200, and a dwell with mouse movement plus three retries changed nothing. Through an accepted proxy egress a direct visit to a product URL is an Access Denied page and a tile click hits the same refused catalog fetch. The basket page renders header and footer only and the checkout page is an empty shell, so the guest path, the address form and the card surface are unknown.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "Two protections work differently here. The edge refuses whole documents with an Access Denied page, and a separate layer refuses the JSON APIs with a 403 that is not a page at all. Classify the second by a dialog reading something went wrong, or by an Add to Basket that ends in a Sign In modal over an empty basket.",
+    "Do not read that Sign In modal as an account requirement. Guest checkout does exist on this retailer; the modal is the site's reaction to the refused basket call.",
+    "A default headless user-agent string is refused at the edge on every page. With a plain desktop Chrome user-agent string the home, search, product, basket and checkout documents all render, which is what makes the API-level refusals easy to misread as selector problems.",
+    "A tile click routes client side and hits the refused catalog fetch, leaving the listing under an error dialog with no buy box. Only a full reload of a product URL rendered the buy box, and a page reload was not available through the proxy.",
+    "On a product page a text match for Add to Basket counts 2. The buy box is button[data-at='add_to_basket_btn'], whose label mentions shipping. An out-of-stock item shows an out-of-stock button in place of the buy box, so check that before assuming the selector is wrong.",
+    "Sort a search by price ascending to find a cheap item; the listing shows only a handful of tiles before a show-more control."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026 to the product page and no further, about eight minutes of proxy time across four sessions. The basket never filled in either environment, so the checkout entry, the address form and the card surface are unknown. The product-page selectors above did work and are kept in case the API refusals lift.",
+  "overrides": {
+    "addToCart": "button[data-at='add_to_basket_btn']",
+    "closeDialog": "[role=dialog] button[data-at='close_button']",
+    "productLinks": "a[href*='/product/']",
+    "quantity": "select[data-at='sku_qty']",
+    "searchInput": "[data-at='site_search']",
+    "swatch": "button[data-at='swatch']"
+  }
+}

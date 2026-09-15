@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "asos.com",
+  "kind": "merchant",
+  "hosts": [
+    "asos.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "From an accepted egress every browsing step works but the add-to-bag call is refused server side: the product page inserts the text Sorry, there was an issue adding this item to the bag about 10 seconds after each click, the header stays on 0 items and /us/bag reads Your bag is empty. Reproduced across three sessions, two products, with and without cookie consent, with and without a size chosen, and with three retries each, including a 30-second settle and a real interaction before the click. From a datacenter egress the edge answers 403 Access Denied on every URL including the home page, so there is no unwalled control. No checkout page, address form or card surface was ever reached.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "The cookie dialog's visible control is button:has-text(\"That's ok\"), which counts 1 on the home page and clicks first try. #onetrust-accept-btn-handler also counts 1 but is not the visible control, and button:has-text('Accept') counts 0, so a run that keys off those two carries the dialog through the whole run.",
+    "Search is /us/search/?q=<terms> and product tiles are a[href*='/prd/'], about 70 per page. article[data-auto-id='productTile'] and article a both count 0, so do not use the tile selectors older notes suggest. Give the product page about 16 seconds, because at 12 the size select is sometimes not there yet.",
+    "A one-size item has no select at all and renders the size as plain text. A sized item has select counting 2, the buy box plus one inside a recommended-product card, and [role=combobox] counts 0, so address it as select.",
+    "Select a size by its literal label, never by index. Selecting by index is accepted and does nothing: the placeholder option stays selected and the add then fails with Please select from the available color and size options. Read the option labels, skip the placeholder and anything ending in Out of stock, and pass the label.",
+    "Two different failure messages separate a refused add from an unset size, and both are written into the buy box rather than onto the cart page, so snapshot the product page after the click before blaming the cart.",
+    "An empty bag has no checkout control: button:has-text('Checkout'), a:has-text('Checkout') and [data-testid='checkout-button'] all count 0, and a bare text match for Checkout is page chrome rather than a button. Whether the site offers a guest path at all is unknown from here."
+  ],
+  "notes": "Consent, search, the product page and size selection were driven through the Agent Vault proxy in September 2026 and are kept above, because they are reusable if the bag endpoint starts accepting automated sessions. The route dies one step before the cart, so no checkout page, address form or card surface was seen and the card surface is unknown.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to bag')",
+    "consentAccept": "button:has-text(\"That's ok\")",
+    "productTiles": "a[href*='/prd/']",
+    "sizeSelect": "select"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "jcpenney.com",
+  "kind": "merchant",
+  "hosts": [
+    "jcpenney.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "gotchas": [
+    "Do not open a listing URL: /s/socks renders sorry, no products were found matching undefined, and a gallery path renders no tiles. Open the home page, type the term into input[placeholder='What can we help you find?'] and press Enter; about 10 seconds later the results carry over a hundred a[href*='/p/'] tiles. A search page that says matching undefined is a client-side routing miss rather than an empty catalog.",
+    "Add to Cart counts 2 on a product page, one per breakpoint, and a plain click on the multi-match selector is accepted. It is the flaky step: through the proxy it took 56 and 113 seconds when it worked and timed out in three other runs, and pressing Enter on it worked in two of three. Retry, then confirm with a[href*='/cart']:has-text('1') or by opening the cart.",
+    "On the cart page Checkout counts 4, the top and the bottom of the summary at two breakpoints, and a plain click was accepted every run. An empty cart has no Checkout button, so that count is the cheap emptiness check.",
+    "Checkout starts on a sign-in page whose Continue as Guest button sits above the email and password form, and no email is asked for there.",
+    "The street and apartment inputs have no name, id, placeholder or aria-label; their accessible names come from a sibling label. input:has(+ label:has-text('Street Address')) counts 1, as do div:has(> :text-is('Street Address')) > input and :nth-match(input[type=text], 4).",
+    "The state select carries full state names. Two Continue clicks are needed: the first saves the address and renders six delivery radios with one preselected, and the second opens the payment step about 17 seconds later.",
+    "The card number is inline in the main document at input[autocomplete='cc-number'], with no card iframe among the nine iframes on the page. Expiry and CVV were not pinned down, because the usual autocomplete and name guesses all count 0, so validate them on first use. The guest email is asked for again on the payment step.",
+    "A click that times out in the proxy preflight can still have fired, so re-count before retrying rather than clicking twice.",
+    "Locally the edge resets the HTTP/2 stream for an automated browser within about 100 ms on every path, while a plain request from the same egress returns a 200, so there is no local control for this route."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from the home page to the inline card-number input: typed search, product page, size, add to cart, the cart, Continue as Guest, the shipping form filled field by field, two Continues past the delivery step, then input[autocomplete='cc-number'] counting 1. The card was not filled, so the status is unverified. Expiry and CVV on the payment step are the fields still unmapped.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to Cart')",
+    "address1": "input:has(+ label:has-text('Street Address'))",
+    "address2": "input:has(+ :text-is('Apt, Suite, Floor (Optional)'))",
+    "cardNumber": "input[autocomplete='cc-number']",
+    "cartBadgeOne": "a[href*='/cart']:has-text('1')",
+    "checkoutButton": "button:has-text('Checkout')",
+    "city": "input[name=city]",
+    "continueStep": "button:has-text('Continue')",
+    "country": "select[name=country]",
+    "email": "input[type=email]",
+    "firstName": "input[name=firstName]",
+    "guestCheckout": "button:has-text('Continue as Guest')",
+    "lastName": "input[name=lastName]",
+    "orderTotal": ".total",
+    "phone": "input[name=phone]",
+    "placeOrder": "button:has-text('Review Order')",
+    "productLinks": "a[href*='/p/']",
+    "searchInput": "input[placeholder='What can we help you find?']",
+    "state": "select[name=state]",
+    "zip": "input[name=zip]"
+  }
+}

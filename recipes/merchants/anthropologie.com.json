@@ -1,0 +1,43 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "anthropologie.com",
+  "kind": "merchant",
+  "hosts": [
+    "anthropologie.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "gotchas": [
+    "Same storefront as urbanoutfitters.com and freepeople.com: the same search, product, /cart and one-page /checkout route, and the same field names on the guest form.",
+    "Guessing a /shop/<slug> URL does not work here. Every slug tried rendered the we cannot seem to find what you are looking for page, whose quick-add tiles swallow an add click and leave the basket empty with Proceed To Checkout disabled. Reach the product page by pressing Enter on the named search tile from /search?q=<term>, which navigated on every attempt.",
+    "The add button is addressed by aria-label, button[aria-label='Add to Basket']. Text matching counts 0 even though the accessibility tree shows that name. Wait about 15 seconds after the product page opens before probing the buy box.",
+    "The header bag count does not appear under [aria-label*='Product Count'] on this host, so do not use it as the add-succeeded check. Open /cart and count button:has-text('Proceed to Checkout'):not([disabled]) instead.",
+    "The bag copy says basket rather than bag, so the empty-bag marker here is the text Sign in to view basket items.",
+    "The button that leaves the shipping step is Ship to this address, not Continue. button:has-text('Continue') counts 0 on this host and a run that keyed off it burned a minute on click and Enter timeouts. Text matching ignores case, so one selector covers the capitalized variant on the sister sites.",
+    "The street field is a combobox with an autocomplete popup. Press Escape after filling it and the typed value stays.",
+    "The payment step renders Stripe Elements, five iframes whose source is Stripe's, beside a Credit Card option and a Place Order button. The card-number frame itself was not pinned down, so start from the Stripe iframe selector and validate the inner selector on first use.",
+    "DataDome fronts every host on this platform and refuses datacenter egress with a 403, on plain requests as well as in a browser. That is an egress problem rather than a selector problem, and it is why none of this could be checked locally."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from search to the payment step: the named search tile, Add to Basket, /cart, Proceed To Checkout, the one-page guest form filled field by field, Ship to this address, then Stripe Elements beside a Place Order button. The card was not filled, so the status is unverified, and the card-number selector inside the Stripe frames is still unknown. The run took about 174 seconds and every action was accepted once the right selector was used.",
+  "overrides": {
+    "addToCart": "button[aria-label='Add to Basket']",
+    "address1": "input[name='address1']",
+    "address2": "input[name='address2']",
+    "cardFrame": "iframe[src*='stripe']",
+    "city": "input[name='city']",
+    "continueShipping": "button:has-text('Ship to this address')",
+    "country": "select[name='country']",
+    "email": "input[type=email]",
+    "firstName": "input[name='firstName']",
+    "lastName": "input[name='lastName']",
+    "orderTotal": "main ul li:last-child span",
+    "paymentHeading": "h1:has-text('Payment')",
+    "phone": "input[type=tel]",
+    "placeOrder": "button:has-text('Place Order')",
+    "proceedToCheckout": "button:has-text('Proceed to Checkout')",
+    "productTiles": "a[href*='/shop/']",
+    "state": "select[autocomplete='address-level1']",
+    "zip": "input[name='postalCode']"
+  }
+}

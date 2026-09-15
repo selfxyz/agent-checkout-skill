@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "apple.com",
+  "kind": "merchant",
+  "hosts": [
+    "apple.com",
+    "secure9.store.apple.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every checkout request answers HTTP 541 from an automated browser and the store then loads /shop/541 and redirects to /shop/404. Seen on the Continue as Guest POST to /shop/signInx, on the fulfillment apply-zip POST to /shop/checkoutx/fulfillment, and on the fulfillment-messages GET from the product page. Ordinary page loads and the bag work, so the storefront is not blocked; the shield script that runs on every page appears to reject the browser at the checkout calls. No card field was ever reached, from either of the two entry routes.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "Product pages are /shop/product/<part>/A/<slug>. A cheap accessory with no options is the easiest item; find one from the store search page and take an a[href*='/shop/product/'] link.",
+    "Add to bag is #add-to-cart, a plain form post that lands on /shop/bag. Do not use button[name='add-to-cart']: its first match is #pdp-options-applePay, which opens an Apple Pay checkout without putting anything in the bag. One click was ignored, so wait for the /shop/bag URL and retry.",
+    "On the bag page the two buttons whose ids contain apwCheckout are Apple Pay. The card route is the checkoutOtherPayments button, which also exists in the top bar with navCheckoutOtherPayments in its id.",
+    "Checkout usually lands on a sign-in page whose Continue as Guest control is the guestLogin id, and once it went straight to the fulfillment step. The product page Apple Pay button also reaches the fulfillment step with no sign-in.",
+    "The block is in the request layer rather than in the pages, so read the status of the checkout calls instead of hunting for a missing selector. A 541 followed by a bounce to a 404 page is the signature.",
+    "The shipping form, the card fields and the card surface were never reached and are entirely unknown."
+  ],
+  "notes": "Driven locally to the fulfillment step in September 2026 by two routes, bag then Continue as Guest, and the product page Apple Pay button that skips sign-in. Both end the same way, so nothing past the zip field has ever rendered. The storefront selectors above all worked and are kept in case the block lifts; a run from a browser the store does not reject should re-check the guest path first and then map the shipping form and the card fields.",
+  "overrides": {
+    "addToCart": "#add-to-cart",
+    "applePay": "#pdp-options-applePay",
+    "checkout": "#shoppingCart\\.actions\\.checkoutOtherPayments",
+    "guestCheckout": "#signIn\\.guestLogin\\.guestLogin",
+    "orderTotal": "#companionbar-button",
+    "productLinks": "a[href*='/shop/product/']",
+    "zip": "#checkout\\.fulfillment\\.deliveryTab\\.delivery\\.deliveryLocation\\.address\\.postalCode",
+    "zipApply": "#checkout\\.fulfillment\\.deliveryTab\\.delivery\\.deliveryLocation\\.address\\.calculate"
+  }
+}

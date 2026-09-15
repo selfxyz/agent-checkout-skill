@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "uniqlo.com",
+  "kind": "merchant",
+  "hosts": [
+    "uniqlo.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.uniqlo.com/us/en/products/E482605-000/00?colorDisplayCode=04&sizeDisplayCode=027",
+  "gotchas": [
+    "Open the US home page first so guest cookies exist, then go straight to a product URL. Listings and search are refused from a datacenter egress while product pages pass, and a product URL carrying colorDisplayCode and sizeDisplayCode query parameters arrives with the colour and the size already selected.",
+    "A cheap item is easy to find from the store's own search endpoint, which returns product ids and prices. The product URL is /us/en/products/<productId>/<priceGroup> with those two query parameters.",
+    "The add-to-cart click needed two or three attempts in two of five sessions. A high-traffic modal is what a refused add looks like here, so retry rather than treating it as a selector problem.",
+    "Checkout lands on a sign-in page where the guest control is a link, a:has-text('Guest'), and the heading that follows reads Checkout as a Guest. The copy there says guests can only check out with a credit card.",
+    "The guest email gate is one field. Fill it, click Continue, and the delivery-option step follows.",
+    "Choose a delivery option before expecting the payment section, because until then it reads that a delivery method must be selected first. Shipping to an address costs a flat fee below the free-shipping threshold and shipping to a store is free.",
+    "The Delivery Address form is the blocker. It renders nine inputs, a textarea and a Confirm button, and none of the inputs exposes a name, id, aria-label, autocomplete or placeholder that any probed selector matched, because their accessible names come from sibling labels. Candidates worth trying first are input:has(+ div:has-text('First name')), div:has-text('First name') > input and :nth-match(input, 1). The document order is first name, last name, address line 1, address details, city, a state dropdown input, zip code, phone and a second phone number.",
+    "An order-total selector of table is accepted but resolves to the free-shipping progress line rather than the order total inside the summary table, so read the Order total row explicitly.",
+    "The card surface was never rendered. The payment bundle names Adyen along with its client key, environment and merchant account, so expect Adyen secured-field iframes, one per field, but nothing in the document confirms that."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from the home page to the Delivery Address form: product page, add to cart, the cart with its line item and Checkout button, the guest link, the guest email gate, then the Ship to address click that renders the address form. The address fill, the Confirm click and the card surface were not reached, so the status is unverified and the card surface is unknown. Locally the edge refuses the home page, search and listings, and the add-to-cart request answers with a rate limit every time, so the checkout document could not be read locally to harvest field selectors.",
+  "overrides": {
+    "addToCart": "button:has-text('ADD TO CART')",
+    "cartLink": "a[href*='/us/en/cart']",
+    "checkoutButton": "button:has-text('Checkout')",
+    "confirmAddress": "button:has-text('Confirm')",
+    "continueStep": "button:has-text('Continue')",
+    "email": "input[name=email]",
+    "guestCheckout": "a:has-text('Guest')",
+    "shipToAddress": "button:has-text('Ship to address')"
+  }
+}

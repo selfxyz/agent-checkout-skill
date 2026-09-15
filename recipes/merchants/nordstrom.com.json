@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "nordstrom.com",
+  "kind": "merchant",
+  "hosts": [
+    "nordstrom.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every document is a client-side interstitial that replays the request by XHR and then redirects an automated browser to a site-closed page reading that unusual activity was noticed and unidentified automated traffic is not allowed. Locally that happened on the home page, on the listing and on a reload, with a fresh profile, with a profile that had passed a day earlier, and with a user-agent string that drops the headless marker, while a plain request from the same egress returns the real listing. An accepted proxy egress passed the interstitial for three sessions and was walled on the fourth. In the sessions that got through, the product page rendered but no add to bag ever filled the bag, so the bag, the checkout control, the guest path and the card surface were never seen.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "A 200 document carrying the real listing can still be a wall, because the redirect happens in the page about 300 ms later. Classify by the text unusual activity or by the site-closed host, never by the response status.",
+    "Product links on the listing are a[href*='/s/'] and count about 200. A plain click on one timed out every time through the proxy while pressing Enter opened it. The first count after the listing loads took 55 to 150 seconds and later counts under 3.",
+    "The radios on a product page are colour swatches and the two fulfillment options, not sizes. Size is a custom dropdown, the first of four [aria-label='dropdown'] elements, and clicking it opens a listbox whose options are grouped under a size-type heading.",
+    "An option can read that it is not available in the chosen colour, and picking one leaves Add to Bag non-actionable, so filter those out and validate the filter on first use.",
+    "Without a size the add click is accepted and an alert asks for a category and size while the bag stays empty. With an unavailable size both the click and an Enter press timed out. A successful add was never observed in either environment.",
+    "The empty bag lists the accepted payment methods but offers only Sign In and Keep Shopping, so nothing about the checkout or the card surface can be read from it.",
+    "Expect the wall to follow repeated automation on one egress rather than to be fixed per IP: three sessions passed and the fourth did not."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 across four sessions, three of which reached the product page while the fourth was walled on the listing. The bag never filled, so the recipe keeps the listing and product-page selectors only. The card surface is unknown and a card fill was never attempted.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to Bag')",
+    "productLinks": "a[href*='/s/']",
+    "sizeDropdown": "[aria-label='dropdown']",
+    "sizeOption": "[role=option]:not(:has-text('Not available'))"
+  }
+}

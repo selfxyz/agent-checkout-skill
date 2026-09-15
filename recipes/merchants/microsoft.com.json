@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "microsoft.com",
+  "kind": "merchant",
+  "hosts": [
+    "microsoft.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "The cart and the checkout render inside iframe#purchase-frame, whose content is served from a /store/purchase/purchaseui/ path on the same host, so every checkout selector has to be scoped to that frame.",
+    "Accessories are listed at /en-us/store/b/accessories; a pc-accessories variant of that path is a 404 and the collections and search paths list nothing. Take an a[href*='/d/'] link, and prefer an item with no options.",
+    "A newsletter dialog covers the buy box a few seconds after the product page loads. Close it with button[aria-label='Close dialog window'] before clicking #buybox-cta-proper.",
+    "Guest checkout is button:has-text('Check out as a guest') inside the purchase frame, with the space in as a; its sibling offers checkout with an account. The email step that follows is input[type='email'] and a real Next button.",
+    "The shipping form is in the same frame and every field fills by an id substring. Frame elements have no select-option call, so the state was set by clicking the control and typing the state name; validate that on first use.",
+    "The shipping step's Next control is unresolved. The accessibility tree shows a Next button under the form, but inside the frame button:has-text('Next') counts 0, input[type='submit'] counts 0 and button counts 1, the disabled Place order, and a frame click, an Enter press and a page-level click all timed out. Try text='Next', [role='button']:has-text('Next') and a:has-text('Next') before anything else, remembering that a button in an accessibility tree is a role rather than a tag.",
+    "One run lost iframe#purchase-frame entirely after the email step. Start over when the frame count is 0.",
+    "The payment step never rendered. A nested iframe exists inside the purchase frame on the guest-checkout page and is the likely card surface, but nothing confirms it.",
+    "Locally the cart frame's first POST to its own /store/purchase/purchaseui/cart endpoint answers 403 Access Denied and the page stays a spinner over an empty frame, while the listing, the product page, the cart count and the add-to-cart PUT all pass. That is one refused request rather than a selector problem, so check its status before hunting for selectors."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from the accessories listing to the shipping form inside the purchase frame: product page, add to cart, the cart, Check out as a guest, the email step, then every shipping field filled. The route stops at the shipping step's Next control, which matched no button or submit selector, so the payment step and the card surface were never seen and the card surface is unknown. The frame's order summary shows the amount on a Total line.",
+  "overrides": {
+    "addToCart": "#buybox-cta-proper",
+    "address1": "input[id*='line1' i]",
+    "address2": "input[id*='line2' i]",
+    "city": "#city",
+    "country": "select[id*='country' i]",
+    "email": "input[type='email']",
+    "firstName": "input[id*='first' i]",
+    "guestCheckout": "button:has-text('Check out as a guest')",
+    "lastName": "input[id*='last' i]",
+    "newsletterClose": "button[aria-label='Close dialog window']",
+    "nextStep": "button:has-text('Next')",
+    "phone": "input[id*='phone' i]",
+    "productLinks": "a[href*='/d/']",
+    "purchaseFrame": "iframe#purchase-frame",
+    "state": "select[id*='state' i]",
+    "zip": "input[id*='zip' i]"
+  }
+}

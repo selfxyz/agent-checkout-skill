@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "electronics.sony.com",
+  "kind": "merchant",
+  "hosts": [
+    "electronics.sony.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://electronics.sony.com/audio/all-audio-acessories/p/vmc15mr2",
+  "gotchas": [
+    "One host carries the storefront, the cart and the checkout. Category listings are /<dept>/c/<slug> and product pages /<anything>/p/<sku>: the path prefix does not matter, since any prefix redirects to the canonical one. Note that the canonical audio-accessories path carries the retailer's own misspelling, acessories.",
+    "A category path that does not exist returns a 404 page that still renders the site chrome, so check for text reading not found rather than counting tiles.",
+    "Two overlays, in this order. A ten-percent-off newsletter dialog opens on the home page and again on every later page; clear it with button[aria-label='Close'] or button:has-text('No thanks'), both of which were accepted. Behind it sits a consent banner whose accept button was never clickable, two attempts at 45 seconds each. Whether that banner is what blocks the buy box is unproven, so validate it on first use.",
+    "Product tiles expose no readable href in an accessibility snapshot, so reach a product page either by a known URL or by clicking a link matched on the exact product title, which resolved to one element and navigated first try.",
+    "Add to cart is where the route dies. The buy box button's accessible name is Add to Cart followed by the product title, and the accessibility tree shows exactly one such button, but a locator for it counts 3, so that name does not uniquely address the buy box. A click exhausted both a 45-second and a 90-second budget inside the checks that run before the action, so the click was never attempted, and pressing Enter returned successfully while the cart stayed empty. A parent-scoped selector is the thing to try first.",
+    "The cheapest success signal for an add is the header cart link's aria-label, which reads that no items are currently in the cart until a line exists. Do not trust an Enter press that reports success.",
+    "The empty cart offers only Continue Shopping and Login, with no checkout control of any kind, so the checkout entry point is unknown.",
+    "Actions on this host are slow before they even start: a 45-second budget was consumed entirely by the pre-action checks on three separate clicks. Allow 90 to 120 seconds for a click and 60 for a fill. Navigation and element counts are fast.",
+    "An earlier local run, made before the edge started refusing this egress, did get an item into the cart by pressing Enter and passed an email step into an address step, where it stalled on a phone field whose only match was a non-input wrapper carrying the aria-label. Expect to address that phone field through its real input descendant. Everything in this gotcha is second hand and needs validating."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 to the product page and no further: home page, newsletter dialog, category listing and product page all render, and add to cart never puts a line in the cart. The cart, the checkout entry, the guest path, the address form and the card surface are therefore unknown, and the payment processor was never identified. Nothing could be checked locally, because the edge answers every request from that egress with a 403 Access Denied on the first request with no challenge page.",
+  "overrides": {
+    "addToCart": "button:has-text('Add to Cart')",
+    "cartEmptyHeader": "a[aria-label='No items currently in your cart']",
+    "consentAccept": "#onetrust-accept-btn-handler",
+    "consentBanner": "#onetrust-banner-sdk",
+    "newsletterClose": "button[aria-label='Close']",
+    "newsletterDecline": "button:has-text('No thanks')",
+    "productLinks": "a[href*='/p/']"
+  }
+}

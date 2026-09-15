@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hm.com",
+  "kind": "merchant",
+  "hosts": [
+    "hm.com",
+    "www2.hm.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every product page URL under www2.hm.com/en_us/productpage.<article>.html answers with an Access Denied page, from a datacenter egress and through an accepted one alike. Two articles were tried, by in-page Enter, by direct navigation and again on a retry six seconds later, and all were denied, so the bag can never be filled and /en_us/checkout just redirects back to the empty bag. Category listings and the empty bag page do render through an accepted egress, which makes this a denial per URL class rather than per session.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "The US store is www2.hm.com/en_us. A productpage URL on www.hm.com is not denied, but it is the global country picker rather than a product page, so do not read a non-denied response on that host as a working page.",
+    "Open a category listing rather than the home page: /en_us/index.html is denied while the men's socks and women's socks-and-tights listings render in about 8 seconds.",
+    "Consent is button:has-text('Accept'), which counts 2 and clicks in about a second. #onetrust-accept-btn-handler counts 0 on this build, so the OneTrust id from older notes is stale.",
+    "A plain click on a product tile link times out in the actionability checks from both egresses, so that is the tile markup rather than the connection. Press Enter on a[href*='productpage'] to navigate, which takes about 9 seconds and lands on the denial page. li:nth-child(4) a[href*='productpage'] is how to pick a different tile.",
+    "The denial page echoes the URL it refused, which is the only way to learn an article number when a page snapshot renders every href as a bare path.",
+    "The empty bag shows a total row, a disabled Continue to checkout and a Sign in button, so whether the bag offers a guest path is unknown. The bag page advertises the usual card brands plus PayPal and Klarna and the retailer normally posts the card through Adyen, but nothing here confirms that.",
+    "Classify the wall with the text Access Denied. Unlike some other retailers this one does not dress it up as its own error page.",
+    "A site can be walled per URL class rather than per session. Probing one page and concluding walled, or clear, is wrong here: the listing, the bag and the product page gave three different answers inside one run."
+  ],
+  "notes": "Category listings and the empty bag page were driven through the Agent Vault proxy in September 2026 and are the only surfaces that render. The size picker, add to bag, the address form and the card surface were never reached and are all unknown. If the denial lifts, the route is listing, Enter on a product link, size, add to bag, the bag, then Continue to checkout.",
+  "overrides": {
+    "checkoutButton": "button:has-text('Continue to checkout')",
+    "consentAccept": "button:has-text('Accept')",
+    "productLinks": "a[href*='productpage']"
+  }
+}

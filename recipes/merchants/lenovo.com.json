@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "lenovo.com",
+  "kind": "merchant",
+  "hosts": [
+    "lenovo.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "The cart write is refused. The add-to-cart click posts to the store's own API host and the response is a 403 Access Denied page carrying a reference number, while reads on the same host return 200 with an empty cart. Unchanged by a fresh profile, a 15-second dwell, a second click, an already graded bot-detection cookie, or a plain request from the same egress, and the same empty cart came back through an accepted proxy egress. Pages render normally throughout, so the storefront gives no sign of the block. Checkout, the guest path, the address form and the card surface were never reached.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "The store's pages are static shells and the cart lives entirely on a separate API host, so a site that renders fine proves nothing. Watch the request the add click fires and treat an Access Denied body with a reference number on the write endpoint, while reads on the same host pass, as a wall.",
+    "A search URL of the form /us/en/search?text=<term> is server rendered and carries both product links and visible add buttons on the listing itself. The product page renders two copies of the same button and both are hidden under automation, so a click there times out. Add from the listing instead, and validate which control is live in a headed browser.",
+    "A below-the-fold listing button timed out on actionability through the proxy where a local run scrolled and clicked it. Pressing Enter on the button worked in both environments.",
+    "An empty cart offers only a Continue Shopping button and a recommendation carousel, so there is no checkout URL to learn from it."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026 as far as the listing and its add button, which work. The cart never filled in either environment, so nothing below it, including the checkout URL, the guest path and the card surface, is known.",
+  "overrides": {
+    "addToCart": "button.product_cta_button",
+    "productLinks": "a[href*='/p/accessories-and-software/']"
+  }
+}

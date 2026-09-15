@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "shein.com",
+  "kind": "merchant",
+  "hosts": [
+    "shein.com",
+    "us.shein.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every listing, category and product URL redirects to the site's own risk gateway: either a challenge page whose modal asks you to verify you are human, or a rate-limit path whose whole body is a status line reading 403. Clicking the human checkbox only opens a picture puzzle, which was not attempted. A plain request from the same egress with a desktop user agent gets the same redirects, and an accepted proxy egress landed on the same challenge with the same modal, so this is egress reputation rather than a browser tell. Only the home page, the empty cart and the login page render, so add to cart, the guest path and the card surface were never seen.",
+    "type": "captcha"
+  },
+  "gotchas": [
+    "Classify the wall by the /risk/ URL, by text matching verify you are human, or by a body that is only a status line. The header and footer still render around an empty main area and the page title does not change.",
+    "The home page is the only page that renders and it carries no product links. Product ids appear only inside the home page HTML as goods_id values, which is the only way a product URL can be built at all.",
+    "An earlier drive saw a full listing on the same URL a day before, so the score is per egress and it tightened overnight. Each retry lowers it further, so record the wall and stop rather than retrying.",
+    "The cart renders unwalled but empty, telling you to sign in to view it, and a checkout URL with an empty cart redirects through a logout to the login page. The login page asks for one field, a mobile number or email address, then a Continue button. Whether a filled cart offers guest checkout sits behind that button and is unknown.",
+    "The footer lists a long set of card brands and wallets, so a card form exists past the Pay step of the cart breadcrumb, but the card surface itself was never seen."
+  ],
+  "notes": "Driven locally and through the Agent Vault proxy in September 2026, and both egresses were challenged on the same listing and product URLs. Nothing below the home page was verified, so the size picker, add to cart, the guest path and the card surface are all unknown.",
+  "overrides": {
+    "categoryLinks": "a[href*='-c-']",
+    "productLinks": "a[href*='-p-']",
+    "searchInput": "input[type=search]",
+    "signInInput": "#continue-alias-input"
+  }
+}

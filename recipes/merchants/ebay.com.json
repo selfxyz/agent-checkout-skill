@@ -1,0 +1,52 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ebay.com",
+  "kind": "merchant",
+  "hosts": [
+    "ebay.com",
+    "pay.ebay.com",
+    "cart.payments.ebay.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "input[name=securityCode]",
+  "exampleProductUrl": "https://www.ebay.com/itm/256671767980",
+  "gotchas": [
+    "Enter through https://www.ebay.com/deals and open the item by clicking its tile, so the item request carries the listing referer. The edge's verdict is per path and per egress: the home page, category paths and the search path were 403 from the local egress, and a direct visit to an item URL was 403 through the proxy while the same item opened by tile click rendered.",
+    "Guest checkout exists only behind Buy It Now. Add to cart works and the cart host renders the item, but the cart's Go to checkout leads to the sign-in host with no guest option.",
+    "On a listing with variations, Buy It Now's href is javascript:; until an option is picked, and the click is a silent no-op. Read the anchor's href before deciding the button is broken. Click button.listbox-button__control, then the [role=option] you want.",
+    "Signed out, Buy It Now opens a lightbox rather than navigating. The guest link inside it is a:has-text('Check out as guest') and the checkout page comes up about 20 seconds later.",
+    "Guest checkout is one page on pay.ebay.com/rgxo with the shipping address open and the payment radios disabled until it is saved. The country is preselected and the phone has a country-code button in front of it.",
+    "The state combobox is not pinned down: select[name=stateOrProvince], select[name=state], select[name=stateOrRegion] and select[aria-label='State'] all count 0 among the three selects on the page. The state fill timed out and Done still saved the address, so the state appears to be derived from the postal code. Validate this on first use.",
+    "After Done the address fields count 0 and four enabled payment radios appear. Choosing Add new card renders the card form inline in the main document about 8 seconds later with no iframe, and the expiry is only addressable as input[autocomplete='cc-exp'] because input[name=expiryDate] counts 0.",
+    "The order-total row also matches an attribute selector, but a plain structural selector such as .total .amount is what a total hint accepts.",
+    "Locally the guest link redirects to an hCaptcha page under /splashui/captcha every time, which cannot be passed unattended. That egress was not challenged through the proxy in two sessions."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 from the deals listing to the card inputs: item page, variation, Buy It Now, Check out as guest, the whole shipping form filled field by field, Done, Add new card, then input[name=cardNumber] in the main document. The card was not filled, so the status is unverified. The state select is the one unmapped field, and the local runs stop earlier at an hCaptcha page on the guest link.",
+  "overrides": {
+    "addNewCard": "input[type=radio][aria-label='Add new card']",
+    "addToCart": "#atcBtn_btn_1",
+    "address1": "input[name=addressLine1]",
+    "address2": "input[name=addressLine2]",
+    "buyItNow": "#binBtn_btn_1",
+    "cardCvv": "input[name=securityCode]",
+    "cardExpiry": "input[autocomplete='cc-exp']",
+    "cardNumber": "input[name=cardNumber]",
+    "city": "input[name=city]",
+    "dialogClose": "button.lightbox-dialog__close",
+    "email": "input[name=email]",
+    "firstName": "input[name=firstName]",
+    "guestCheckout": "a:has-text('Check out as guest')",
+    "itemTiles": "a[href*='/itm/']",
+    "lastName": "input[name=lastName]",
+    "orderTotal": ".total .amount",
+    "phone": "input[name=phoneNumber]",
+    "placeOrder": "button:has-text('Confirm and pay')",
+    "price": ".x-price-primary",
+    "saveAddress": "button:has-text('Done')",
+    "variationListbox": "button.listbox-button__control",
+    "variationOption": "[role=option]",
+    "zip": "input[name=postalCode]"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "nike.com",
+  "kind": "merchant",
+  "hosts": [
+    "nike.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Add to Bag clicks fine but the guest cart write is refused: the PUT that creates the cart answers 403 with bot-detection headers and the follow-up PATCH fails outright, so the bag stays empty and the Checkout button stays disabled. The page then shows either a we-could-not-complete-your-request message or an issue-with-your-request code. Six attempts across fresh, warmed and user-agent-spoofed profiles all ended the same way, on a product page and on a listing. One earlier hand drive did get an item in, so the verdict varies by session and egress and a headed browser or an accepted egress is worth re-checking.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "A socks listing URL redirects to a broader listing but the grid still holds the sock cards, so take the first a[href*='/t/'] whose href contains the term.",
+    "The size radios render 5 to 25 seconds after the document is ready, sometimes only after a reload. Wait for input[name='grid-selector-input'] and click the label whose for attribute matches the first enabled one, because the inputs themselves are visually hidden.",
+    "Do not click the fieldset labels above the sizes. Those belong to input[name='product-group-toggle'] and switch to a different product.",
+    "When Add to Bag succeeds and the bag stays empty, read the cart API responses. A 403 that carries bot-detection headers is the browser being graded, and no selector change, overlay dismissal or user-agent change gets past it. Log failed requests too, because a 403 without CORS headers shows up only as a generic network failure.",
+    "With an empty bag the checkout button is disabled, so a click waits on actionability forever and an Enter press does nothing either.",
+    "The guest path, the address form and the card surface are unknown. The bag already embeds PayPal frames, so expect a cross-origin payment iframe."
+  ],
+  "notes": "Driven locally in September 2026 to the product page and its size and add controls, all of which work. The bag never filled, so no checkout page, address form or card surface was seen and the card surface is unknown. Because the block is on the cart API rather than on the pages, the storefront selectors above stay usable if it lifts.",
+  "overrides": {
+    "addToCart": "button[data-testid='atb-button']",
+    "checkoutButton": "button.checkout-button.desktop-checkout-button",
+    "productLinks": "a[href*='/t/']",
+    "sizeRadios": "input[name='grid-selector-input']"
+  }
+}

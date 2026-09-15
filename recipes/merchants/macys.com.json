@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "macys.com",
+  "kind": "merchant",
+  "hosts": [
+    "macys.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "details": "Every route tried answers with a branded Access Denied page. The home page returns 200 with the denial body, a category path returns 403, and a search path returns 200 with the same body and zero product links. The retailer's own header and footer render around the denial, so the page looks live. A plain request from the same egress with a desktop user agent is also refused, and an accepted proxy egress hit the identical wall on the home page and the category, so the denial is on the egress rather than on the browser. No product page, bag or checkout page was ever reached.",
+    "type": "automation-blocked"
+  },
+  "gotchas": [
+    "Classify the wall by the page title, which reads Access Denied, or by its Reference line, and never by the presence of navigation. The header, footer and search box all render around the denial, so a text check that looks for nav links sees a live site.",
+    "Nothing below the wall is known. The product URL shape, add to bag, the guest path, the address form and the card surface all have to be mapped from scratch from an egress the retailer accepts."
+  ],
+  "notes": "Three URLs were tried in September 2026, locally with two different user-agent strings and through the Agent Vault proxy, and all three returned the denial page. Nothing about the route was verified, so this recipe records the wall and its signature rather than a checkout."
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "zara.com",
+  "kind": "merchant",
+  "hosts": [
+    "zara.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Search works and the category listing does not. Open /us/en/search?searchTerm=<terms>, settle about 15 seconds, and a[href*='-p0'] counts about 68 for 34 products, an image link and a title link each.",
+    "Do not hard-code a product URL. The site answers an unknown product id by searching for its slug, so a navigation that looks successful can leave you on an empty results page. Check that h1 counts 1, which it does on a product page and does not on search.",
+    "There is no consent gate: the usual accept-all selectors all count 0. What is there, on every page, are two privacy dialogs with their own close buttons and a marketing sign-up popup inside a cross-origin iframe. That popup overlays the grid and is the likely reason ordinary clicks never become actionable. Dismissing it through the iframe failed, and whether the two main-document dialogs can be closed was never tried.",
+    "Opening a product is the blocker. A plain click on a tile timed out in the actionability checks, and pressing Enter on the tile returns successfully without navigating, because the grid is a single-page router listening on click. A forced click navigated once in about 1.4 seconds and burned its whole budget twice more, so retry it several times rather than concluding the selector is wrong.",
+    "The buy box is a heading reading Add to cart followed by a button whose accessible name is Add plus the product title, so address it as button[aria-label^='Add ']:not([aria-label*='wishlist']). A bare prefix match also hits the wishlist button, and text matches for ADD count 0.",
+    "The per-tile quick add on the listing is the other route worth trying: pressing Enter on button[aria-label='Open size selector'] is accepted in about a second and raises a dialog with about 52 list-item buttons in it. That panel's own markup was never captured.",
+    "Size selection and add to cart are not verified. Candidates to try, all with a forced click, are [data-qa-action='size-in-stock'], li[data-qa-action='size-in-stock'] button, ul[class*='size' i] li button and [role=dialog] li button.",
+    "Locally every URL on this host is a 403 Access Denied from the edge on a fresh profile, so there is no local control for this route, while through an accepted egress no page class is denied."
+  ],
+  "notes": "Driven through the Agent Vault proxy in September 2026 to a product page and its add button. The tile click that opens a product succeeded about one time in three, so the bag was never filled and the cart, the guest path, the address form and the card surface are all unknown. The retailer normally posts the card through its parent group's own payment service rather than a Stripe or Adyen frame, and normally offers a guest purchase, but nothing observed here confirms either.",
+  "overrides": {
+    "addToCart": "button[aria-label^='Add ']:not([aria-label*='wishlist'])",
+    "closeDialog": "button[aria-label='Close']",
+    "productTileHeading": "a:has(h3)",
+    "productTiles": "a[href*='-p0']",
+    "quickAddSizeSelector": "button[aria-label='Open size selector']"
+  }
+}

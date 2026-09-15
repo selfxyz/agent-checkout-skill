@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "uline.com",
+  "kind": "merchant",
+  "hosts": [
+    "uline.com"
+  ],
+  "platform": "custom",
+  "status": "dead-end",
+  "cardSurface": "direct-inputs",
+  "deadEnd": {
+    "note": "Akamai Bot Manager fires a crypto proof-of-work challenge on the sign-in POST, and checkout is gated behind mandatory sign-in with no guest option. Browsing is not blocked.",
+    "type": "captcha"
+  },
+  "exampleProductUrl": "https://www.uline.com/Product/Detail/S-25440-4/Warehouse-Labels/2-Die-Cut-Vinyl-Number-Labels-4",
+  "gotchas": [
+    "Checkout is gated behind a MANDATORY sign-in. Clicking #btnCheckout on the cart redirects to /Signin/SignIn?reloc=/Ordering/Step1Address. There is no guest checkout - the page offers only sign in, create account, or email-me-a-link.",
+    "Akamai Bot Manager fires a crypto proof-of-work challenge on the sign-in POST, deterministically. Verified 3/3 attempts: cold, straight to the bare sign-in page, and a warmed session that browsed home -> product -> cart -> checkout first. Not transient, not sequence-dependent. Detect it via '.sec-container' or 'iframe[challenge]' with the site header absent. The credential is never evaluated - Akamai intercepts before the app sees the POST, so a challenge here says nothing about whether the login is valid.",
+    "Akamai does NOT block browsing. Product pages, category pages and the cart all serve fine to a normal browser UA. Only /Product/AdvSearchResult (site search) and the sign-in POST were challenged. Navigate by direct product URL from the sitemap instead of searching: robots.txt points to sitemapindex.xml, and sitemap-us-product.xml.gz holds ~49,000 product URLs.",
+    "Category and search pages carry no prices in static HTML - they load via AJAX and the page ships a flag literally named IsDPCAjaxDisabledForBots. Read prices from the product page's JSON-LD instead: offers.price is the case/pack total and offers.priceSpecification.price is the per-unit price.",
+    "Sold by the case. Respect #MinOrderQuantity - the orderable total is the case price, not the unit price. Example: S-423 is $3.75 per roll but $67.50 minimum because a case is 18. Cheapest item found across a 78-product sample was $10.00 at minimum quantity 1 (die-cut vinyl number/letter labels).",
+    "The add-to-cart control is an anchor, not a button: a#cart.1, with the quantity input id qty.1 (the NAME is txtQuantity but the ID is not - do not target #txtQuantity). Both ids contain a literal dot and must be escaped in CSS as #qty\\.1 and a#cart\\.1.",
+    "Adding to cart is a client-side AJAX POST of {itemNumber, itemQuantity, preventViewCartRedirect, addToCartPageName} and needs the page's __RequestVerificationToken. There is no GET cart permalink - a real browser session is mandatory.",
+    "The header cart link a#lnkCartLink is present but not visible; clicking it times out. Use a#lnkCartLink2 or navigate directly to /Product/ViewCart.",
+    "Cart is session-bound: an item added in one session is gone in a fresh one, and the checkout button will not render on an empty cart. Add and checkout must happen in one unbroken session.",
+    "Checkout is a five-step funnel, all Disallow-ed in robots.txt: /Ordering/Step1Address, Step2Carrier, Step3Payment, Step4Confirm, Step5OrderSubmitted. The card form is on Step3Payment - never reached, so its field names are unknown.",
+    "Site supports B2B punchout (isPunchout hidden field, /Product/ViewCart/ExitPunchout). A punchout session has item restrictions and may bypass the normal funnel.",
+    "Platform is a bespoke ASP.NET / IIS 10 storefront (server: Microsoft-IIS/10.0, x-powered-by: ASP.NET) behind Akamai (_abck and bm_sz cookies, server-timing ak_p)."
+  ],
+  "notes": "Fill the card form. Never press Place Order / Pay / Submit Order.",
+  "overrides": {
+    "addToCartButton": "a#cart\\.1",
+    "cartUrl": "https://www.uline.com/Product/ViewCart",
+    "checkoutButton": "#btnCheckout",
+    "csrfTokenInput": "input[name=\"__RequestVerificationToken\"]",
+    "productQuantityInput": "#qty\\.1",
+    "signInEmail": "#txtEmail",
+    "signInPassword": "#txtPassword",
+    "signInSubmit": "#btnSignIn"
+  }
+}

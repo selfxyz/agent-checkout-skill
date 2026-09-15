@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "cursor.com",
+  "kind": "merchant",
+  "hosts": [
+    "cursor.com",
+    "authenticator.cursor.sh"
+  ],
+  "platform": "stripe-checkout",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://cursor.com/pricing",
+  "gotchas": [
+    "'Get Pro' CTA = https://cursor.com/api/auth/checkoutDeepControl?yearly=false (yearly=true for annual); redirects to WorkOS AuthKit on authenticator.cursor.sh, so the vault login must be registered to authenticator.cursor.sh.",
+    "Login is email-first then password; the password step carries a Cloudflare Turnstile (captcha handoff), followed by an email OTP (owner handoff, no totp).",
+    "After login you land on hosted Stripe Checkout (checkout.stripe.com), inputs same-document (no iframes). Total shows in .ProductSummary-totalAmount as '$20.00' but the proxy's total reader reported 'order total could not be established' on every attempt, including after billing address was filled, so card fill was blocked."
+  ],
+  "overrides": {
+    "billingCountry": "#billingCountry",
+    "billingName": "#billingName",
+    "billingPostalCode": "#billingPostalCode",
+    "cardCvc": "#cardCvc",
+    "cardExpiry": "#cardExpiry",
+    "cardNumber": "#cardNumber",
+    "submit": ".SubmitButton"
+  }
+}

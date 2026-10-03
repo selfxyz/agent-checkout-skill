@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "aerlingus.com",
+  "kind": "merchant",
+  "hosts": ["aerlingus.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "iframe[name=\"tx_iframe_cvv_cvvIframeContainerId\"]",
+  "exampleProductUrl": "https://www.aerlingus.com/en-gb/",
+  "gotchas": [
+    "Guest checkout, no login. /en-gb/ is an airtrfx fares page whose booking widget hands off to /app/make/... Flow: Search Flights -> results -> fare card 'Economy from' -> 'Saver' -> 'Continue with Saver Fare' (upsell dialog) -> Continue -> Passenger Information -> Select seats ('Skip Seat Selection' then 'Continue without seats') -> Add Bags (a carry-on choice radio, 'Check it in - 10kg Bag No Charge' works) -> Enhance your trip (Continue) -> Review & Purchase (/app/make/purchase), which carries the card form. 'Complete Purchase' is the final button.",
+    "A OneTrust consent scrim intercepts every click until it is answered; only #onetrust-accept-btn-handler was visible at the first layer.",
+    "Widget: trip type is the button aria-label 'fc-booking-journey-type-aria-label, ...' with option 'One way'; From/To take typing on [aria-label=\"fc-booking-origin-aria-label\"] / [aria-label=\"fc-booking-destination-aria-label\"], then click the option such as 'London/Heathrow (LHR), United Kingdom'. Pick a gridcell like '23 Oct 2026, ,' and press 'Done' in the date dialog.",
+    "Passenger step: title is the first visible <select>, names input[autocomplete=\"given-name\"]/input[autocomplete=\"family-name\"], email and confirm are input[type=email] nth 0/1, the country code is a [role=combobox] (type the country, click the option), then input[id*=\"area\" i] and input[id*=\"local\" i].",
+    "Card number and CVV are TokenEx iframes: iframe[name=\"tx_iframe_numberIframeContainerId\"] (input[autocomplete=\"cc-number\"], id data) and iframe[name=\"tx_iframe_cvv_cvvIframeContainerId\"] (input[autocomplete=\"cc-csc\"]). Expiry is one plain input[autocomplete=\"cc-exp\"] taking MM/YY. Card Type select (option 'Visa Card') sits before the number.",
+    "Address Line 1 has a short maxlength: a full street line came back fill_rejected (truncated).",
+    "The billing Country select (select[id*=\"ountry\" i]) did not take the country token through selectOption; it timed out waiting for the option. Set it by label instead.",
+    "order.total hint '[class*=\"total\" i]' resolved to the right amount (GBP 96.23) before any fill."
+  ],
+  "overrides": {
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardType": "select[id*=\"card\" i]",
+    "city": "input[autocomplete=\"address-level2\"]",
+    "country": "select[id*=\"ountry\" i]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "firstName": "input[autocomplete=\"cc-given-name\"]",
+    "lastName": "input[autocomplete=\"cc-family-name\"]",
+    "street1": "input[autocomplete=\"address-line1\"]",
+    "zip": "input[autocomplete=\"postal-code\"]"
+  }
+}

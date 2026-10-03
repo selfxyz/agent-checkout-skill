@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "asana.com",
+  "kind": "signup",
+  "hosts": ["asana.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password). After the work email Asana sent \"Action Required: Reserve your Asana account\" with a code; the account owner entered it through a challenge handoff (outcome solved). A Welcome step then asked for a full name and a new password; both were accepted and the page went on to onboarding. A fresh sign-in with the same credentials was then accepted.",
+  "gotchas": [
+    "Email-first: after the work email, Asana sends a code by email (\"Reserve your Asana account\"); the code belongs to the account owner: hand it off. After the code a Welcome step asks for a full name and a new password on the same page.",
+    "The Welcome step shows a minimum-length rule for the password; the vault's 24-character default passed."
+  ],
+  "overrides": {
+    "email": "#email-input",
+    "fullName": "input[type=\"text\"]",
+    "password": "input[type=\"password\"][autocomplete=\"new-password\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://asana.com/create-account",
+  "stepped": true
+}

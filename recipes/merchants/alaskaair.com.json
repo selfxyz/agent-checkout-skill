@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "alaskaair.com",
+  "kind": "merchant",
+  "hosts": ["alaskaair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "iframe[src*=\"cybersource\"] >> nth=1 >> #securityCode",
+  "exampleProductUrl": "https://www.alaskaair.com/search/results?A=1&O=SEA&D=PDX&OD=2026-10-23&OT=Anytime&RT=false&UPG=none&ShoppingMethod=onlineprice&locale=en-us",
+  "gotchas": [
+    "Guest checkout works. Results deep link: /search/results?A=1&O=SEA&D=PDX&OD=YYYY-MM-DD&OT=Anytime&RT=false&UPG=none&ShoppingMethod=onlineprice&locale=en-us.",
+    "Click a 'Main $.. One way' fare button; a 'Make it refundable' modal follows, click 'Continue with flights', then 'Add to cart', then 'Continue as guest' in the cart. The cart holds the fare for only about 10 minutes (session timer), so drive the rest without pauses.",
+    "Text inputs are web components whose real <input> is visually hidden until the field is clicked: click the field's label text (e.g. text=First name / Given) first, then fill the input (#firstName-input, input[id*=ast i], input[id*=day i], input[id*=ear i], input[id*=mail i], input[id*=hone i], input[id*=ip i]). Role-based textbox fills time out.",
+    "Traveler page: Gender and Month are comboboxes (click, then role=option 'Female' / 'January'). Contact info needs email, phone and a Zip code even though country of residence is optional.",
+    "Seats: 'Skip seats' at the bottom bar goes straight to Review & pay.",
+    "Payment: click the 'Credit/debit card' button to reveal the form. Card number and security code are Cybersource Flex microform iframes (iframe[src*=cybersource], first = #number, second = #securityCode); use pressSequentially. Expiry Month/Year are native selects (autocomplete cc-exp-month / cc-exp-year); index 8 gave 08. Name on card and billing inputs carry autocomplete attributes.",
+    "Billing Address line 1 cleared a filled value (fill_rejected, an address-autocomplete field) and City stayed hidden after a label click; they need another approach.",
+    "An insurance radiogroup ('Please make a insurance selection') must be answered before 'Book now'; the decline radio did not take a ref click. A reCAPTCHA Enterprise badge is on the page (invisible; no challenge shown before payment)."
+  ],
+  "overrides": {
+    "cardName": "input[autocomplete=\"cc-name\"]",
+    "cardNumber": "iframe[src*=\"cybersource\"] >> nth=0 >> #number",
+    "city": "input[autocomplete*=\"address-level2\"]",
+    "cvv": "iframe[src*=\"cybersource\"] >> nth=1 >> #securityCode",
+    "expiryMonth": "select[autocomplete*=\"cc-exp-month\"]",
+    "expiryYear": "select[autocomplete*=\"cc-exp-year\"]",
+    "state": "select[autocomplete*=\"address-level1\"]",
+    "street1": "input[autocomplete*=\"address-line1\"]",
+    "zip": "input[autocomplete*=\"postal-code\"]"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dailymotion.com",
+  "kind": "signup",
+  "hosts": ["dailymotion.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. Continue with email → the address → a password step → a date-of-birth step (three native selects) → the signed-in Dailymotion home, with a \"verify your email\" notice; no code, link or CAPTCHA was asked for. A fresh sign-in with the same credentials (the same email-first flow, whose password step then reads as a log-in) reached the home signed in. No mail from Dailymotion had arrived at the signup address within about five minutes, so the email verification the notice asks for was not completed.",
+  "gotchas": [
+    "The page opens on sign-up choices; click 'Continue with email' to show the email box (the mode_toggle precondition).",
+    "The box is named username but takes an email address.",
+    "Stepped: the email, then a password step (input[type=\"password\"]), then a date of birth as three native selects (month, day, year; choose options rather than typing), then the signed-in home. No code, link or CAPTCHA was asked for.",
+    "The home then shows a \"verify your email\" notice; on 2026-09-30 no verification mail arrived within about five minutes. A verification link, when it comes, belongs to the account owner.",
+    "Sign-in uses the same email-first flow (/signin also shows 'Join Dailymotion' and 'Continue with email'); a cookie notice (I understand) may need dismissing first."
+  ],
+  "overrides": {
+    "email": "#username",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://www.dailymotion.com/signup",
+  "stepped": true
+}

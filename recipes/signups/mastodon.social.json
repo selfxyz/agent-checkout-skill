@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "mastodon.social",
+  "kind": "signup",
+  "hosts": ["mastodon.social"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); all five selectors matched. After the rules were accepted, the form took a public username, the date of birth and the terms checkbox; submit moved to \"Confirm email\" and \"Mastodon: Confirmation instructions for mastodon.social\" arrived at the signup address. The account owner opened its link, which showed a CAPTCHA, and completed it. A fresh sign-in with the same credentials was then accepted, with no approval hold.",
+  "gotchas": [
+    "The server's rules are shown first and must be accepted before the form appears (the consent_gate precondition); accepting them is the account owner's agreement.",
+    "The form also requires a date of birth (#user_date_of_birth_1i, _2i, _3i), which is the account owner's to supply.",
+    "This is the mastodon.social server only; other Mastodon servers are separate sites with their own rules.",
+    "The date of birth is three text inputs named in Rails order: #user_date_of_birth_1i is the year, _2i the month, _3i the day.",
+    "A terms-of-service and privacy-policy checkbox must be ticked before Sign up.",
+    "The emailed confirmation link opens a CAPTCHA before the account is confirmed; both are the account owner's."
+  ],
+  "overrides": {
+    "confirmPassword": "#user_password_confirmation",
+    "email": "#user_email",
+    "password": "#user_password",
+    "submit": "button[type=\"submit\"]",
+    "username": "#user_account_attributes_username"
+  },
+  "ownerSteps": ["email_link", "captcha"],
+  "preconditions": ["consent_gate"],
+  "signupUrl": "https://mastodon.social/auth/sign_up",
+  "stepped": true
+}

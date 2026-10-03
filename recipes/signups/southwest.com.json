@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "southwest.com",
+  "kind": "signup",
+  "hosts": ["southwest.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]",
+    "username": "#username"
+  },
+  "signupUrl": "https://www.southwest.com/loyalty/enroll/"
+}

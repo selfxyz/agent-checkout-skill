@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "myfitnesspal.com",
+  "kind": "signup",
+  "hosts": ["myfitnesspal.com"],
+  "platform": "custom",
+  "status": "partial",
+  "evidence": "2026-09-30: signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. /account/create is a questionnaire before the account form: first name, goals, a note, barriers, activity level, sex / birthday / country / zip, height and weight; then Email address and Create a password (#Email\\ address, #Create\\ a\\ password) with a terms checkbox, then a username. The page then showed the plan's daily calorie goal, and an email from no-reply@myfitnesspal.com arrived at the signup address; the account owner opened its verification link. A fresh sign-in on /account/login was held by a Cloudflare check after Log in; two handoffs to the owner timed out, and in a third the owner completed the check, after which the login form had reloaded empty; filled and submitted again, it was held by the Cloudflare check once more. Sign-in was not confirmed. Partial: the account was created and its email verified, sign-in through the proxy was not.",
+  "gotchas": [
+    "/account/create opens a multi-step questionnaire (name, goals, barriers, activity, sex, birthday as month/day/year spinbuttons, country and zip, height and weight) before the email and password step; answer each and press Next.",
+    "The email-and-password step has a required terms checkbox, and a username step follows it.",
+    "A cookie consent dialog in an iframe (title contains SP Consent, button OK) covers the page, including the login button, until dismissed.",
+    "The account's email is verified by a link sent by email, which belongs to the account owner.",
+    "On 2026-09-30 a sign-in through the Agent Vault proxy (US egress) was held by a Cloudflare check (challenges.cloudflare.com) after Log in; the page reloads with the form emptied, and a resubmit after the account owner completed the check was held again. A Cloudflare check belongs to the account owner."
+  ],
+  "overrides": {
+    "email": "#Email\\ address",
+    "password": "#Create\\ a\\ password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.myfitnesspal.com/account/create"
+}

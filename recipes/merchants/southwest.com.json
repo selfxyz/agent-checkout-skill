@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "southwest.com",
+  "kind": "merchant",
+  "hosts": ["southwest.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "#creditCardNewVerificationValue",
+  "exampleProductUrl": "https://www.southwest.com/",
+  "gotchas": [
+    "Guest checkout: no login needed. Flow is homepage search -> Price -> Passengers -> Seats -> Payment.",
+    "Search from the homepage form (#originationAirportCode, #destinationAirportCode, input[name=\"departureDate\"], submit #flightBookingSubmit). A deep link to /air/booking/select-depart.html renders an empty flight list with no error.",
+    "Trip type defaults to Round-trip in a fresh browser; set One-way first or the search fails with 'Enter return date'.",
+    "The date picker stays open over the search button and intercepts the click; press Enter on #flightBookingSubmit instead.",
+    "Card fields are inline on southwest.com, not in a payment iframe. Card Type (#creditCardType) is a custom combobox and must be set (e.g. Visa) before the number.",
+    "Expiry is MMYY digits only. The CVV input has no recognisable id; it was located only as input[maxlength=\"4\"] and has not been filled - verify before relying on it.",
+    "#creditCardStreetAddress has a short maxlength and truncated a full street line (fill_rejected).",
+    "Passenger step requires DOB (#passengerDateOfBirth-0, MMDDYYYY digits) and Gender (custom combobox); contact method combobox defaults to Text, switch to 'Email me' to get an email field.",
+    "Seat step: 'Skip all seats' link advances to payment; the 'Continue to payment' control is not a button.",
+    "CVV confirmed 2026-10-02 from a pre-fill snapshot: the field labelled 'CVV' is input#creditCardNewVerificationValue (maxlength 4), the only input[maxlength=\"4\"] on the payment page. Its accessible name carries a trailing icon glyph, so match it as textbox \"CVV...\" rather than an exact name.",
+    "Fill the card number and the CVV back to back (expiry and the billing fields first), so nothing sits between the two card legs.",
+    "input[id*=\"mail\"] matches TWO visible inputs on the payment page (the receipt email and its confirmation); fill both, by nth=0 and nth=1.",
+    "Billing #creditCardStreetAddress is maxlength 40, Zip 5, Phone 10 digits (country code is a separate combobox defaulting to +1), City 32, name on card 30 each. Country (#creditCardCountry) and State (#creditCardState) are readonly comboboxes, not text inputs.",
+    "Order total for an order.total hint: .checkout-totals--content li:last-child .currency (the 'Trip total' row) resolved to the right USD amount when declared before any fill."
+  ],
+  "overrides": {
+    "cardNumber": "#creditCardNumber",
+    "cardType": "#creditCardType",
+    "city": "input[id^=\"creditCardCity\"]",
+    "cvv": "#creditCardNewVerificationValue",
+    "email": "input[id*=\"mail\"]",
+    "expiry": "input[id*=\"Expir\"]",
+    "firstName": "#creditCardFirstNameOnCard",
+    "lastName": "#creditCardLastNameOnCard",
+    "phone": "#creditCardPhoneNumber",
+    "street1": "#creditCardStreetAddress",
+    "zip": "#creditCardZipCode"
+  }
+}

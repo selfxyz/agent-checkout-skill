@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "qantas.com",
+  "kind": "merchant",
+  "hosts": ["qantas.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.qantas.com/en-au",
+  "gotchas": [
+    "/au/en.html redirects to /en-au. A country banner offers 'Stay on Qantas AU'.",
+    "Search widget: 'Trip Type' combobox with option 'One way'; Departure/Arrival are input[role=combobox] (the arrival is #arrivalPort-input). Typing 'Sydney' lists Sydney (CA) YQY first, so type the code (SYD) or match 'Kingsford Smith'.",
+    "Choosing an airport auto-opens a full-screen 'Select travel dates' dialog that covers the form and takes clicks; day buttons are labelled like 'Fri Oct 23 2026. Select for departure date.' and the dialog closes with 'Continue'.",
+    "The booking engine is a separate host, book.qantas.com; the Akamai block lands there, not on www.qantas.com.",
+    "Blocking: 2026-10-02, staging proxy with local egress (non-AU): 'Search flights' on www.qantas.com/en-au hands off to book.qantas.com/qf-booking/dyn/air/tripflow.redirect, which answers an Akamai 'Access Denied' page (errors.edgesuite.net reference). No flight results were shown. Egress-dependent, so re-test from another egress before treating it as permanent."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gap.com",
+  "kind": "signup",
+  "hosts": ["gap.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Gap's secure-www sign-in, reached from the storefront's 'Sign In or Join Now' link, with an email box and Continue. Nothing was typed or submitted.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "Gap Inc. brands share this account system; Old Navy's page is secure-oldnavy.gap.com/my-account/sign-in, with the same #verify-email-input."
+  ],
+  "overrides": {
+    "email": "#verify-email-input",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://secure-www.gap.com/my-account/sign-in",
+  "stepped": true
+}

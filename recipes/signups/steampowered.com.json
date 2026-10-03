@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "steampowered.com",
+  "kind": "signup",
+  "hosts": ["steampowered.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Steam's /join account creation, with #createAccountButton. Nothing was typed or submitted.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email belongs to the account owner: hand it off."
+  ],
+  "overrides": {
+    "email": "#email",
+    "submit": "#createAccountButton"
+  },
+  "signupUrl": "https://store.steampowered.com/join",
+  "stepped": true
+}

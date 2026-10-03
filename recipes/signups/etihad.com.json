@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "etihad.com",
+  "kind": "signup",
+  "hosts": ["etihad.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: the Etihad Guest 'Create Account' page (Title, first and last name, email, date of birth, then Continue). Nothing was typed or submitted.",
+  "gotchas": [
+    "The Title box (#title) carries autocomplete=\"new-password\" but is a text field for a salutation, not a password; do not put a password in it.",
+    "No password field on this first step; the step after Continue was not observed — look at it before filling it.",
+    "The form also requires a date of birth and acceptance of the Etihad Guest terms (#privacyChkBox); both are the account owner's to give.",
+    "Continue is a plain button (type=button, no id); press the button labelled Continue."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]"
+  },
+  "signupUrl": "https://www.etihad.com/en-in/etihadguest/join",
+  "stepped": true
+}

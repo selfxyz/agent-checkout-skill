@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "mercari.com",
+  "kind": "signup",
+  "hosts": ["mercari.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "2026-09-29: driven through the Agent Vault proxy with this recipe; all three selectors matched. Sign up was pressed twice (click, then Enter): each time the fields went disabled while the request ran and came back with no message, no visible challenge and no mail to the signup address. 2026-09-30, with browser egress through the owner's tunnel on a US network: the same signup now answered that the email is already registered, so an account may exist from the earlier attempt, but no mail from Mercari ever arrived and a sign-in with the same credentials sat on the form with no message and no redirect. Not verified. A later retry the same day with an address on the owner's own domain behaved the same: all fields valid, the terms box ticked, and Sign up and then Log in both submitted with no answer and no mail to either inbox, so the email domain is not the cause.",
+  "gotchas": [
+    "A Terms of Service and Privacy Policy checkbox must be ticked; Sign up stays disabled until it is.",
+    "A cookie banner (Got it / Review details) covers the Sign up button until it is dismissed.",
+    "The password placeholder asks for at least 8 characters; no maximum was shown.",
+    "An invisible reCAPTCHA frame is on the page.",
+    "Through the Agent Vault proxy (both its own egress and a US egress), Sign up and Log in submitted with no visible answer: no error, no challenge, no redirect and no mail. A signup that looks silent may still register the email; a later signup with the same address is answered that it is already registered.",
+    "On 2026-09-30 the same silence followed with an address on the account owner's own domain (no mail to either inbox), so the email domain is not what Mercari refuses."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-29 and 2026-09-30, see evidence.",
+  "overrides": {
+    "email": "#email",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.mercari.com/signup/"
+}

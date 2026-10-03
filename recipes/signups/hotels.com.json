@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hotels.com",
+  "kind": "signup",
+  "hosts": ["hotels.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Hotels.com's /login (redirected to a country host, in.hotels.com, from India), headed 'Sign in or create an account'. Nothing was typed or submitted.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The site redirects to a country host by the visitor's location; the form is the same."
+  ],
+  "overrides": {
+    "email": "#loginFormEmailInput",
+    "submit": "#loginFormSubmitButton"
+  },
+  "signupUrl": "https://www.hotels.com/login",
+  "stepped": true
+}

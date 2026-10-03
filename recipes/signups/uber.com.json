@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "uber.com",
+  "kind": "signup",
+  "hosts": ["uber.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: auth.uber.com/v2/, headed 'What's your phone number or email?', where uber.com, ubereats.com and postmates.com all send 'Sign up'. Nothing was typed or submitted.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email (the box also takes a phone number) first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The same Uber account serves Uber rides, Uber Eats and Postmates."
+  ],
+  "overrides": {
+    "email": "#PHONE_NUMBER_or_EMAIL_ADDRESS",
+    "submit": "#forward-button"
+  },
+  "signupUrl": "https://auth.uber.com/v2/",
+  "stepped": true
+}

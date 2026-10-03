@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "heb.com",
+  "kind": "signup",
+  "hosts": ["heb.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: H-E-B's /oidc/prompt/register, which redirects to accounts.heb.com/interaction/<per-visit id>/register, headed 'Sign up for an account' (first and last name, email, mobile number, Create account). Nothing was typed or submitted.",
+  "gotchas": [
+    "Start from www.heb.com/oidc/prompt/register every time: the accounts.heb.com page it redirects to carries a per-visit interaction id and goes stale.",
+    "No password field on this form; what follows Create account was not observed — look at the next screen before filling it. A code sent by text or email belongs to the account owner: hand it off.",
+    "The form also asks for a mobile number (#phone-input), which is the account owner's to supply.",
+    "The same account signs in at H-E-B, Central Market, Favor and Joe V's."
+  ],
+  "overrides": {
+    "email": "#email-input",
+    "firstName": "#firstName-input",
+    "lastName": "#lastName-input",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.heb.com/oidc/prompt/register",
+  "stepped": true
+}

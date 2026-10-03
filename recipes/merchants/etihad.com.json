@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "etihad.com",
+  "kind": "merchant",
+  "hosts": ["etihad.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "#cvvIframe >>> #value",
+  "exampleProductUrl": "https://www.etihad.com/en-us/",
+  "gotchas": [
+    "Start at https://www.etihad.com/en-us/ ; close the top banner. Booking widget: tab 'One way', origin #fsporigin and destination #fspdestination are comboboxes - type a city and click the option whose name ends with the IATA code (e.g. 'airport Abu Dhabi, United Arab Emirates Zayed International Airport AUH'). 'Guests and Cabin' opens first with a Continue button, then the two-month 'Travel dates' calendar (day cells are generics with the day number; a hidden previous month also matches, pick the clickable one), then Search.",
+    "The booking flow moves to digital.etihad.com (same site). Results: open a flight's Economy 'View', then 'Continue' under Basic; a 'Value fare is ideal' dialog needs the 'Accept basic fare restrictions' checkbox before 'Continue with Basic' enables (click it inside [role=\"dialog\"]; dialogs blank the accessibility names of the page behind them).",
+    "Guests page (guest checkout, no login): Title mat-select, input[formcontrolname=\"firstName\"/\"lastName\"], a calling-code combobox (offered only AE +971 from a European egress), input[placeholder=\"Contact number\"], email (disablepaste), and two marketing checkboxes pre-ticked (news, WhatsApp) - untick them. Then Continue.",
+    "Seats: 'Add seats later' then 'Continue without seats' in the dialog. Bags: Continue, then Continue in the 'You have selected Basic' dialog. Extras: 'Continue without extras'. Then Payment.",
+    "Payment (Amadeus checkout SDK): card number is in iframe#panIframe (prd.payment.amadeus.com .../pan.html) input#value; CVV is in iframe#cvvIframe input#value (maxlength 3). Card holder #cardholderName (letters, space and apostrophe only, max 30), expiry two inline inputs #expiryMonth / #expiryYear (2 digits each), email is prefilled from the guest step, billing 'Country' combobox needs an option click. Terms checkbox before 'Pay now'.",
+    "Order total is span.price[data-amount] inside .price-description-total ('Total: AED335'); an order.total hint on it (text or data-amount) came back resolved:false on 2026-10-02, so the vault may not read the amount here."
+  ],
+  "overrides": {
+    "cardNumber": "#panIframe >>> #value",
+    "cardholderName": "#cardholderName",
+    "cvv": "#cvvIframe >>> #value",
+    "email": "input[type=\"email\"]",
+    "expiryMonth": "#expiryMonth",
+    "expiryYear": "#expiryYear",
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]",
+    "phone": "input[placeholder=\"Contact number\"]"
+  }
+}

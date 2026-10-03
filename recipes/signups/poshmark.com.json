@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "poshmark.com",
+  "kind": "signup",
+  "hosts": ["poshmark.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password). All six selectors matched as filed. After Next no code or challenge was shown; Poshmark's \"Welcome to Poshmark\" mail arrived at the signup address within seconds, and the public closet page for the chosen username loaded.",
+  "gotchas": [
+    "The username is public and, per the page, cannot be changed; choose it before submitting and record it on the login only after the site accepts it.",
+    "Password rule shown on the page: at least 6 characters with a number or symbol; the field caps input at 24 characters (maxlength).",
+    "After Next the page kept showing the Create Your Account form for 20+ seconds even though the account had been created; confirm by the welcome mail or a signed-in page, not by the page moving on."
+  ],
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]",
+    "username": "input[name=\"userName\"]"
+  },
+  "signupUrl": "https://poshmark.com/signup"
+}

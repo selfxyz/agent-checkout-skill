@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hawaiianairlines.com",
+  "kind": "merchant",
+  "hosts": ["hawaiianairlines.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "exampleProductUrl": "https://www.hawaiianairlines.com/search/results?A=1&O=HNL&D=OGG&OD=2026-10-23&RT=false",
+  "gotchas": [
+    "Guest checkout works: cart page offers 'Continue as guest'. Flow: results -> fare -> Trip summary 'Add to cart' -> Cart 'Continue as guest' -> Travelers -> Seats ('Skip seats') -> Review & pay (/book/checkout).",
+    "Working search deep link: https://www.hawaiianairlines.com/search/results?A=1&O=HNL&D=OGG&OD=2026-10-23&RT=false (one-way, 1 adult). Picking Saver opens a 'Travel your way in Main' modal; choose 'Continue with Saver'.",
+    "Homepage opens an Atmos Rewards Visa promo dialog ('No, thanks') and an MFA advisory banner; neither blocks the search.",
+    "All text inputs are web-component inputs rendered visually hidden (util_displayHiddenVisually) under a floating label: fill times out on the bare input until you click the label text (e.g. 'First name / Given name', 'Name on card'), then fill the #...-input by id. Ids: #firstName-input, #lastName-input, #dateOfBirthDay-input, #dateOfBirthYear-input, #email-input, #phone-input, #zipCode-input.",
+    "Gender, DOB month, card expiry month/year and state are custom comboboxes: click the combobox then the option (role option) - no native select to selectOption.",
+    "Card number and security code are Cybersource Microform (flex.cybersource.com) in TWO separate iframes, both iframe[allowtransparency] (nth=0 number, nth=1 CVV); inner inputs input[name=number] and input[name=securityCode]. Use pressSequentially, number then CVV back to back.",
+    "Billing Address line 1 rejects a plain fill (fill_rejected: field emptied, likely address autocomplete re-render); typing it (page.type) keeps the value. City/zip need their label clicked first.",
+    "Order total ($94.90 under Price summary 'Total') sits inside web-component markup; order.total hints on .calculation-totals, span.tw-m-0 and similar did not resolve (implausible_total / not found), so the spending guard may not read the amount.",
+    "reCAPTCHA Enterprise (invisible badge) loads on the checkout page; it did not challenge before payment. Final button is 'Book now' - never click it. Travel insurance radio must be answered (No) before booking."
+  ],
+  "overrides": {
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[allowtransparency] >> nth=0",
+    "cardholderName": "#name-input",
+    "city": "#billingInfoCity-input",
+    "cvv": "input[name=\"securityCode\"]",
+    "cvvFrame": "iframe[allowtransparency] >> nth=1",
+    "street1": "#addressLineOne-input",
+    "zip": "#billingInfoZipCode-input"
+  }
+}

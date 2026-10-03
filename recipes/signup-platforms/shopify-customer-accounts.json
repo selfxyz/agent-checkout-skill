@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "shopify-customer-accounts",
+  "kind": "signup-platform",
+  "name": "Shopify customer accounts (passwordless)",
+  "status": "unverified",
+  "evidence": "Read-only DOM read on 2026-09-21 against account.colourpop.com, reached from colourpop.com/account, which served /authentication/login. The email input matched exactly one visible element; both submit buttons were confirmed to belong to the email's own form. Nothing was typed or submitted.",
+  "detect": {
+    "selectors": ["#customer-authentication-web-email"]
+  },
+  "fields": {
+    "email": "#customer-authentication-web-email",
+    "submit": [
+      "button[type=\"submit\"][aria-label=\"Continue\"]",
+      "form:has(#customer-authentication-web-email) button[type=\"submit\"][aria-label]"
+    ]
+  },
+  "gotchas": [
+    "Passwordless: completing this signup needs the code emailed to the account owner. There is no step a vault password can fill.",
+    "The aria-label 'Continue' is English, so on a translated store use the fallback, which keys on the PRESENCE of aria-label rather than its text. It names the same button alone. Do not drop the [aria-label] from it: the email's form holds a second submit, labelled 'Submit', and a selector matching both cannot be clicked under strict locator semantics.",
+    "The form id (FormP0-17 when observed) and the hashed classes are generated per build. Do not target them.",
+    "Nothing in this flow's URL is unique to Shopify: it runs on the store's own account.<store> subdomain, and /authentication/login is a generic path. So it has no URL detect signal at all and is reached only through a host-keyed signup recipe naming this platform. Inferring it from the path would hand these selectors to unrelated login pages."
+  ],
+  "notes": "Shopify's newer customer accounts are passwordless, with one page for signing in and signing up. Entering an email sends a one-time code, and entering that code creates the account if none exists. There is no password field in the flow, so a vault-minted password is never used here.",
+  "steps": {
+    "open": "Open /account on the store's domain. A store on these accounts redirects to a Shopify-hosted page, observed at account.<store>/authentication/login.",
+    "fill": "Fill #customer-authentication-web-email with the email token. The input has no name attribute.",
+    "submit": "Click the 'Continue' arrow beside the email field.",
+    "outcome": "Not observed: discovery never submits.",
+    "verify": "Shopify emails a one-time code to the address. That code belongs to the account owner: hand off to them, and never guess or automate it."
+  }
+}

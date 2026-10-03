@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "jetblue.com",
+  "kind": "merchant",
+  "hosts": ["jetblue.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "iframe[name=\"tx_iframe_cvv_tokenex-security-code-container\"] #data",
+  "exampleProductUrl": "https://www.jetblue.com/booking/flights?from=JFK&to=BOS&depart=2026-10-23&isMultiCity=false&noOfRoute=1&adults=1&children=0&infants=0&sharedMarket=false&roundTripFaresFlag=false&usePoints=false",
+  "gotchas": [
+    "Guest checkout works. The results deep link is /booking/flights?from=JFK&to=BOS&depart=YYYY-MM-DD&isMultiCity=false&noOfRoute=1&adults=1&children=0&infants=0&sharedMarket=false&roundTripFaresFlag=false&usePoints=false.",
+    "A TrustArc cookie dialog covers the page (div.truste_overlay intercepts clicks). It is in the top document; its accessible button name is 'Accept All Cookies' (capital C), although it reads 'Accept all cookies'.",
+    "Click the 'Main Standard seat $..' fare card to expand it, then 'Select' under Main Base or Main; a 'Main Flex' upsell modal follows: click 'Select Main'. Then Shopping Cart -> 'Continue to checkout' -> 'Continue as guest'.",
+    "Traveler Details asks for name, email, gender, date of birth, address and phone. Gender, Month, Day, Year and State are custom button pickers (click role=button[name=\"Gender\"], then the role=option). Month options are short names (Jan, Feb). Address line 1 is an autocomplete combobox. The traveler address becomes the billing address on the payment step (Billing address 'Edit' button reopens it).",
+    "Seats & Extras: click 'Next: Review & Pay' to skip seats and extras.",
+    "Payment: card number and security code are TokenEx iframes (iframe[name=\"tx_iframe_tokenex-card-number-container\"] and iframe[name=\"tx_iframe_cvv_tokenex-security-code-container\"]), each with a visible input #data; use pressSequentially. Name on card and the mm/yy expiry are top-level inputs with autocomplete cc-name / cc-exp.",
+    "The trip-insurance radios (Yes/No) must be answered before paying; click role=radio[name=/^No, I choose not to protect/]. The final button is 'Accept & Pay'.",
+    "Billing fields carry no autocomplete attributes; they resolve by formcontrolname (city, stateCode, postalCode) and input[role=combobox] for line 1."
+  ],
+  "overrides": {
+    "cardName": "[autocomplete=\"cc-name\"]",
+    "cardNumber": "iframe[name=\"tx_iframe_tokenex-card-number-container\"] #data",
+    "city": "input[formcontrolname=\"city\"]",
+    "cvv": "iframe[name=\"tx_iframe_cvv_tokenex-security-code-container\"] #data",
+    "expiry": "[autocomplete=\"cc-exp\"]",
+    "state": "input[formcontrolname=\"stateCode\"]",
+    "street1": "input[role=\"combobox\"]",
+    "zip": "input[formcontrolname=\"postalCode\"]"
+  }
+}

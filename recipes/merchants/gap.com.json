@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gap.com",
+  "kind": "merchant",
+  "hosts": [
+    "gap.com",
+    "oldnavy.gap.com",
+    "oldnavy.com",
+    "bananarepublic.gap.com",
+    "bananarepublic.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "gap.com redirects to www.gap.com; oldnavy.com and bananarepublic.com land on oldnavy.gap.com and bananarepublic.gap.com. Product pages are /browse/product.do?pid=<id>; a search listing is /browse/search.do?searchText=<term>.",
+    "Skip pid=000173092 on the search page: it is the gift-card footer link and its page adds nothing to the bag.",
+    "An Attentive SMS sign-up overlay (#attentive_overlay with iframe#attentive_creative, fixed, z-index 501) mounts 3 to 5 seconds after the product page loads and covers the viewport, so #pdp-atb-btn never becomes actionable while it is up. Wait up to 8 seconds for #attentive_overlay to attach, press Escape on body, and press Escape once more right before clicking add to bag.",
+    "Size inputs are visually hidden (sr-only), so clicking the input times out. Click the label in .pdp_size-selector-container__items instead; labels carry for=\"pdp_buybox_dimension_<size>\". Pick any in-stock size.",
+    "/shopping-bag shows the total and a Checkout button. On oldnavy.gap.com Checkout opens an email step first; the step after Continue rendered a single input and no shipping or card fields in the run recorded here, so the checkout past the bag is not mapped.",
+    "A click that never becomes actionable while the element count says the button is present is usually a fixed overlay, not a missing element: send Escape before retrying."
+  ],
+  "notes": "Verified locally and through the Agent Vault proxy to the shopping bag on gap.com and oldnavy.gap.com, and locally on bananarepublic.gap.com (September 2026). The card form was not reached, so the status is unverified: everything from the bag's Checkout button on is unmapped and should be validated on first use.",
+  "overrides": {
+    "addToCart": "#pdp-atb-btn",
+    "bagCheckout": "button:has-text(\"Checkout\")",
+    "productLinks": "a[href*=\"/browse/product.do?pid=\"]",
+    "sizeOption": ".pdp_size-selector-container__items label",
+    "smsOverlay": "#attentive_overlay"
+  }
+}

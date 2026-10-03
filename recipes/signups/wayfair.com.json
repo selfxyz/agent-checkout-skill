@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "wayfair.com",
+  "kind": "signup",
+  "hosts": ["wayfair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Wayfair's authentication page, headed 'Enter your email address to sign in or to create an account'. Nothing was typed or submitted. 2026-10-01: driven through the Agent Vault proxy using this recipe (test-inbox address), with browser egress through the owner's tunnel on a US network. The page showed 'Loading...' for several seconds before input[name=\"email\"] appeared; a PerimeterX collector (prx.wayfair.com/px/.../collector) was among its requests. After the email fill, neither the submit click nor Enter on the email field moved the page: no password or code step, no field error (no aria-invalid), no challenge (detect_challenge), and no mail from the site at the signup address. The same happened on a fresh load in a new session. No account was created, so this is not verified. The same day, the account owner entered a test-inbox address (agentmail.to) at the same email step in their own browser, and the site moved on and sent an emailed verification code, so the address is accepted and the stall is specific to the proxy's browser (see #739).",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "On 2026-10-01, through the Agent Vault proxy (US egress), the email step did not advance after submit or Enter and showed no error or challenge; a PerimeterX collector runs on the page. Treat a stuck email step here as a likely bot refusal, not a selector problem."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.wayfair.com/v/account/authentication/login",
+  "stepped": true
+}

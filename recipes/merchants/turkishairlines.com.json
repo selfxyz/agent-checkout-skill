@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "turkishairlines.com",
+  "kind": "merchant",
+  "hosts": ["turkishairlines.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "captcha",
+    "details": "PerimeterX/HUMAN 'Before we continue... Press & Hold' modal (iframe#px-captcha-modal, #px-captcha) appeared on the homepage while picking a departure date, before any search was submitted (2026-10-02, proxy local egress). It needs the account owner via a challenge handoff; agents must not solve it."
+  },
+  "exampleProductUrl": "https://www.turkishairlines.com/en-us/",
+  "gotchas": [
+    "Homepage https://www.turkishairlines.com/en-us/ loads without a wall at first. Booker: click the 'One way' button, then the From/To inputs #fromPort / #toPort (role=combobox; prefilled with the egress city): clear, type the city (Istanbul, Ankara) and click the option (e.g. 'Istanbul Airport', 'Ankara Esenboga'). 'Dates' opens a two-month calendar with an OK button; then 'Search flights'.",
+    "PerimeterX Press & Hold challenge (iframe#px-captcha-modal) pops over the booker within a minute of interaction and intercepts every click; detectChallenge reports captcha (#px-captcha). Hand it to the owner or stop - never try to hold the button."
+  ]
+}

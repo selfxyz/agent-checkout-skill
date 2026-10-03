@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ana.co.jp",
+  "kind": "signup",
+  "hosts": ["ana.co.jp"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#apiWebPswd_confirmation",
+    "email": "#apiHomeEmalAddr",
+    "firstName": "#apiNameKanji2",
+    "lastName": "#apiNameKanji",
+    "password": "#apiWebPswd",
+    "submit": "#registerSubmit"
+  },
+  "signupUrl": "https://www.ana.co.jp/ja/jp/amc/signup/"
+}

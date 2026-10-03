@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "amazon.in",
+  "kind": "merchant",
+  "hosts": ["amazon.in"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "input[name=\"addCreditCardVerificationNumber\"]",
+  "gotchas": [
+    "No guest checkout: Proceed to Buy from the cart lands on the sign-in page (identifier first at #ap_email_login, then #ap_password; input#continue does not exist on the identifier step, press Enter on the field instead).",
+    "A new device gets a one-time code after the password (input[name*='otp']); detect_challenge reports it and request_challenge_handoff reaches the owner. snapshot_page is closed from then on.",
+    "The new-card form lives inside iframe.apx-secure-iframe and mounts only after clicking the 'Credit or debit card' row and then the add-card link inside it; pass the iframe as `frame` to every card field. Expiry is two <select>s whose option values are the bare month number (value \"2\" for February) and the four-digit year.",
+    "The security code is on the same form as the number, so number and code go back to back. On a deployment with live CVV entry the code leg waits for the owner and fails with a timeout if they do not enter it; the number is already in the form by then, so do not refill it.",
+    "Every order-summary row reuses span[data-shimmer-target=\"ordertotals-amount\"]; the Order Total is the last row, reachable as li:last-child .order-summary-line-definition (an attribute-value selector is refused by declare_page_hint).",
+    "Search results open the product in a new tab: wait_for_popup after clicking the title link.",
+    "Sign-in and checkout raised no bot wall from the staging proxy's egress on 2026-09-30, which Amazon geolocated to an Indian pincode."
+  ],
+  "notes": "Driven through the staging proxy on 2026-09-30 with a signed-in account that already had a delivery address. Name, expiry and card number filled inside the secure iframe; the CVV leg was refused by the proxy's live-CVV timeout, not by the page, and the add-card form was left unsubmitted. No order was placed.",
+  "overrides": {
+    "addCardLink": ":text-matches(\"add a new credit or debit card|enter card details\",\"i\") >> visible=true",
+    "addToCart": "#add-to-cart-button",
+    "cardCvv": "input[name=\"addCreditCardVerificationNumber\"]",
+    "cardExpiryMonth": "select[name=\"ppw-expirationDate_month\"]",
+    "cardExpiryYear": "select[name=\"ppw-expirationDate_year\"]",
+    "cardFrame": "iframe.apx-secure-iframe",
+    "cardNumber": "input[name=\"addCreditCardNumber\"]",
+    "cardholderName": "input[name=\"ppw-accountHolderName\"]",
+    "cartProceed": "input[name=\"proceedToRetailCheckout\"]",
+    "loginIdentifier": "#ap_email_login",
+    "loginPassword": "#ap_password",
+    "loginSubmit": "#signInSubmit",
+    "orderTotal": "li:last-child .order-summary-line-definition",
+    "paymentCardRow": "span.a-text-bold:text-is(\"Credit or debit card\")",
+    "searchBox": "#twotabsearchtextbox",
+    "searchResultTitleLink": "div[data-component-type=\"s-search-result\"] a:has(h2)"
+  },
+  "preconditions": ["account_required"]
+}

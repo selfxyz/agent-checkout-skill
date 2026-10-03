@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "auth0.auth0.com",
+  "kind": "signup",
+  "hosts": ["auth0.auth0.com", "manage.auth0.com"],
+  "platform": "auth0",
+  "status": "partial",
+  "evidence": "Read-only discovery (enclave arm) and a DOM read on 2026-09-21 of auth0.auth0.com/u/signup/identifier, then a REAL signup on 2026-09-28 through the proxy, from manage.auth0.com via the login page's 'Sign up' link: email, an emailed code, then a password, all accepted. Claims Auth0's own tenant and dashboard entry point only; auth0.com itself is deliberately not claimed, because a claim covers subdomains and every customer tenant is a subdomain of it.",
+  "gotchas": [
+    "auth0.com/signup is NOT this form: it is a separate Okta-branded page that none of the auth0 platform selectors match. Start at manage.auth0.com instead.",
+    "manage.auth0.com ignores screen_hint=signup and opens the LOGIN form (the mode_toggle precondition). Click its 'Sign up' link to reach /u/signup/identifier.",
+    "On this tenant the email is verified with an emailed code BEFORE the password is asked for. That code is the account owner's: hand off with request_challenge_handoff."
+  ],
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://manage.auth0.com/"
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "monday.com",
+  "kind": "signup",
+  "hosts": ["monday.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password), browser egress through the owner's tunnel on a US network. Email, then a details step (full name, account name, password, a 'what will you use monday for' select, optional phone); submit led through onboarding pages into the monday.com workspace (an invite-teammates dialog over the board) with no code, link or CAPTCHA. A fresh sign-in with the same email and password was accepted and went on to a 'new login detected' page asking for a code sent by email; that page was not completed, because the proxy did not detect it as a challenge and refused a handoff. The only mail was a marketing reminder sent about five minutes after an earlier, unfinished attempt.",
+  "gotchas": [
+    "Stepped: the email alone first (Enter submits it), then a details step with full name (#user\\[name\\]), account name (input[id*=\"account\" i]), password (#user\\[password\\], at least 8 characters), a required 'what will you use monday for' combobox and an optional phone field. No code, link or CAPTCHA was asked for during signup.",
+    "The details step's submit ([data-testid=\"submit-button\"]) stays aria-disabled until the 'use monday for' combobox has a choice; pick an option (role=option) first.",
+    "The account is only created at the end of the onboarding pages that follow submit: click through Continue until the workspace loads. Leaving on the first onboarding page leaves no account, and signing in then fails to find the email.",
+    "Signing in again from a new browser goes email, then password, then a 'new login detected' page that asks for a code sent by email. That code belongs to the account owner: hand it off."
+  ],
+  "overrides": {
+    "email": "#user\\[email\\]",
+    "fullName": "#user\\[name\\]",
+    "password": "#user\\[password\\]",
+    "submit": "[data-testid=\"submit-button\"]"
+  },
+  "signupUrl": "https://auth.monday.com/users/sign_up_new",
+  "stepped": true
+}

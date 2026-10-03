@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airfrance.com",
+  "kind": "merchant",
+  "hosts": ["airfrance.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://wwws.airfrance.co.uk/",
+  "gotchas": [
+    "Booking runs on market hosts such as wwws.airfrance.co.uk and wwws.airfrance.fr/en; same Air France-KLM booking widget as klm.co.uk.",
+    "Cookie wall on load: click the 'Reject' button.",
+    "The From/To comboboxes expose no CSS-fillable <input>; focus the combobox (aria-label From / To), send the airport code as single key presses, then click the option such as 'From London Heathrow Airport LHR' or 'To Paris-Charles de Gaulle airport CDG'. Trip type is the 'Trip' combobox with a 'One-way' option.",
+    "Search deep link that pre-fills the widget: /search/offers?pax=1:0:0:0:0:0:0:0&cabinClass=ECONOMY&activeConnection=0&connections=LHR:A:20261023%3ECDG:A&bookingFlow=LEISURE.",
+    "Blocking (2026-10-02, staging proxy, local egress): once both airports are set, the 'Search flights' button turns into a spinner that never finishes and the Departure date picker never opens, on the UK and FR markets and on the deep link alike (40 s+ waits). No offers page was reached. Likely a bot-score gate on the booking API, as on klm.co.uk."
+  ]
+}

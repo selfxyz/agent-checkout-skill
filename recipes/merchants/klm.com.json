@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "klm.com",
+  "kind": "merchant",
+  "hosts": ["klm.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.klm.co.uk/",
+  "gotchas": [
+    "The UK booking site is www.klm.co.uk; www.klm.com/en-gb is a separate fares/marketing page whose 'View offers' button navigates to klm.co.uk, and in one run that navigation wedged the whole tab (goto, screenshot and snapshot all timed out) until the browser was relaunched.",
+    "Cookie wall on load: click the 'Reject' button.",
+    "The booking widget's From/To comboboxes expose no fillable <input> to CSS selectors (input count is 0); focus the combobox (aria-label From / To) and send the airport code as individual key presses, then click the 'From London Heathrow Airport LHR' style option.",
+    "Search deep link that pre-fills the widget: /search/offers?pax=1:0:0:0:0:0:0:0&cabinClass=ECONOMY&activeConnection=0&connections=LHR:A:20261023%3EAMS:A&bookingFlow=LEISURE (it lands round-trip; the trip type must still be switched).",
+    "Blocking (2026-10-02, staging proxy, local egress): the 'Search flights' button stays in a permanent loading spinner and the Departure date picker never opens, both from the homepage and the deep link; the page loads www.recaptcha.net, so an invisible reCAPTCHA score gate on the search API is the likely cause. No offers page was ever reached."
+  ]
+}

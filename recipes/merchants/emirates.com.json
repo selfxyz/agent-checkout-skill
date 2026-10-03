@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "emirates.com",
+  "kind": "merchant",
+  "hosts": ["emirates.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.emirates.com/us/english/",
+  "gotchas": [
+    "Guest checkout, no login needed. Flow: homepage Search flights -> results (Economy fare card -> Saver/Flex/Flex Plus 'Select') -> Review your flights 'Continue to Passengers' -> passenger details 'Continue to Options' -> Options (seats/bags/insurance all optional) 'Continue to Payment' -> Make a purchase.",
+    "Homepage search form: accept the OneTrust banner first (#onetrust-accept-btn-handler), its dark filter intercepts every click. Departure/Arrival are input[name=\"Departure Airport\"] / input[name=\"Arrival Airport\"] (3 matches each, use the first): type the IATA code (DXB, MCT) and press Enter to take the first suggestion. Tick 'One-way' in the date panel, click the day button (e.g. 'Friday, 23 October 2026'), then 'Search flights'.",
+    "The booking is handed to the country site of the origin (e.g. 'You will be taken to the United Arab Emirates site'), so prices show in that currency (AED).",
+    "Custom dropdowns (passenger Title #title, card expiry #select_0 / #select_1) ignore clicks on the button (click times out); focus and press ArrowDown to open, then click the role=option. Expiry options are labelled like 'Aug Month' and '2030 Year'.",
+    "Contact phone country code defaults to the egress country (#country-code); a phone number that does not fit that country's format makes 'Continue to Options' fail with a generic 'Sorry, we were unable to process your request due to a technical error' banner rather than a field error.",
+    "Payment: choose 'Credit/Debit card' to expand the inline card form (no iframe): #input_0 card number, #input_1 name on card, expiry dropdowns. No CVV field is rendered until a card number is accepted, so it could not be probed before the number fill.",
+    "Order total: #total-amount-text ('Total to be paid: AED 605'). The order.total hint resolved but reported 75 USD for an AED 605 basket, so check the amount it reads. Final button is 'Pay now' (behind a T&C checkbox) - never click it."
+  ],
+  "overrides": {
+    "cardNumber": "#input_0",
+    "cardholderName": "#input_1",
+    "email": "#email",
+    "expiryMonth": "#select_0",
+    "expiryYear": "#select_1",
+    "firstName": "#firstname",
+    "lastName": "#lastname",
+    "orderTotal": "#total-amount-text",
+    "phone": "#mobile"
+  }
+}

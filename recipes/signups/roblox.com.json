@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "roblox.com",
+  "kind": "signup",
+  "hosts": ["roblox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Roblox's /CreateAccount (birthday, username, password, Sign Up); no email is asked on this form. Nothing was typed or submitted.",
+  "gotchas": [
+    "The birthday (#MonthDropdown, #DayDropdown, #YearDropdown) is required and is the account owner's to supply.",
+    "The account is keyed by username, not email; the username must be unique on Roblox.",
+    "A verification puzzle may appear after Sign Up; it is the account owner's — hand it off."
+  ],
+  "overrides": {
+    "password": "#signup-password",
+    "submit": "#signup-button",
+    "username": "#signup-username"
+  },
+  "signupUrl": "https://www.roblox.com/CreateAccount"
+}

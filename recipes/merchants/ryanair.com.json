@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ryanair.com",
+  "kind": "merchant",
+  "hosts": ["ryanair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.ryanair.com/gb/en/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-22&isConnectedFlight=false&discount=0&isReturn=false&promoCode=&originIata=STN&destinationIata=DUB",
+  "gotchas": [
+    "Search deep link that works and skips the homepage: /gb/en/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-22&isConnectedFlight=false&discount=0&isReturn=false&promoCode=&originIata=STN&destinationIata=DUB (plus the matching tp* params). Cookie banner: 'No, thanks'.",
+    "Flow: date strip -> flight card 'Select' -> 'Continue with basic' -> upsell 'Continue with Basic' -> 'Log in later' (defers the login) -> passenger title (custom dropdown, button '-' then 'Ms') + first name input[autocomplete=\"given-name\"] + last name input[name*=\"surname\" i] -> Continue -> seats 'Option 2: Select seats later' -> 'Continue without a seat' -> 'Continue with random allocation' -> bags (mandatory cabin-bag choice) -> extras -> transport -> payment.",
+    "Many snapshot aria-ref clicks time out on ryanair.com (the ref resolves but never becomes actionable); CSS clicks work: the cabin-bag choice is 'ry-radio-button >> nth=0' (1 Small Bag, included), and step buttons are 'button:has-text(\"Continue\") >> visible=true'. A bag 'info' button opens a dialog whose close button is 'ry-dialog button'.",
+    "One aria-ref click (Continue with random allocation) hung the proxy connection for 180 s and killed the session; pressing Enter on the same ref worked on the replay.",
+    "Blocking: 'Log in later' only defers the login. On /gb/en/payment a 'Log into myRyanair' modal (embedded /gb/en/kyc frame: Google/Facebook/PayPal or email+password, plus Sign up) covers the page with no close control and Escape does not dismiss it. The card option ('Credit or debit card') cannot be reached and no card fields render without an account."
+  ],
+  "overrides": {
+    "firstName": "input[autocomplete=\"given-name\"]",
+    "lastName": "input[name*=\"surname\" i]"
+  },
+  "preconditions": ["account_required"]
+}

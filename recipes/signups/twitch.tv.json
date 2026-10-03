@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "twitch.tv",
+  "kind": "signup",
+  "hosts": ["twitch.tv"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Twitch's /signup, an email box with 'Use phone number instead', Continue and Google, Amazon and Apple buttons. Nothing was typed or submitted.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off."
+  ],
+  "overrides": {
+    "email": "#email-input",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.twitch.tv/signup",
+  "stepped": true
+}

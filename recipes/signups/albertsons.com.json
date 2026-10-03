@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "albertsons.com",
+  "kind": "signup",
+  "hosts": ["albertsons.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Albertsons' 'Short Registration' (first and last name, mobile phone, email, Continue) — the same page Safeway serves. Nothing was typed or submitted.",
+  "gotchas": [
+    "No password field on this step; what follows Continue was not observed — look at it before filling it. A code sent by text or email belongs to the account owner: hand it off.",
+    "The form also asks for a mobile phone number (#phonenumber), which is the account owner's to supply.",
+    "Leave the text and email offer checkboxes as the account owner wants them; they are marketing opt-ins, not part of the account."
+  ],
+  "overrides": {
+    "email": "#emailAddress",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.albertsons.com/account/short-registration.html",
+  "stepped": true
+}

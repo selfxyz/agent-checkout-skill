@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "united.com",
+  "kind": "merchant",
+  "hosts": ["united.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.united.com/en/us/fsr/choose-flights?f=EWR&t=BOS&d=2026-10-23&tt=1&sc=7&px=1&taxng=1&newHP=True&clm=7&st=bestmatches",
+  "gotchas": [
+    "Guest checkout, no login needed. Flow: search results -> fare -> Traveler Info -> Travel add-ons -> Select seats -> Checkout (travel options step, then payment).",
+    "A deep link to the results page works: /en/us/fsr/choose-flights?f=EWR&t=BOS&d=YYYY-MM-DD&tt=1&sc=7&px=1&taxng=1&newHP=True&clm=7&st=bestmatches (tt=1 is one-way). From a non-US egress the homepage pre-fills a local origin; the deep link sidesteps that.",
+    "Results: click the cabin button 'United Economy (Main cabin) From $..' to expand the fare options. 'Select United Economy Basic' stays disabled until the 'Basic Economy works for me.' checkbox is ticked; 'Select United Economy Standard' works directly.",
+    "Field ids/names are not stable or guessable; role selectors (role=textbox[name=\"First name required\"]) and autocomplete attributes resolve. On Traveler Info: First/Last name textboxes, Month is a native select (combobox 'Month'), Day and Year textboxes, Gender a native select ('Gender required'). No email/phone on that page; contact fields are on the payment step.",
+    "Seat map: the 'Skip seat selection' link is an in-page jump link covered by the seat map wrapper; click the page's 'Continue' button instead to go to Checkout without a seat.",
+    "Checkout opens on 'United travel options': the insurance decline radio is covered by its label; click label[for=\"WASCInsuranceOfferOption2\"], then 'Next step' to reveal the payment form.",
+    "Card fields are inline (not in an iframe) and carry autocomplete attributes (cc-number, cc-exp MM/YY, cc-csc, cc-name). State is a typeahead text input (input[id*=\"tate\" i]), Country a native select defaulting to United States. 'Save your credit card' and marketing-email checkboxes are pre-checked. The final button is 'Agree and purchase'.",
+    "The billing address line 1 field has a short maxlength: a full street line was truncated (fill_rejected).",
+    "A cookie banner with a 'Close' button sits at the bottom of every page and can intercept clicks; close it first."
+  ],
+  "overrides": {
+    "cardName": "[autocomplete=\"cc-name\"]",
+    "cardNumber": "[autocomplete=\"cc-number\"]",
+    "city": "[autocomplete=\"address-level2\"]",
+    "cvv": "[autocomplete=\"cc-csc\"]",
+    "email": "[autocomplete=\"email\"]",
+    "expiry": "[autocomplete=\"cc-exp\"]",
+    "phone": "[autocomplete=\"tel\"]",
+    "street1": "[autocomplete=\"address-line1\"]",
+    "zip": "[autocomplete=\"postal-code\"]"
+  }
+}

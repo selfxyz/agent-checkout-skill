@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "singaporeair.com",
+  "kind": "signup",
+  "hosts": ["singaporeair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#confirmPassword",
+    "email": "#email",
+    "firstName": "#personal-infor-first-name-cb",
+    "lastName": "#guardianLastName",
+    "password": "#password",
+    "submit": "#btnContinue",
+    "username": "input[name=\"username\"]"
+  },
+  "signupUrl": "https://www.singaporeair.com/en_UK/ppsclub-krisflyer/registration-form/",
+  "stepped": true
+}

@@ -7,9 +7,7 @@
   "cardSurface": "direct-inputs",
   "cvvTarget": "#cardCvc",
   "detect": {
-    "hosts": [
-      "checkout.stripe.com"
-    ],
+    "hosts": ["checkout.stripe.com"],
     "selectors": [
       "form[action*=\"checkout.stripe.com\"]",
       "script[src*=\"js.stripe.com/checkout\"]"
@@ -27,7 +25,7 @@
     "addToCart": "A merchant-side 'Checkout'/'Buy' button redirects to the hosted page.",
     "contact": "#email, plus name/address inputs directly on the page.",
     "outcome": "'Payment successful' / receipt page.",
-    "payment": "Direct inputs on Stripe's domain, no iframe: #cardNumber, #cardExpiry, then the CVV token into #cardCvc immediately after the number.",
+    "payment": "Direct inputs on Stripe's domain, no iframe. Fill #cardExpiry (and any billing field) FIRST, then #cardNumber, then the CVV token into #cardCvc immediately after the number, with nothing at all in between.",
     "placeOrder": "The 'Pay' .SubmitButton, once."
   }
 }

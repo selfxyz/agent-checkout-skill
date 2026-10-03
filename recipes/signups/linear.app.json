@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "linear.app",
+  "kind": "signup",
+  "hosts": ["linear.app"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe, with browser egress through the owner's tunnel on a US network. After Continue with email and the email, a Cloudflare Turnstile check was shown and the account owner completed it in a handoff (outcome solved); Linear then sent a login email. Its link only works in the browser that requested it (opened elsewhere it says \"Your login link has expired or was opened in a different browser\"), so the owner entered the emailed code in the proxy's page through a handoff instead. The page moved to Create workspace; a workspace was created and onboarding followed. A security notice and a welcome email then arrived at the signup address. There is no password: sign-in is by emailed link or code. An earlier attempt the same day from the proxy's own egress failed Turnstile on its own with no interactive check.",
+  "gotchas": [
+    "The page opens on sign-in choices; click 'Continue with email' to show the email box (the mode_toggle precondition).",
+    "Passwordless: after the email, Linear sends a login email with a link and a code, and no password is ever set. The link only works in the browser that asked for it; the page's code option shows an input[autocomplete=\"one-time-code\"] box instead. The code belongs to the account owner: hand it off.",
+    "After the code, a Create workspace step asks for a workspace name; the account is set up once a workspace is created, and onboarding (invite teammates) follows.",
+    "A Cloudflare Turnstile check follows the email submit. From a US egress it showed a check the account owner completed. On 2026-09-30, from the Agent Vault proxy's own egress, it failed on its own (\"We're unable to verify it's you. Please refresh the page and try again.\") with no interactive check, and no mail was sent."
+  ],
+  "overrides": {
+    "email": "input[type=\"email\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["captcha", "email_code"],
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://linear.app/signup",
+  "stepped": true
+}

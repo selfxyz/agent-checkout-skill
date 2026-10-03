@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "qatarairways.com",
+  "kind": "signup",
+  "hosts": ["qatarairways.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#f107",
+    "email": "#f105",
+    "firstName": "#f102",
+    "lastName": "#f104",
+    "password": "#f106"
+  },
+  "signupUrl": "https://www.qatarairways.com/en/Privilege-Club/join-now.html"
+}

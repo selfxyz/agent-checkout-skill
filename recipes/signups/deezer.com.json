@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "deezer.com",
+  "kind": "signup",
+  "hosts": ["deezer.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password), with browser egress through the owner's tunnel on a US network. Email, then a password step, then a profile step (display name, age, a gender select); submit went on to onboarding with no code, link or CAPTCHA. A fresh sign-in with the same credentials (Log in with email address) was accepted. No mail arrived.",
+  "gotchas": [
+    "Stepped: email, then a password step (input[type=\"password\"]), then a profile step with a display name (input[name=\"username\"]), an age (input[name=\"age\"]) and a gender select. No code, link or CAPTCHA was asked for.",
+    "A cookie-consent prompt (Accept / Refuse) appears on a fresh profile; answer it before filling.",
+    "On 2026-09-30, through the Agent Vault proxy, Continue on the email step did nothing for any address (no error, no challenge detected, no mail); the step never advanced.",
+    "Signup is country-restricted: from a country Deezer does not serve, the site says \"Sorry, it is currently impossible to sign up to Deezer in your country\", and through the proxy Continue on the email step simply did nothing. From a US egress it went through.",
+    "The log-in page opens in phone-number mode; \"Log in with email address\" switches it to email and password."
+  ],
+  "overrides": {
+    "email": "#email",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]",
+    "username": "input[name=\"username\"]"
+  },
+  "signupUrl": "https://account.deezer.com/en-us/signup/",
+  "stepped": true
+}

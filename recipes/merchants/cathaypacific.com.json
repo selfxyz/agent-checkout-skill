@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "cathaypacific.com",
+  "kind": "merchant",
+  "hosts": ["cathaypacific.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.cathaypacific.com/cx/en_US.html",
+  "gotchas": [
+    "Start at https://www.cathaypacific.com/cx/en_US.html. A 'Cookies settings' modal blocks the page; 'Reject all' dismisses it. An 'Elevate your experience as a Cathay member' popover stays over the right half of the booking panel and over its dropdowns.",
+    "Booking panel: set the 'Trip type' combobox to 'One way'. The origin input[placeholder=\"Select a departure city\"] is covered by div.bookTripPanel__odInputFieldSmall, so click that div first, clear the prefilled geo-located city, type a city name and click the first visible [role=\"option\"]. Destination: type into input[placeholder=\"Select a destination\"] and pick the option whose name contains the IATA code, e.g. '(TPE)'.",
+    "Dates: the 'Calendar Start Date' button opens the picker; day cells carry aria-label like 'October 23'; then Done. Search with #flight-booking-search-btn; its click can time out waiting for navigation though the search did start, so do not treat that as a failure.",
+    "Results (HKG-TPE, Light fare HKD 1,704 one way): click 'from HKD ... Lowest fare', then 'Select' on the fare family, then 'Continue with Light' in the 'Upgrade to Essential' drawer. The booking engine carries a reCAPTCHA (invisible badge).",
+    "Passenger page (Trip Summary): a 'Sign in' dialog offers 'Continue as guest'. 'Add passenger information' opens a drawer: Title is input[data-path=\"name.title\"] (role=combobox, type=button), names are input[data-path=\"name.firstName\"] / input[data-path=\"name.lastName\"], then 'Save and continue'. Then Contact Information, travel insurance radios, and 'Select seat and extras' or 'Review and pay'.",
+    "Through the proxy this flow is slow and unstable: one session went dead (screenshot unanswered for 180s) inside the passenger drawer, and a fresh session's repeat search ended in 'An error occurred while processing your request. Please try again later.' Payment page not reached yet."
+  ],
+  "overrides": {
+    "firstName": "input[data-path=\"name.firstName\"]",
+    "lastName": "input[data-path=\"name.lastName\"]"
+  }
+}

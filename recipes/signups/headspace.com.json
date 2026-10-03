@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "headspace.com",
+  "kind": "signup",
+  "hosts": ["headspace.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: the homepage's 'Try for free' leads to checkout.headspace.com/checkout, headed 'Sign up' (first and last name, email, 'Password (8+ characters)', Create account); the bare URL shows the same form. Nothing was typed or submitted.",
+  "gotchas": [
+    "The password must be at least 8 characters.",
+    "This signup is the first step of the subscription checkout; the steps after Create account were not observed and may ask for payment, which is the account owner's to give.",
+    "auth.headspace.com/u/signup/identifier is the sign-in service's own signup, reachable only with a per-visit state parameter; start here instead."
+  ],
+  "overrides": {
+    "email": "#email-input",
+    "firstName": "#firstName-input",
+    "lastName": "#lastName-input",
+    "password": "#password-input",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://checkout.headspace.com/checkout"
+}

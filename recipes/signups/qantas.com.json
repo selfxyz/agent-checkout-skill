@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "qantas.com",
+  "kind": "signup",
+  "hosts": ["qantas.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a DOM read the same day of 'Join Qantas Frequent Flyer today': a join form (#joinForm… fields) that is present but hidden until its Get started link is used. Nothing was typed or submitted.",
+  "gotchas": [
+    "The form is hidden when the page loads; the 'Get started' link on the page scrolls to and opens it.",
+    "The password fields are named Pin (#joinFormPin, #joinFormConfirmPin) and carry no length or pattern attribute; what they accept was not read. Check the hint beside the field before filling it.",
+    "The email is asked twice (#joinFormConfirmEmail), which no field in this recipe covers: type the same address there.",
+    "The form also requires country, title, gender, phone, street address, suburb, state, postcode and date of birth; they are the account owner's to supply."
+  ],
+  "overrides": {
+    "confirmPassword": "#joinFormConfirmPin",
+    "email": "#joinFormEmail",
+    "firstName": "#joinFormFirstName",
+    "lastName": "#joinFormLastName",
+    "password": "#joinFormPin"
+  },
+  "signupUrl": "https://www.qantas.com/en-au/frequent-flyer/join",
+  "stepped": true
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "www.tumblr.com",
+  "kind": "signup",
+  "hosts": ["www.tumblr.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); all three selectors matched. After Sign up came a birthday step (month, day and year dropdowns, then Next) and a blog-name step; the page then went on to onboarding and Tumblr's \"Verify your email address\" mail arrived at the signup address. The account owner opened its link, which showed a CAPTCHA and then a button to verify the email, and completed both. A fresh sign-in with the same credentials was then accepted.",
+  "gotchas": [
+    "Claims www.tumblr.com only: every tumblr.com subdomain is a user's blog, not Tumblr's own signup.",
+    "After Sign up come a birthday step (three <select> dropdowns for month, day and year; Next stays disabled until all three are set) and a blog-name step (the blog's public name, not a sign-in name; sign-in is by email).",
+    "The header's Search box is a visible text input on every step; target the signup fields by name, not by type=text.",
+    "The emailed verification link opens a page with a CAPTCHA and then a button to verify the email; both are the account owner's."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link", "captcha"],
+  "signupUrl": "https://www.tumblr.com/register",
+  "stepped": true
+}

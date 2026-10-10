@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "choicehotels.com",
+  "kind": "merchant",
+  "hosts": ["choicehotels.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.choicehotels.com/texas/dallas/hotels?adults=1&checkInDate=2026-10-22&checkOutDate=2026-10-23",
+  "gotchas": [
+    "Guest checkout, no login needed. Flow: search results 'See Availability' (same tab) -> hotel page 'Book Now' on a room -> 'Select a rate' page -> pick a 'Non-member Rate' row's 'Book Room' link (accessible name '<room> Guest rate - Book Room'; the 'Member price' links assume joining) -> one-page Guest information + Payment.",
+    "Search deep link works: /<state>/<city>/hotels?adults=1&checkInDate=YYYY-MM-DD&checkOutDate=YYYY-MM-DD. Parts of the header may render in the egress's language; prices stay in USD.",
+    "The guest form asks for name, email, country (defaults to United States), phone, postal code and state only: no street or city fields. Fields carry no autocomplete attributes; the ids/names in the overrides resolve.",
+    "Card fields are inline (not in an iframe): card number (name contains cardNumber), a SINGLE expiry text input #expirationDate (MM/YY, e.g. '02/30'), and name on card. No security-code field on the Flexible Rate (card guarantees the room). Fill name and expiry before the number.",
+    "'Join Choice Privileges for free' is PRE-CHECKED on the guest form; click its label to uncheck it. Unchecking disables nothing.",
+    "A sign-in panel (email + password) sits at the top of the checkout page; leave it alone for a guest booking. The page also shows a 'Reservation held for: 14:xx minutes' timer, so the checkout has to be filled within it.",
+    "Total shown as 'Current total $95.89' (one night, Flexible Rate, taxes included) in a credit-card upsell block; the proxy read it without a hint. Final button: 'Book Now'."
+  ],
+  "overrides": {
+    "cardName": "input[id*=\"name\" i][id*=\"card\" i]",
+    "cardNumber": "input[name*=\"cardNumber\" i]",
+    "country": "#country",
+    "email": "#email",
+    "expiry": "#expirationDate",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "phone": "input[id*=\"phone\" i]",
+    "state": "main select:not(#country)",
+    "zip": "#postalCode"
+  }
+}

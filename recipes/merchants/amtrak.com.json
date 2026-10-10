@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "amtrak.com",
+  "kind": "merchant",
+  "hosts": ["amtrak.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "varies",
+  "gotchas": [
+    "Guest booking, no login needed. Cheapest test basket: NYP -> PHL Coach Value fare ($10 on 2026-10-22).",
+    "The fare finder's date input is covered by its floating <label>, so a fill or click on it times out; focus it and send keypresses, then Enter. FIND TRAINS stays aria-disabled until both stations and the date are set; press Enter on it.",
+    "Radios (points opt-out, travel protection) are visually hidden inputs covered by styled divs: press Space on them instead of clicking.",
+    "Traveler Details requires a date of birth (input[autocomplete=bday], MM/DD/YYYY) and a mobile number (country code combobox defaults to US).",
+    "Payment page: a 'Add Travel Protection' radiogroup must be answered and Confirmed before the card form is usable. Card form is CyberSource Flex Microform: card number and security code are two separate iframes from flex.cybersource.com (number first, code second); expiry is a plain page input 'mm yy' (input[autocomplete=cc-exp]), and billing first/last name, address, city, state, ZIP and country are plain page fields. 'Add Credit Card' then 'Purchase' are the final buttons.",
+    "The order total is shown as a level-3 heading '$10.00' in the Price Summary; no stable selector for an order.total hint was found.",
+    "A reCAPTCHA Enterprise frame is present on the payment page (invisible); it did not challenge during the fill."
+  ],
+  "overrides": {
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[src*=\"flex.cybersource.com\"] >> nth=0",
+    "cvv": "input[name=\"securityCode\"]",
+    "cvvFrame": "iframe[src*=\"flex.cybersource.com\"] >> nth=1",
+    "dateOfBirth": "input[autocomplete=\"bday\"]",
+    "email": "input[autocomplete=\"email\"] >> nth=0",
+    "firstName": "input[autocomplete=\"given-name\"]",
+    "lastName": "input[autocomplete=\"family-name\"]",
+    "phone": "input[autocomplete=\"tel-national\"]"
+  },
+  "route": [
+    {
+      "host": "www.amtrak.com",
+      "url": "https://www.amtrak.com/home.html"
+    },
+    {
+      "action": "manual",
+      "host": "www.amtrak.com",
+      "note": "Fare finder: pick From and To stations from the combobox suggestions; type MM/DD/YYYY into input[data-julie=departdisplay_booking_oneway] by keypresses, then Enter; press Enter on button[data-julie=findtrains]. Coach from $ -> Value fare -> SELECT; Trip Summary Continue; Traveler Details (names, mobile, email, date of birth, No to points) Continue; on Payment answer 'No, do not protect my trip' and Confirm."
+    }
+  ]
+}

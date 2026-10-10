@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "linkedin.com",
+  "kind": "signup",
+  "hosts": ["linkedin.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "#email-or-phone",
+    "firstName": "#first-name",
+    "lastName": "#last-name",
+    "password": "#password",
+    "submit": "#join-form-submit"
+  },
+  "signupUrl": "https://www.linkedin.com/signup",
+  "stepped": true
+}

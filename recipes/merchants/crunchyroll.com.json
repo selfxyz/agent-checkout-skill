@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "crunchyroll.com",
+  "kind": "merchant",
+  "hosts": ["crunchyroll.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.crunchyroll.com/premium",
+  "gotchas": [
+    "Start at /premium. Each plan card has 'Start 7-Day free trial' and 'Skip free trial' links; the first 'Skip free trial' is the Fan plan (monthly by default). A cookie/phishing notice dialog has a Continue button; a 'Privacy' cookie dialog on the login page has an OK button.",
+    "Signed out, the plan link goes to Create Account; use its 'Log In' link (email + password on one page, submit with Enter). After sign-in it lands on www.crunchyroll.com/payments/checkout.",
+    "On /payments/checkout pick the Credit/Debit option (radios are visually hidden; click the visible 'Credit'/'Debit' text). That mounts split Basis Theory iframes, titled for card number, expiration and security code, each holding one input. Expiry is a single MM/YY input. Billing ZIP is a plain page input (accessible name ZIP/postal) and should be filled in an earlier call than the card number.",
+    "Observed 2026-10-07 through the proxy (US tunnel, Dallas) with the public test card under a verification-only key: ZIP, expiry, number and security code filled with no error. The final submit button was not identified (it is not a button labelled Subscribe/Start/Confirm/Purchase while the form is filled); stopped there, nothing submitted."
+  ],
+  "overrides": {
+    "billingZip": "role=textbox[name=/zip|postal/i]",
+    "cardNumber": "input",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cvv": "input",
+    "cvvFrame": "iframe[title*=\"security\" i]",
+    "expiry": "input",
+    "expiryFrame": "iframe[title*=\"expir\" i]",
+    "planSelect": "role=link[name=\"Skip free trial\"] >> nth=0"
+  },
+  "preconditions": ["account_required"]
+}

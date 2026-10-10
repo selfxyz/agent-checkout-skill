@@ -1,0 +1,77 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gap.com",
+  "kind": "merchant",
+  "hosts": [
+    "gap.com",
+    "oldnavy.gap.com",
+    "oldnavy.com",
+    "bananarepublic.gap.com",
+    "bananarepublic.com",
+    "secure-www.gap.com"
+  ],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "gotchas": [
+    "gap.com redirects to www.gap.com; oldnavy.com and bananarepublic.com land on oldnavy.gap.com and bananarepublic.gap.com. Product pages are /browse/product.do?pid=<id>; a search listing is /browse/search.do?searchText=<term>.",
+    "Skip pid=000173092 on the search page: it is the gift-card footer link and its page adds nothing to the bag.",
+    "An Attentive SMS sign-up overlay (#attentive_overlay with iframe#attentive_creative, fixed, z-index 501) mounts 3 to 5 seconds after the product page loads and covers the viewport, so #pdp-atb-btn never becomes actionable while it is up. Wait up to 8 seconds for #attentive_overlay to attach, press Escape on body, and press Escape once more right before clicking add to bag.",
+    "Size inputs are visually hidden (sr-only), so clicking the input times out. Click the label in .pdp_size-selector-container__items instead; labels carry for=\"pdp_buybox_dimension_<size>\". Pick any in-stock size.",
+    "/shopping-bag shows the total and a Checkout button. On oldnavy.gap.com Checkout opens an email step first; the step after Continue rendered a single input and no shipping or card fields in the run recorded here, so the checkout past the bag is not mapped.",
+    "A click that never becomes actionable while the element count says the button is present is usually a fixed overlay, not a missing element: send Escape before retrying.",
+    "Observed 2026-10-06 (through the proxy, US tunnel) past the bag on gap.com, oldnavy.gap.com and bananarepublic.gap.com: Checkout asks for an email first. gap.com then shows an Encore join form with \"Continue As Guest\" ([data-testid=continue-guest-btn]); Old Navy and Banana Republic show a Contact box with a Continue arrow and, on Banana Republic, a \"Join now\" form whose bottom button is \"Continue as a guest\".",
+    "Ship To is one form: Full Name (input[autocomplete=name]), Street Address (autocomplete=address-line1), Town/City (address-level2), State is a custom button + listbox (click the \"State\" button, then [role=option] e.g. California), Zip (postal-code), Phone (type=tel). Continue may raise \"The address entered may be incomplete\" — click \"Keep as Entered\". Shipping Speed then pre-selects Standard.",
+    "Payment & Gift Cards: \"Pay with credit or debit card\" is pre-selected and the card fields are plain inputs on the page (no iframe): input[autocomplete=cc-number], input[autocomplete=cc-exp] (MM/YY), input[autocomplete=cc-csc]. Verified 2026-10-06 on all three brands with the public test card under a verification-only key (fields filled, no aria-invalid); stopped before the order was placed.",
+    "2026-10-09 (staging proxy): /browse/search.do?searchText=socks returned 0 results; reach products through a category page such as /browse/category.do?cid=3041527 (Accessories). The mega-nav 'accessories' links are hidden until hovered, so navigate to the category URL instead of clicking them.",
+    "The email step's input is input[name*=mail] (no type=email). Continue (arrow) did not advance on click; Enter on the email input did. gap.com then shows a 'Join now' form with a plain 'Continue as a guest' button (button:has-text(\"Continue as a guest\")); the old [data-testid=continue-guest-btn] is gone.",
+    "Ship To's Street Address is a Google Places combobox (input[role=combobox][autocomplete=address-line1]). Typed text alone leaves Continue disabled: pick an option from listbox 'Predictions' (it fills city/state/zip). If the Continue button sticks disabled, reopen /shopping-bag and click Checkout again: the address is kept and the page opens on Shipping Speed with the payment form already rendered.",
+    "Order total: declare_page_hint order.total on [id*=total i] resolved the grand total (66.80 USD) on 2026-10-09.",
+    "Add to Bag can answer 'We're sorry, there's been an error adding this item to bag.' on some products; try another product rather than retrying the same one."
+  ],
+  "notes": "Verified locally and through the Agent Vault proxy to the shopping bag on gap.com and oldnavy.gap.com, and locally on bananarepublic.gap.com (September 2026). The card form was not reached, so the status is unverified: everything from the bag's Checkout button on is unmapped and should be validated on first use. 2026-10-06: checkout past the bag mapped to the payment step on all three brands and the card fields exercised with the public test card (no order placed). 2026-10-09: route re-walked through the staging proxy to Payment; test card filled (card_fields_verified), stopped before Place Order.",
+  "overrides": {
+    "addToCart": "#pdp-atb-btn",
+    "bagCheckout": "button:has-text(\"Checkout\")",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "city": "input[autocomplete=\"address-level2\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[name*=\"mail\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "guestCheckout": "[data-testid=\"continue-guest-btn\"]",
+    "guestCheckoutAlt": "button:has-text(\"Continue as a guest\")",
+    "name": "input[autocomplete=\"name\"]",
+    "orderTotal": "[id*=\"total\" i]",
+    "phone": "input[autocomplete=\"tel\"]",
+    "productLinks": "a[href*=\"/browse/product.do?pid=\"]",
+    "sizeOption": ".pdp_size-selector-container__items label",
+    "smsOverlay": "#attentive_overlay",
+    "street1": "input[role=\"combobox\"][autocomplete=\"address-line1\"]",
+    "zip": "input[autocomplete=\"postal-code\"]"
+  },
+  "route": [
+    {
+      "host": "www.gap.com",
+      "url": "https://www.gap.com/browse/category.do"
+    },
+    {
+      "action": "manual",
+      "host": "www.gap.com",
+      "note": "Open a category with a cid query (e.g. Accessories, cid=3041527), open any in-stock product, press Escape for the SMS overlay, click #pdp-atb-btn."
+    },
+    {
+      "host": "www.gap.com",
+      "url": "https://www.gap.com/shopping-bag"
+    },
+    {
+      "action": "click",
+      "host": "www.gap.com",
+      "selector": "button:has-text(\"Checkout\")"
+    },
+    {
+      "action": "manual",
+      "host": "secure-www.gap.com",
+      "note": "Guest contact form: type an email into input[name*=mail], press Enter, click Continue as a guest, then fill Ship To (pick a Places prediction for the street) and continue to Payment."
+    }
+  ]
+}

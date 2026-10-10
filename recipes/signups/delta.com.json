@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "delta.com",
+  "kind": "signup",
+  "hosts": ["delta.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "SkyMiles join form at https://www.delta.com/joinskymiles/ (reached from the header 'Sign Up' link). Old URLs /profile/enrolllanding.action and /us/en/skymiles/join-skymiles are 404s.",
+    "A 'Language Selection' dialog covers the page on first load and intercepts clicks; pick a locale (e.g. 'Switzerland - English') first.",
+    "Stepped accordion form: 'Basic Info' -> Next -> 'Contact Info' -> 'Login Info', then Terms and Conditions. Only Basic Info is rendered until Next is clicked, so the email, username and password selectors of the later steps were not observed.",
+    "Basic Info requires name exactly as on government ID, Date of Birth as three custom comboboxes (Month MM / Date DD / Year YYYY, not native selects) and a custom Gender combobox; Middle Name is optional and a suffix is behind '+ Add Suffix'. Advance with button:has-text(\"Next\").",
+    "Basic Info DOB comboboxes: Month options are 'Jan'..'Dec', Date options '1'..'31'; Gender option 'Female'. Then Next.",
+    "Contact Info: all fields required. Set Country/Region (custom combobox, defaults to the locale's country) BEFORE the address fields. State/Province is a custom combobox. Confirm Email Address is input[aria-label=\"Confirm Email Address\"]. The phone box wants the national number (phone_national), with the calling code in the separate Country/Region Code combobox.",
+    "Address Line 1 validation refused a 49-character street line (aria-invalid, no visible maxlength cut)."
+  ],
+  "overrides": {
+    "city": "input[aria-label=\"City\"]",
+    "email": "input[aria-label=\"Email Address\"]",
+    "firstName": "input[aria-label=\"First Name\"]",
+    "lastName": "input[aria-label=\"Last Name\"]",
+    "phone": "input[aria-label=\"Area Code + Phone #\"]",
+    "street1": "input[aria-label=\"Address Line 1\"]",
+    "zip": "input[aria-label=\"Postal Code\"]"
+  },
+  "signupUrl": "https://www.delta.com/joinskymiles/",
+  "stepped": true
+}

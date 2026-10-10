@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "notion.com",
+  "kind": "merchant",
+  "hosts": ["notion.com", "notion.so", "app.notion.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://app.notion.com/",
+  "gotchas": [
+    "Sign in at notion.com/login: email + Enter, then Notion emails a login code (no password step); the code is the account owner's handoff. A challenge handoff makes snapshot_page unavailable for the rest of the session, so the in-app route below is driven by count/click only.",
+    "notion.so/upgrade and notion.so redirect to the signed-out marketing site; the app is app.notion.com. Controls are div[role=button] with StyleX class names (old .notion-sidebar/.notion-topbar selectors match nothing). The off-screen 'Skip' on the page is the 'Skip to content' screen-reader link, not an onboarding button.",
+    "A new account lands on a 'Create workspace' onboarding (role question, use-case question with a Continue that stays disabled until an option is picked, a plan step with 'Try … free' + Continue). Press Continue on the plan step, not 'Try … free'.",
+    "Route: click the workspace-name button at the top-left of the sidebar (menu shows 'Free Plan · 1 member'), then the menu item whose text is exactly 'Upgrade' -> Settings 'Upgrade plan' (Compare all plans). It has four buttons whose text is exactly 'Upgrade' in DOM order: Notion AI, Plus, Business, Enterprise; Plus is nth=1.",
+    "The 'Upgrade to the Plus plan' dialog: Name (page input, prefilled from the profile), Business name (optional), billing options Pay monthly (default, $12/month/member) / Pay annually. Card is a Stripe Payment Element in one iframe titled 'Secure payment input frame' with input[name=number|expiry|cvc|postalCode]; Country select (United States default) is in the same frame. The frame's inputs mount a few seconds after the iframe: wait_for_selector input[name=number] in the frame before filling.",
+    "Submit needs the auto-renew checkbox ticked in the 'Confirm upgrade' panel before 'Upgrade to Plus' (role=button).",
+    "Verified 2026-10-07 through the proxy (US tunnel) with the public test card under a verification-only key: ZIP, expiry, number and CVC filled with no field error. Stopped before ticking auto-renew and before Upgrade to Plus."
+  ],
+  "overrides": {
+    "billingZip": "input[name=\"postalCode\"]",
+    "cardFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"Secure payment input\" i]",
+    "expiry": "input[name=\"expiry\"]",
+    "expiryFrame": "iframe[title*=\"Secure payment input\" i]",
+    "placeOrder": "[role=\"button\"]:visible:has-text(\"Upgrade to Plus\")",
+    "planSelect": "[role=\"button\"]:visible:text-is(\"Upgrade\") >> nth=1"
+  },
+  "preconditions": ["account_required"]
+}

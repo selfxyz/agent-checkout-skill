@@ -1,0 +1,75 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "humblebundle.com",
+  "kind": "merchant",
+  "hosts": ["humblebundle.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.humblebundle.com/store/search?sort=bestselling&price=0-5",
+  "gotchas": [
+    "Sign in first at /login (input[name=\"username\"] takes the email, input[type=\"password\"], Enter submits). Signed out, the cart's Checkout button does nothing: no prompt, no payment page.",
+    "Every new browser session gets a new-device check after sign-in: a verification code sent by email (input[aria-label*=\"verification code\"]). It belongs to the account owner — hand it off.",
+    "The cart is a side panel (/store/cart is a 404). Add to Cart on a product page, then the visible Checkout button in the panel.",
+    "On the payment step, click \"Pay with card\" to reveal the card form. The only visible Stripe iframe is the express-checkout (wallet) button, not the card form: the card fields are plain inputs on the page, addressed by autocomplete (cc-name, postal-code, cc-exp, cc-number, cc-csc). Expiry accepted MM/YY.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: all five fields filled, no aria-invalid or alert. Stopped before the order was placed.",
+    "2026-10-09 (staging proxy, local egress): after \"Pay with card\" the card inputs take a few seconds to mount; wait for cc-number to be visible before probing. Number, expiry (MM/YY) and security code filled with the test card under a verification-only key (card_fields_verified); the postal-code input was not actionable within 30 s on this run. Stopped before the order was placed.",
+    "The new-device code was supplied by the account owner from the signup inbox; the sign-in then landed on the signed-in store (account menu holds a Log out link)."
+  ],
+  "overrides": {
+    "addToCart": "button:has-text(\"Add to Cart\")",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cartCheckout": "button:has-text(\"Checkout\") >> visible=true",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "name": "input[autocomplete=\"cc-name\"]",
+    "payWithCard": "button:has-text(\"Pay with card\")",
+    "productLinks": ".entity-block-container a",
+    "zip": "input[autocomplete=\"postal-code\"]"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "www.humblebundle.com",
+      "url": "https://www.humblebundle.com/store/search"
+    },
+    {
+      "action": "click",
+      "host": "www.humblebundle.com",
+      "selector": ".entity-block-container a >> nth=0"
+    },
+    {
+      "action": "click",
+      "host": "www.humblebundle.com",
+      "selector": "button:has-text(\"Add to Cart\") >> visible=true"
+    },
+    {
+      "action": "click",
+      "host": "www.humblebundle.com",
+      "selector": "button:has-text(\"Checkout\") >> visible=true"
+    },
+    {
+      "action": "click",
+      "host": "www.humblebundle.com",
+      "selector": "button:has-text(\"Pay with card\") >> visible=true"
+    },
+    {
+      "action": "wait",
+      "host": "www.humblebundle.com",
+      "selector": "input[autocomplete=\"cc-number\"]"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "www.humblebundle.com",
+        "url": "https://www.humblebundle.com/login"
+      }
+    ],
+    "fields": {
+      "email": "input[name=\"username\"]",
+      "password": "input[type=\"password\"]",
+      "submit": "button:has-text(\"Log In\")"
+    }
+  }
+}

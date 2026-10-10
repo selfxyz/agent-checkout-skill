@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "battle.net",
+  "kind": "signup",
+  "hosts": ["battle.net"],
+  "platform": "custom",
+  "status": "dead-end",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Battle.net's account-creation link, which lands on a page headed 'Log in or sign up' with an 'Email or Phone' box and Continue. Nothing was typed or submitted. 2026-10-02: driven through the Agent Vault proxy using this recipe (+tag test-inbox address), with browser egress through the owner's tunnel on a US network. #accountName then #submit moved a new address to a step with a country select (#capture-country) and a single date-of-birth box (placeholder MM/DD/YYYY) with #flow-form-submit-btn. A filled date was ignored by the box's input mask; typed one digit at a time (MMDDYYYY) it was accepted, but each submit was answered 200 by the site and the same date-of-birth step re-rendered, with no field error, no message and no challenge (detect_challenge), on two fresh loads. No account was created, so this is not verified. The same day, the account owner entered a +tag test-inbox address and a date of birth in their own browser on the same page, and the flow moved on to a first-name / last-name step, so the address and the date step are accepted for a real browser.",
+  "deadEnd": {
+    "type": "automation-blocked",
+    "details": "Through the Agent Vault proxy (US egress, 2026-10-02) the date-of-birth step re-rendered after every submit (answered 200) with no error or challenge, on two fresh loads; the owner's own browser passed the same step with the same kind of address. The masked date box's value could not be read back."
+  },
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email (the box also accepts a phone number) first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The account host depends on region: the unprefixed account.battle.net sent a visitor to kr.account.battle.net, so start from the us. host.",
+    "The date-of-birth box is input-masked: a filled value is ignored, so type the digits one key at a time (MMDDYYYY, the slashes are added).",
+    "On 2026-10-02, through the Agent Vault proxy (US egress), the date-of-birth step re-rendered after every submit (answered 200) with no error or challenge; whether a real browser passes it was not checked."
+  ],
+  "overrides": {
+    "email": "#accountName",
+    "submit": "#submit"
+  },
+  "signupUrl": "https://us.account.battle.net/creation/flow/creation-full",
+  "stepped": true
+}

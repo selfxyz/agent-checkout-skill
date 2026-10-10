@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "bestbuy.com",
+  "kind": "merchant",
+  "hosts": ["bestbuy.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "#cvv",
+  "exampleProductUrl": "https://www.bestbuy.com/site/searchpage.jsp?st=usb+c+cable",
+  "gotchas": [
+    "Guest checkout works: search (/site/searchpage.jsp?st=…) -> 'Add to Cart' on a result (it navigates to /cart) -> 'Checkout' -> 'Continue as Guest'.",
+    "Checkout is one page with four numbered steps, each with its own 'Continue': 1 Contact info (email, phone), 2 Shipping address, 3 Shipping details (delivery-date radios, the cheapest pre-selected), 4 Payment method. Step 3 completed on its own after the address step.",
+    "State is a native <select> of two-letter codes (CA, TX, …), not names.",
+    "The address box offers suggestions (a 'Hide Suggestions' button); press Escape in the last address field before Continue.",
+    "Card number (#number), expiry (#expirationDate) and security code (#cvv) are plain inputs on the page, not in a payment iframe. The only iframe at the payment step is the PayPal button.",
+    "'Use as billing address' is pre-checked, so no separate billing form appears.",
+    "The card fields were probed read-only on 2026-10-06 and not filled (no card fill in this pass), so the card selectors are unverified.",
+    "The order total for an order.total hint was not settled: [data-testid*=\"total\"] matches two elements and was reported unreadable.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared on search, cart or checkout.",
+    "order.total: '[data-testid*=\"total\" i]:last-of-type' resolves on the checkout page (checked 2026-10-09: 19.06 USD, and 12.65 USD on a second basket). '[data-testid*=\"total\"]' alone matches two elements.",
+    "The search page can open a 'Choose a country' splash from a non-US egress. Adding &intl=nosplash to the URL skips it.",
+    "On 2026-10-09, after a few runs from one egress, 'Add to Cart' on search stopped adding: the cart stayed at 0 items and no cart request was sent. 'Checkout' on /cart was also blocked behind a .page-spinner overlay. That looks like soft bot throttling, so space runs out.",
+    "Identity tokens on this host (the email) wait for the owner's destination approval before anything is typed. On 2026-10-09 it was not granted, and the fill ended denied."
+  ],
+  "overrides": {
+    "cardNumber": "#number",
+    "city": "input[id*=\"city\" i]",
+    "cvv": "#cvv",
+    "email": "input[type=\"email\"]",
+    "expiry": "#expirationDate",
+    "firstName": "input[id*=\"firstName\" i]",
+    "lastName": "input[id*=\"lastName\" i]",
+    "phone": "input[type=\"tel\"]",
+    "state": "select[id*=\"state\" i]",
+    "street1": "input[id*=\"address\" i]",
+    "zip": "input[id*=\"postal\" i]"
+  }
+}

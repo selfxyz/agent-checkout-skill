@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "walgreens.com",
+  "kind": "signup",
+  "hosts": ["walgreens.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "#wag-email",
+    "firstName": "#wag-RXUser-firstname",
+    "lastName": "#wag-RXUser-lastname",
+    "password": "#wag-password"
+  },
+  "signupUrl": "https://www.walgreens.com/register/pharmacyRegistration"
+}

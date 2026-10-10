@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "emirates.com",
+  "kind": "signup",
+  "hosts": ["emirates.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "#email",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.emirates.com/in/english/skywards/registration/"
+}

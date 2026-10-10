@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "expedia.com",
+  "kind": "signup",
+  "hosts": ["expedia.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Expedia's /login, headed 'Sign in or create an account' (the same Expedia Group page Vrbo serves). Nothing was typed or submitted. Driven through the proxy on 2026-09-29 and 2026-09-30 (tunnel egress from a US VPN address): on 2026-09-29 the page served a DataDome bot wall the detector did not classify, so the run ended at the door. On 2026-09-30, with the DataDome frame recognised, the wall was handed off and cleared by the owner in about two minutes; the email token filled #loginFormEmailInput, the submit advanced to a one-time-code step ('we’ve sent', '6-digit code') that the detector does not classify, so the code could not be handed off and the run stopped there. No password step was reached. A second run later on 2026-09-30, with sent-code copy matching deployed, cleared the wall and passed the email step again and stopped at the same code step, still unclassified; the exact wording is in the gotchas.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The page is behind a DataDome bot wall ('Show us your human side... We can't tell if you're a human or a bot'). Its challenge frame (geo.captcha-delivery.com) is hidden with an empty URL for the first seconds and becomes visible after about 20 seconds: after open_page, wait_for_selector on iframe[src*=\"captcha-delivery\"] with state visible before calling detect_challenge, or the first call lands in the hidden phase. Once visible it classifies as captcha and the handoff works.",
+    "For a new address the email step is followed by a 6-digit emailed code, not a password: the input's id contains 'code' (input[id*=\"code\" i]) and the submit's id contains 'otp' (button[id*=\"otp\" i]). As of 2026-09-30 detect_challenge does not classify this step and the handoff refuses, so the run stops here; the code is the owner's.",
+    "The code page's wording, read on 2026-09-30: headed 'Confirm your email'; the sentence is '... the code we sent to <masked address>' (simple past, no contraction, the word code BEFORE 'we sent'); the input is labelled '6-digit code'. It contains no 'we've sent', 'we have sent' or 'code sent to your', which is why the sent-code copy matching deployed that day does not fire on it."
+  ],
+  "overrides": {
+    "email": "#loginFormEmailInput",
+    "submit": "#loginFormSubmitButton"
+  },
+  "signupUrl": "https://www.expedia.com/login",
+  "stepped": true
+}

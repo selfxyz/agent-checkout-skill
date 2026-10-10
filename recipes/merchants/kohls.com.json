@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "kohls.com",
+  "kind": "merchant",
+  "hosts": ["kohls.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.kohls.com/search.jsp?search=socks",
+  "gotchas": [
+    "Add to Cart starts disabled (\"Loading inventory\"); wait for it to enable. Then open /checkout/shopping_cart.jsp; shipping is pre-selected over store pickup.",
+    "Checkout Options: an Email box and \"Checkout as Guest\" (no account needed).",
+    "Shipping form fields carry no stable autocomplete/ids through the proxy; address them by accessible name (role=textbox[name=\"First Name\"] etc.). A \"Shipping, Surcharges & Fees\" drawer can open and intercept: press Escape first.",
+    "Address verification: a multi-unit address without a unit is rejected (\"Please check the apartment or unit number\"); with a unit it shows \"Unable to verify address\" with a suggestion — click \"Accept suggested address\".",
+    "Payment: \"Pay with Card\" is pre-selected; Card Number, Expiration Date (MM/YY), CVV and Name on Card are plain inputs on the page. A hidden gift-card drawer also has a \"Card Number\" box, so use role selectors (visible only). Billing defaults to the shipping address. The next button is \"Review Order\" (a review step follows before the order is placed).",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: all four fields filled, no alert or aria-invalid. Stopped before Review Order. No bot wall seen."
+  ],
+  "overrides": {
+    "acceptAddress": "button:has-text(\"Accept suggested address\")",
+    "addToCart": "button:has-text(\"Add to Cart\"):not([disabled])",
+    "bagCheckout": "button:text-is(\"Checkout\")",
+    "cardNumber": "role=textbox[name=\"Card Number\"]",
+    "city": "role=textbox[name=\"City\"]",
+    "continueToPayment": "button:has-text(\"Continue to Payment\")",
+    "cvv": "role=textbox[name=\"CVV\"]",
+    "expiry": "role=textbox[name=\"Expiration Date\"]",
+    "firstName": "role=textbox[name=\"First Name\"]",
+    "guestCheckout": "button:has-text(\"Checkout as Guest\")",
+    "guestEmail": "input[type=\"email\"]",
+    "lastName": "role=textbox[name=\"Last Name\"]",
+    "name": "role=textbox[name=\"Name on Card\"]",
+    "phone": "role=textbox[name=\"Phone\"]",
+    "placeOrder": "button:has-text(\"Review Order\")",
+    "productLinks": "a[href*=\"/product/prd-\"]",
+    "state": "role=combobox[name=/State/]",
+    "street1": "role=textbox[name=\"Street Address or P.O. Box\"]",
+    "street2": "role=textbox[name=\"Address 2 Optional\"]",
+    "zip": "role=textbox[name=\"ZIP Code\"]"
+  }
+}

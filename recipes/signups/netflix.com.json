@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "netflix.com",
+  "kind": "signup",
+  "hosts": ["netflix.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Netflix's homepage (redirected to a country path), an 'Email address' box and Get Started; /signup itself opens on 'Choose your plan'. Nothing was typed or submitted.",
+  "gotchas": [
+    "The homepage carries the same email box twice (top and bottom); the first is the one to use.",
+    "After the email, the signup moves to choosing a plan; the steps after that were not observed and may ask for payment, which is the account owner's to give."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.netflix.com/",
+  "stepped": true
+}

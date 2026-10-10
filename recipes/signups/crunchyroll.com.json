@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "crunchyroll.com",
+  "kind": "signup",
+  "hosts": ["crunchyroll.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-10-01",
+  "evidence": "2026-10-01: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. sso.crunchyroll.com/register takes the email and password on one page; with a test-inbox address (agentmail.to) Create Account was answered 200 by the site's own requests but nothing followed — no redirect, no account (a sign-in with those credentials was answered 401). With an address on the account owner's own domain the same submit was followed by redirects (307, 302, 307, 200) to a page with a verify-your-email notice and a Premium offer. The account owner opened the verification link, and a fresh sign-in on sso.crunchyroll.com/login with the same credentials was answered 200 and redirected into the signed-in site. Read with the staging network log (#734).",
+  "gotchas": [
+    "The register page asks for the email and the password together (role=textbox named Email Address and Password); Create Account stays disabled until both are filled. The older email-first form is gone.",
+    "Crunchyroll refuses some email domains without a message: on 2026-10-01 an agentmail.to test-inbox address got 200 responses and then nothing (no redirect, no account, the password field cleared). The account owner's own domain was accepted.",
+    "After signup the page asks to verify the email (a link sent by email, which belongs to the account owner) beside a Premium / free-trial offer; the offer is optional.",
+    "Sign-in is sso.crunchyroll.com/login with the same Email Address and Password boxes."
+  ],
+  "overrides": {
+    "email": "role=textbox[name=\"Email Address\"]",
+    "password": "role=textbox[name=\"Password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://sso.crunchyroll.com/register"
+}

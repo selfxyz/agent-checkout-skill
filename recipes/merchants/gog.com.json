@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gog.com",
+  "kind": "merchant",
+  "hosts": ["gog.com", "login.gog.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.gog.com/en/games?priceRange=1,10&order=desc:trending",
+  "gotchas": [
+    "No guest checkout: signed out, \"Continue to payment\" on /en/checkout opens a Log in iframe from login.gog.com. Sign in first.",
+    "Sign-in is in an iframe (iframe[src*=\"login.gog.com\"]) opened by the header SIGN IN button: #login_username, #login_password. Use frame-aware fills and press Enter on #login_password in that frame (a top-level click on \"Log in now\" times out). When login.gog.com already knows the account only the password field shows.",
+    "A cookie banner (Reject all) and an age gate on many product pages: press Enter on `.age-gate button`. Press Enter on the add-to-cart button rather than clicking it.",
+    "Payment is Adyen secured fields (split iframes, not Stripe): three separate iframes for number, expiry (MM/YY) and security code, addressed by title. Fill expiry first, then number and CVC back to back. No cardholder name field was shown.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: all three fields filled, no Adyen field error. Stopped before \"Checkout order now\"."
+  ],
+  "overrides": {
+    "addToCart": "[selenium-id=\"AddToCartButton\"]",
+    "ageGate": ".age-gate button",
+    "cardNumber": "input[data-fieldtype=\"encryptedCardNumber\"]",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "continueToPayment": "button:has-text(\"Continue to payment\"):not([disabled])",
+    "cvv": "input[data-fieldtype=\"encryptedSecurityCode\"]",
+    "cvvFrame": "iframe[title*=\"security code\" i]",
+    "expiry": "input[data-fieldtype=\"encryptedExpiryDate\"]",
+    "expiryFrame": "iframe[title*=\"expiry\" i]",
+    "productLinks": "a.product-tile"
+  },
+  "preconditions": ["account_required"]
+}

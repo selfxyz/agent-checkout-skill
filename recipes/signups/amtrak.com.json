@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "amtrak.com",
+  "kind": "signup",
+  "hosts": ["amtrak.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "lastVerifiedAt": "2026-10-01",
+  "gotchas": [
+    "One page (Azure AD B2C): first name (#givenName), last name (#surname), password (#newPassword) and its confirmation (#reenterPassword), email (#email), a required mobile phone (input[id*=\"phone\" i]), a country select (United States by default) and a required marketing yes/no choice (label:text-is(\"No\")), then #continue. The vault's default 24-character password was accepted.",
+    "The mobile phone is required and is the account owner's to supply; on 2026-10-01 no text-message step followed submit.",
+    "After submit, a welcome page with the member number asks to verify the email by a link sent by email. The link belongs to the account owner.",
+    "Sign-in (/guestrewards/account-overview.html) is #signInName and the password, then #next. From a new browser, once the password is accepted, the page moves to a step that sends a new-login code by email ('Send code'). That code belongs to the account owner: hand it off."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-10-01, see evidence.",
+  "overrides": {
+    "confirmPassword": "#reenterPassword",
+    "email": "#email",
+    "firstName": "#givenName",
+    "lastName": "#surname",
+    "password": "#newPassword",
+    "submit": "#continue"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://www.amtrak.com/guestrewards/enroll.html"
+}

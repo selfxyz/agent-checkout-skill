@@ -1,0 +1,34 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "underarmour.com",
+  "kind": "merchant",
+  "hosts": ["underarmour.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.underarmour.com/en-us/search?q=t-shirt",
+  "gotchas": [
+    "Use the /en-us/ storefront (e.g. /en-us/search?q=…). Many sock listings showed every colour 'Out of Stock' on 2026-10-06; a t-shirt worked. Size is a radio group (press Space on input[type=radio][name*=size]); the add button is button[data-pdp-add-to-bag=\"true\"] (two match; use the visible one).",
+    "An Attentive 'Sign Up via Text' overlay (iframe#attentive_creative) covers the page and takes clicks; close it by pressing Enter on #closeIconContainer in that frame. A cookie banner also shows.",
+    "Checkout starts as a guest directly: Shipping -> Payment -> Contact Information, each with its own continue button. 'Continue to Payment' (#btn-shipping-submit) first opens a 'Member Checkout' dialog; choose 'Continue As Guest'.",
+    "State is a custom combobox (combobox 'State' next to a hidden textbox): open it and click the two-letter option (e.g. 'CA'). The address typeahead (api.edq.com) offers suites; an address without a suite at a multi-unit building gets a 'Please Verify Your Address' dialog — 'Review Address', then pick a suggestion.",
+    "Payment: 'Credit Card' is pre-selected. Card number, expiry, security code and name on card are ALL in one iframe (iframe[id*=\"card\"]), addressed by aria-label. Billing 'Same as shipping address' is pre-checked. Then 'Continue to Contact' (email/phone come after the card on this site).",
+    "Card fields probed read-only on 2026-10-06 and not filled, so card selectors are unverified. Order summary shows 'Total:'; no order.total hint was settled.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared.",
+    "Observed 2026-10-06: through the proxy (US tunnel) every colour of a product that had been in stock hours earlier showed \"Out of Stock\" and Add to Bag did nothing, while the account owner's own browser on the same VPN saw it in stock at the same time. The sock page also showed Spanish breadcrumbs (\"Promo aniversario\" / \"Ver todo\") on /en-us/. Read an all-out-of-stock page as the site treating the automated browser differently (#739), not as real stock; inventory GraphQL calls still answered 200."
+  ],
+  "overrides": {
+    "cardNumber": "input[aria-label=\"Enter card number\"]",
+    "cardNumberFrame": "iframe[id*=\"card\" i]",
+    "city": "input[name=\"city\"] >> visible=true",
+    "cvv": "input[aria-label=\"Enter security code\"]",
+    "cvvFrame": "iframe[id*=\"card\" i]",
+    "expiry": "input[aria-label=\"Enter expiration month and year\"]",
+    "expiryFrame": "iframe[id*=\"card\" i]",
+    "firstName": "input[name=\"firstName\"] >> visible=true",
+    "lastName": "input[name=\"lastName\"] >> visible=true",
+    "name": "input[aria-label=\"Enter name on card\"]",
+    "nameFrame": "iframe[id*=\"card\" i]",
+    "street1": "input[name=\"address1\"] >> visible=true",
+    "zip": "input[name=\"postalCode\"] >> visible=true"
+  }
+}

@@ -12,9 +12,7 @@
       "iframe[src*=\"buy.paddle.com\"]",
       ".paddle-checkout"
     ],
-    "urlPatterns": [
-      "buy\\.paddle\\.com"
-    ]
+    "urlContains": ["buy.paddle.com"]
   },
   "notes": "Derived from Paddle's known checkout structure — validate on first use and record variants back into this recipe.",
   "selectors": {
@@ -26,7 +24,7 @@
     "addToCart": "'Buy'/'Checkout' opens the Paddle overlay iframe (buy.paddle.com); target fields THROUGH frameLocator on that iframe — page-level selectors do not reach it. Hosted buy.paddle.com pages keep inputs in the top frame.",
     "contact": "input[name=email]; country/postcode (Paddle is merchant of record and collects tax location).",
     "outcome": "Paddle success screen / emailed receipt.",
-    "payment": "Direct inputs (not Stripe): input[name=cardNumber] / input[autocomplete=cc-number], expiry (required), then the CVV token into input[autocomplete=cc-csc] immediately after the number.",
+    "payment": "Direct inputs (not Stripe): fill expiry (required) FIRST, then the card-number token into input[name=cardNumber] / input[autocomplete=cc-number], then the CVV token into input[autocomplete=cc-csc] immediately after the number, with nothing at all in between.",
     "placeOrder": "'Pay' / 'Subscribe now' inside the same frame, once."
   }
 }

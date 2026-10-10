@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "todoist.com",
+  "kind": "signup",
+  "hosts": ["todoist.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: app.todoist.com/auth/signup, headed 'Sign up' (email, password, 'Sign up with Email'). An earlier attended signup through this form, in the proxy browser, completed end to end (credential minted, form accepted, confirmation mail received; recorded on #626, undated). Nothing was typed or submitted.",
+  "gotchas": [
+    "Field ids are generated (element-0); match by type.",
+    "The password field carries autocomplete=\"current-password\" although this is the signup form.",
+    "A challenge widget may appear beside the form; it is the account owner's — hand it off with request_challenge_handoff.",
+    "2026-10-09 via the staging proxy (tunnel egress): one page, email + password, 'Sign up with Email'; Todoist then emailed a 'Verify your email address' link (no code), which verified the address.",
+    "The first sign-in (app.todoist.com/auth/login, email + password on one page, 'Log in') lands on onboarding: a Welcome page with a single button, then a name box and Next, then a how-will-you-use-it choice; the app and the subscription settings page stay behind it until it is finished."
+  ],
+  "overrides": {
+    "email": "input[type=\"email\"]",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://app.todoist.com/auth/signup"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gopuff.com",
+  "kind": "signup",
+  "hosts": ["gopuff.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Gopuff's /user-registration, reached from 'Sign in / Sign up', whose only field is a phone number. Nothing was typed or submitted.",
+  "deadEnd": {
+    "type": "phone-required",
+    "details": "/user-registration ('Sign in / Sign up') asks for a mobile phone number and nothing else; the account is keyed to that number, which the account owner must supply and verify."
+  },
+  "gotchas": ["The phone number and any code sent to it are the account owner's; hand them off."],
+  "overrides": {
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.gopuff.com/user-registration"
+}

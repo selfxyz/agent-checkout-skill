@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "grammarly.com",
+  "kind": "signup",
+  "hosts": ["grammarly.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); all four selectors matched. After the name and password the page asked for a 6-digit code sent by email; the account owner completed it through a challenge handoff (code, then a reCAPTCHA checkbox, then the code again; outcome solved), and the page went on to Grammarly's onboarding (\"Welcome Jane, what are you using Grammarly for\"). Grammarly's confirmation-code mail arrived at the signup address.",
+  "gotchas": [
+    "The form is stepped: only the email is visible at first; #name and #password are in the page but hidden until \"Agree and Sign up\" is pressed, then shown on the same page.",
+    "After the name and password are submitted, a 6-digit code sent by email is asked for in six one-digit boxes (autocomplete=one-time-code); the code belongs to the account owner: hand it off.",
+    "Sign-in showed a visible reCAPTCHA checkbox after the password.",
+    "Signing up opts in to Grammarly's product-related marketing emails, per the page text."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-29, see evidence.",
+  "overrides": {
+    "email": "#email",
+    "fullName": "#name",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_code", "captcha", "email_code"],
+  "signupUrl": "https://www.grammarly.com/signup",
+  "stepped": true
+}

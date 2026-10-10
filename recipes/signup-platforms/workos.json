@@ -1,0 +1,41 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "workos",
+  "kind": "signup-platform",
+  "name": "WorkOS AuthKit",
+  "status": "partial",
+  "evidence": "Read-only discovery (enclave arm) and a DOM read on 2026-09-21 against WorkOS's own AuthKit instance, signin.workos.com/sign-up, reached from dashboard.workos.com/signup; nothing typed. Then a REAL signup on 2026-09-28 through the proxy on an authkit.app tenant with no recipe of its own (stalwart-neutron-47-staging.authkit.app, Agent Vault's own staging tenant), which the registry resolved to this platform by its route claim alone. Every field and button below matched exactly one element there. The email was verified with the code WorkOS mailed, and confirmed out of band: signing in again with the same credentials skipped the code step entirely and no further mail was sent. `partial`, not `verified`: one tenant, whose configuration (name fields, password method) is its own.",
+  "detect": {
+    "selectors": ["button.ak-PrimaryButton", "button[name=\"intent\"][value=\"sign-up\"]"],
+    "routes": [
+      {
+        "hosts": ["authkit.app"],
+        "paths": ["/sign-up"]
+      }
+    ]
+  },
+  "fields": {
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"first_name\"]",
+    "lastName": "input[name=\"last_name\"]",
+    "password": "input[name=\"password\"]",
+    "submit": ["button[name=\"intent\"][value=\"sign-up\"]", "button.ak-PrimaryButton"]
+  },
+  "gotchas": [
+    "Never target the email input's id: it is a generated Radix id that changes between renders. name=\"email\" is stable.",
+    "First and last name are TENANT-optional: the observed tenant asked for them on the first screen, and the 2026-09-21 read of WorkOS's own instance did not show them. Skip firstName/lastName when they match nothing.",
+    "Once, on the sign-in email screen, a fill followed at once by Continue did nothing: the page stayed put with no error. Filling again and clicking again advanced it. If Continue appears to do nothing, check that the page moved (wait for the next screen's field) before assuming a selector is wrong.",
+    "Sign-in has no intent=sign-in button: its 'Continue with email' is button.ak-PrimaryButton. Opening /sign-in directly rendered a blank page on the observed tenant; reach it from /sign-up's 'Sign in' link.",
+    "/sign-in is the other flow on the same host and is deliberately not route-claimed: a route there would hand signup selectors to a sign-in page.",
+    "The emailed code is the account owner's, always: hand it off with request_challenge_handoff. It expires in 15 minutes, so hand off as soon as the code screen appears."
+  ],
+  "notes": "Stepped, one field group per screen: the first screen (email, plus first and last name on tenants that ask), then a password screen, then a six-digit emailed code. What appears after the email depends on the methods the tenant enabled; a password followed by an email code is what the observed tenant used.",
+  "stepped": true,
+  "steps": {
+    "open": "Open the tenant's AuthKit sign-up page (path /sign-up on the AuthKit domain); apps commonly redirect there from their own /signup. The state and authorization_session_id in that URL are per-session.",
+    "fill": "First screen: input[name=\"email\"] with the email token, and input[name=\"first_name\"] / input[name=\"last_name\"] with the identity name tokens where the tenant shows them. Submit, WAIT for input[name=\"password\"], then fill it with the password token.",
+    "submit": "Click button[name=\"intent\"][value=\"sign-up\"] ('Continue') on the first screen and again on the password screen: the same button submits both.",
+    "outcome": "The page moves to an emailed-code screen, and WorkOS mails a six-digit code valid for 15 minutes.",
+    "verify": "The emailed code is the account owner's: call request_challenge_handoff and let them enter it. Never read, guess or type it. Once it is in, the tenant redirects to its app — on the observed tenant that target rendered blank, which is success, not an error. To confirm, sign in again with the same credentials: a verified account goes straight through with no code step and no new mail."
+  }
+}

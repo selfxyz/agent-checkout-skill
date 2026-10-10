@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "booking.com",
+  "kind": "merchant",
+  "hosts": ["booking.com", "secure.booking.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "varies",
+  "exampleProductUrl": "https://www.booking.com/hotel/us/sleep-inn-dallas-northwest-irving.html?checkin=2026-10-22&checkout=2026-10-23&group_adults=1&req_adults=1&no_rooms=1&group_children=0&req_children=0&selected_currency=USD&lang=en-us",
+  "gotchas": [
+    "Guest checkout, no login needed. Open the property page directly (/hotel/<cc>/<slug>.html?checkin=YYYY-MM-DD&checkout=YYYY-MM-DD&group_adults=1&no_rooms=1&selected_currency=USD&lang=en-us): on the search results a sign-in modal ([data-bui-trap-root]) intercepts clicks on 'See availability', which also opens a new tab.",
+    "Room table: set the first select[name^=nr_rooms_] to '1', then 'I'll reserve'. Four steps follow on secure.booking.com: Your Details (button[name=book] labelled 'Next') -> Protection ('Add Travel Protection?' radios, Yes $7 vs 'No thanks'; pick No thanks, then 'Next: Final details') -> Finish booking.",
+    "On Your Details each name/email input exists twice (one hidden), hence the '>> visible=true'. Country/Region defaults to United States, so no select fill is needed there; on a not-yet-approved host make the first saved-details fill a text field.",
+    "The card form is a hosted iframe, iframe[src*=paymentcomponent.booking.com] (the cardFrame override), that loads a few seconds after the Finish booking page (a progressbar shows meanwhile). Pass it as `frame` for every card field. Inside it, 'New card' is preselected; cardholder name, number, MM/YY expiry and CVC all carry standard autocomplete attributes. The CVC is REQUIRED on the prepaid rate.",
+    "The cheapest rates are often prepaid and non-refundable ('Today you'll pay $X'; the cancel cost equals the total). A $50 refundable damage deposit is listed separately. Final button: 'Complete booking'.",
+    "Two marketing-consent checkboxes (email, SMS) sit above Complete booking, unchecked by default.",
+    "After any token fill the page's text matchers and snapshot become unavailable, and the Protection step's controls are hard to tell apart blind; take the snapshot of each step before the first fill if the flow is new.",
+    "Total: 'Today you'll pay US$X' under 'Your payment details'; no stable id/class found for an order.total hint (generated classes).",
+    "Identity-token fills on this host hold for the owner's approval of saved details; an unapproved fill was denied after ~4 min and the proxy connection dropped once during it."
+  ],
+  "overrides": {
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardFrame": "iframe[src*=\"paymentcomponent.booking.com\"]",
+    "cardName": "input[autocomplete=\"cc-name\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[name=\"email\"] >> visible=true",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "firstName": "input[name=\"firstname\"] >> visible=true",
+    "lastName": "input[name=\"lastname\"] >> visible=true",
+    "phone": "input[name=\"phoneNumber\"]"
+  },
+  "route": [
+    {
+      "host": "www.booking.com",
+      "url": "https://www.booking.com/hotel/us/sleep-inn-dallas-northwest-irving.html"
+    },
+    {
+      "action": "manual",
+      "host": "www.booking.com",
+      "note": "Pick dates in the query (checkin/checkout/group_adults=1/no_rooms=1), set the first select[name^=nr_rooms_] to 1, click I'll reserve; on secure.booking.com fill the guest contact form, Next step, choose Don't add insurance, Next: Final details. The payment iframe loads a few seconds later."
+    }
+  ]
+}

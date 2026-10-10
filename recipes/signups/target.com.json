@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "target.com",
+  "kind": "signup",
+  "hosts": ["target.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Target's /login, reached from the homepage's 'Sign in or create account' button, headed 'Sign in or create account' with an 'Email or mobile phone' box and Continue. Nothing was typed or submitted.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email (the box also accepts a mobile number) first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "A bare /login without the client_id parameter redirects to the homepage; keep the parameter."
+  ],
+  "overrides": {
+    "email": "#username",
+    "submit": "#login"
+  },
+  "signupUrl": "https://www.target.com/login?client_id=ecom-web-1.0.0&ui_namespace=ui-default",
+  "stepped": true
+}

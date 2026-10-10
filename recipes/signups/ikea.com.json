@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ikea.com",
+  "kind": "signup",
+  "hosts": ["ikea.com"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-09",
+  "evidence": "2026-10-09: real signup through the Agent Vault staging proxy (pre-approved login ikea.com, plain test-inbox address). Form filled from address tokens plus synthetic name/birthdate, email from the login token; the emailed code was put in the field and the Cloudflare Turnstile on the code step was handed off; the account owner solved it and submitted (handoff outcome solved, 64 s), and IKEA's welcome email arrived. A fresh session then signed in at /us/en/profile/login/ with a new emailed code, supplied by the account owner, and reached the signed-in page (logout link, purchase history; get_session_outcome success).",
+  "gotchas": [
+    "US IKEA Family signup: /us/en/profile/signup/ redirects to us.accounts.ikea.com. One page: first/last name, birthdate (MM/DD/YYYY text box), address, preferred store (optional), email, marketing and terms checkboxes. There's no password; IKEA accounts sign in with an emailed one-time code.",
+    "The address field starts as an autocomplete search box; click text=Enter address manually to show street/city/zip/state (the street is the second input[name*=address i]). button:has-text(...) doesn't match that control.",
+    "Tick the terms checkbox (input[name*=terms i][type=checkbox], force click), then 'Continue to email verification' sends a 6-digit code from no.reply@ikea.com, valid 5 minutes. The code is supplied by the account owner and goes into input[autocomplete=\"one-time-code\"].",
+    "A Cloudflare Turnstile widget (iframe[src*=\"challenges.cloudflare.com\"]) is on the code step; submitting the code at signup was held by it through the proxy. That's a captcha owner step: hand it off with the code already in the field; the owner clears Turnstile and presses Continue. A welcome email ('Make the most of your rewards and benefits!') confirms the account.",
+    "2026-10-09: the identity first/last-name tokens reported a fill but left the boxes empty ('Your First name is required'), so a synthetic name was typed; check the owner's Identity page has a name.",
+    "Sign in: /us/en/profile/login/ → input[type=email] → Continue → code in input[autocomplete=\"one-time-code\"] + Enter. Signed in shows a[href*=logout] and purchase history. The fresh sign-in on 2026-10-09 passed without a Turnstile hold."
+  ],
+  "overrides": {
+    "city": "input[name*=city i]",
+    "dateOfBirth": "input[name*=birth i]",
+    "email": "input[name*=email i][type=email]",
+    "firstName": "input[name*=first i]",
+    "lastName": "input[name*=last i]",
+    "state": "select[name*=province i]",
+    "street1": "input[name*=address i] >> nth=1",
+    "zip": "input[name*=zip i]"
+  },
+  "ownerSteps": ["captcha", "email_code"],
+  "signupUrl": "https://www.ikea.com/us/en/profile/signup/",
+  "stepped": true
+}

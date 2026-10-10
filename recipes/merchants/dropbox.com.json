@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dropbox.com",
+  "kind": "merchant",
+  "hosts": ["dropbox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.dropbox.com/buy",
+  "gotchas": [
+    "Use /buy (signed out, plan buttons are links, e.g. a[aria-label=\"Buy now: Plus\"]). /plans renders them as buttons behind a cookie banner in an iframe (press Enter on Decline inside iframe[src*=\"consent\"]).",
+    "The checkout page (/checkout) opens a \"Log in or sign up\" dialog over it. Its email field submits on Enter. Do not target button:has-text(\"Continue\") — it also matches \"Continue with Apple\"/Microsoft and opens a third-party popup. Email then password, each submitted with Enter.",
+    "Signing in from a new browser sent a one-time code (input[autocomplete=one-time-code]); that is the account owner's handoff. Purchase needs the account.",
+    "Card fields are in Dropbox's own iframe (iframe[name=\"cc_iframe\"], cf.dropboxpayments.com) as plain autocomplete inputs (cc-number, cc-exp MM/YY, cc-csc); Country and Billing ZIP are on the page under it. Credit card is the default radio; PayPal is the alternative. A dropboxcaptcha.com frame is present.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: the cc_iframe fields filled with no error (filled while the login dialog was still open; the code step was not completed). Stopped before Purchase.",
+    "Observed 2026-10-07 (proxy, US tunnel): signing in first at dropbox.com/login (email + Enter, password + Enter) asked for no code this time. Signed in, /buy shows no \"Buy now: Plus\" control; open /plans and click the first visible a:has-text(\"Buy now\"). The checkout then has Postal Code on the page (role=textbox name Postal Code) and the same cc_iframe; the public test card filled with no error while signed in. A signed-out /checkout may show the card form with no login dialog until Purchase."
+  ],
+  "overrides": {
+    "cardFrame": "iframe[name=\"cc_iframe\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardNumberFrame": "iframe[name=\"cc_iframe\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "cvvFrame": "iframe[name=\"cc_iframe\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "expiryFrame": "iframe[name=\"cc_iframe\"]",
+    "placeOrder": "button:has-text(\"Purchase\")",
+    "planSelect": "a[aria-label=\"Buy now: Plus\"]"
+  },
+  "preconditions": ["account_required"]
+}

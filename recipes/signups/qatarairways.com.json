@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "qatarairways.com",
+  "kind": "signup",
+  "hosts": ["qatarairways.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "2026-10-07: a reCAPTCHA widget (.g-recaptcha) is on the join form; detectChallenge reports captcha. It belongs to the account owner.",
+    "Required beyond email/password: Country code combobox + Mobile number (spinbutton), Title combobox, first/last name as per passport, Date of Birth as one DDMMYYYY textbox, gender radios (Male/Female), Country/region of residence combobox.",
+    "Password specials allowed: !@#$%?&* only. Mint the password with a symbol set inside that list."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#f107",
+    "email": "#f105",
+    "firstName": "#f102",
+    "lastName": "#f104",
+    "password": "#f106"
+  },
+  "ownerSteps": ["captcha"],
+  "signupUrl": "https://www.qatarairways.com/en/Privilege-Club/join-now.html"
+}

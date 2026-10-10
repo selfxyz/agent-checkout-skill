@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "theatlantic.com",
+  "kind": "signup",
+  "hosts": ["theatlantic.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. The email went into #username; for a new address the next step asked for first name, last name and a password (a pre-ticked checkbox was left as it was), and submit moved on to a subscribe offer. An email from accounts@noreply.theatlantic.com arrived at the signup address. A sign-in straight after was not accepted (the site stayed signed out). The account owner opened the verification link in that email, and a fresh sign-in with the same credentials then left theatlantic.com showing My Account.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. A NEW address is then asked for a first name, last name and a password on the same step; a known address gets the password alone.",
+    "The box is named username but takes an email address.",
+    "The new-account step carries a pre-ticked checkbox (email offers); leave it or untick it, it is not required.",
+    "After signup the page moves to a subscription offer; the account exists, but a sign-in does not take until the address is verified by a link sent by email, which belongs to the account owner.",
+    "The sign-in password step can take several seconds to appear after the email is submitted, and pressing Enter in it did nothing on 2026-09-30; click the submit button. Signed in, the theatlantic.com header shows My Account instead of Sign In."
+  ],
+  "overrides": {
+    "email": "#username",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://accounts.theatlantic.com/login/",
+  "stepped": true
+}

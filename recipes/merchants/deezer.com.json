@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "deezer.com",
+  "kind": "merchant",
+  "hosts": ["deezer.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.deezer.com/us/offers",
+  "gotchas": [
+    "Start at /us/offers (US offers need a US egress; signup is country-restricted). The first 'Try for free' is Premium (monthly tab selected). A cookie banner offers Accept / Refuse / Preferences.",
+    "Signed out, the plan link opens a stepped sign-in: email + Enter, then password + Enter. No code was asked. It then lands on Deezer's payment page with Adyen secured fields (checkoutshopper-live.adyen.com, iframes titled 'Iframe for card number' / 'Iframe for expiry date' / 'Iframe for security code').",
+    "The Adyen iframes are in the DOM but hidden until the card payment option is clicked (the one visible Credit/Debit/Card text). Holder name (input[name=holderName]) is on the page; fill it in an earlier call than the card number. Expiry is one MM/YY input.",
+    "The offer is a free trial: the page says nothing is charged before the trial ends, and the submit button's label contains 'trial'. Eligible only for accounts with no previous Deezer subscription or trial.",
+    "Observed 2026-10-07 through the proxy (US tunnel, Dallas) with the public test card under a verification-only key: holder name, expiry, number and security code filled with no error. Stopped before the submit button."
+  ],
+  "overrides": {
+    "cardNumber": "input[data-fieldtype=\"encryptedCardNumber\"]",
+    "cardNumberFrame": "iframe[title=\"Iframe for card number\"]",
+    "cvv": "input[data-fieldtype=\"encryptedSecurityCode\"]",
+    "cvvFrame": "iframe[title=\"Iframe for security code\"]",
+    "expiry": "input[data-fieldtype=\"encryptedExpiryDate\"]",
+    "expiryFrame": "iframe[title=\"Iframe for expiry date\"]",
+    "nameOnCard": "input[name=\"holderName\"]",
+    "placeOrder": "button[type=\"submit\"]:has-text(\"trial\")",
+    "planSelect": "role=link[name=\"Try for free\"] >> nth=0"
+  },
+  "preconditions": ["account_required"]
+}

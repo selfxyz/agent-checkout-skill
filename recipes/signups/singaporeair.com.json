@@ -1,0 +1,31 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "singaporeair.com",
+  "kind": "signup",
+  "hosts": ["singaporeair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Password rule on the form: 8 to 16 alphanumeric characters with a digit, a lowercase and an uppercase letter. Create the login with maxLength 16 and noSymbols.",
+    "Title and the three date-of-birth parts (DD, MM as month names, YYYY) are custom comboboxes: click the combobox, then the visible [role=option] by exact text.",
+    "Email must be typed twice (contact-email and contact-confirm-email).",
+    "Mobile is three parts: a country autocomplete input[aria-label=\"Country/RegionMobile\"] (default Singapore +65; type the country and click its [class*=autocomplete] li), a MobileAreaCode box, and the national number. An E.164 phone value is marked invalid in the number box, so it needs the split phone tokens.",
+    "Country of residence is an autocomplete: type 'United States' and click the li that does not say 'Minor' (it is 'United States Of America'). That enables the State/Province autocomplete.",
+    "#btnContinue stays disabled until every required field is valid, including the T&C checkbox."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "input[aria-label=\"Confirm Password\"]",
+    "country": "input[aria-label=\"Country/Region\"]",
+    "email": "input[aria-label=\"contact-email\"]",
+    "firstName": "input[aria-label=\"first-name\"]",
+    "lastName": "input[aria-label=\"last-name\"]",
+    "password": "input[aria-label=\"Enter Password\"]",
+    "phone": "input[aria-label=\"Mobile Phone number\"]",
+    "state": "input[aria-label=\"stateInput\"]",
+    "submit": "#btnContinue",
+    "username": "input[name=\"username\"]"
+  },
+  "signupUrl": "https://www.singaporeair.com/en_UK/ppsclub-krisflyer/registration-form/",
+  "stepped": true
+}

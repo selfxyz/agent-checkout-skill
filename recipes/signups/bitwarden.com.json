@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "bitwarden.com",
+  "kind": "signup",
+  "hosts": ["bitwarden.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-10-01",
+  "evidence": "2026-10-01: real signup through the Agent Vault proxy using this recipe, with browser egress through the owner's tunnel on a US network. The region selector was left on bitwarden.com; the email and name selectors matched, and Continue moved to a check-your-email page with no CAPTCHA. An email from no-reply@bitwarden.com arrived at the signup address. The account owner opened its Verify email link, which led to the set-master-password page in the owner's browser, and set the master password there, completing the account. The master password was therefore chosen by the owner and is not the vault-minted one, so no sign-in was made through the proxy.",
+  "gotchas": [
+    "A 'Creating account on' selector picks the region the vault is hosted in (bitwarden.com or bitwarden.eu); it is the account owner's choice.",
+    "Continue sends a verification email instead of asking for a password; the master password is set only on the page that email's Verify email link opens, in whichever browser opens it. Both the link and the master password belong to the account owner.",
+    "The master password is the vault's only key; Bitwarden cannot recover it.",
+    "A 'Receive updates from Bitwarden' checkbox is ticked by default."
+  ],
+  "overrides": {
+    "email": "#register-start_form_input_email",
+    "fullName": "#register-start_form_input_name",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://vault.bitwarden.com/#/signup",
+  "stepped": true
+}

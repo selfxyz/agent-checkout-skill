@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "instacart.com",
+  "kind": "signup",
+  "hosts": ["instacart.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Instacart's /signup, an email box with Continue and Google, Facebook and Phone buttons. Nothing was typed or submitted. 2026-10-05: account created through the Agent Vault proxy (US tunnel egress): email, Continue, then an emailed one-time code entered by the account owner via handoff; a fresh sign-in in a new session (email, Continue, emailed code via handoff) opened /store/account.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The page has two submit buttons, 'Log in' and 'Continue'; press Continue.",
+    "Observed 2026-10-05: passwordless. After Continue the page asks for a code sent by email (input[autocomplete=\"one-time-code\"]); sign-in at /login works the same way. A vault-minted password is never used.",
+    "After the code, onboarding asks for a delivery address in a single autocomplete box; pick a suggestion ([role=option]) and Save/Continue."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.instacart.com/signup",
+  "stepped": true
+}

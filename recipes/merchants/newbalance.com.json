@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "newbalance.com",
+  "kind": "merchant",
+  "hosts": ["newbalance.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.newbalance.com/pd/active-premium-qtr-3-pack/AC69122.html",
+  "gotchas": [
+    "A '20% off your first order' discount modal (.discount_modal) covers the search results and takes clicks; open a product URL directly (/pd/…) instead of clicking from search.",
+    "Size is required before 'Add to cart' works: click a button[aria-label*=\"size\" i] first (the add silently does nothing without one).",
+    "After adding, the mini-bag offers 'Checkout'; the next page asks 'How would you like to checkout?' — use the 'Guest checkout' link.",
+    "Shipping page: Email, Phone (input-masked; a plain fill can drop digits — select all, Backspace, then fill the 10 digits), First/Last name, Street Address with typeahead. City/State/ZIP stay hidden until a suggestion is picked or 'Enter address manually' is clicked. Picking a suggestion may open a second list of suites; 'Enter address manually' is simpler. The visible ZIP is input[id*=\"zip\"], not the name*=postal input.",
+    "State is a <select> of full names ('California').",
+    "'Continue to Payment' can open an 'Confirm shipping address' dialog (USPS-style ZIP+4 suggestion pre-selected); click its 'Save & continue'.",
+    "Payment: Adyen Secured Fields, three iframes (titles contain 'card number', 'expiry', 'security') each holding an input[data-fieldtype=\"encrypted…\"]. Billing same as shipping is pre-checked. Next button is 'Review your order', then 'Review and buy'.",
+    "Card fields probed read-only on 2026-10-06 and not filled, so card selectors are unverified. order.total hint not settled.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared.",
+    "2026-10-09 (staging proxy): the ZIP input is masked like the phone: a plain fill left it empty ('Please enter a valid zip code'); click it, select all, Backspace, then fill. The street typeahead list opens only after a keystroke in the field; 'Enter address manually' is a button at its bottom.",
+    "2026-10-09 (staging proxy): after 'Save & continue' in the address-verification dialog, POST /on/demandware.store/Sites-NBUS-Site/en_US/CheckoutShippingServices-SubmitShipping answered 403 twice (a WAF refusal with no visible challenge), so the payment step never opened. Read the network log for it before treating a stuck shipping step as a selector problem."
+  ],
+  "overrides": {
+    "cardNumber": "input[data-fieldtype=\"encryptedCardNumber\"]",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "city": "input[name*=\"city\" i] >> visible=true",
+    "cvv": "input[data-fieldtype=\"encryptedSecurityCode\"]",
+    "cvvFrame": "iframe[title*=\"security\" i]",
+    "email": "input[type=\"email\"] >> visible=true",
+    "expiry": "input[data-fieldtype=\"encryptedExpiryDate\"]",
+    "expiryFrame": "iframe[title*=\"expiry\" i]",
+    "firstName": "input[name*=\"firstName\" i]",
+    "lastName": "input[name*=\"lastName\" i]",
+    "phone": "input[name*=\"phone\" i]",
+    "state": "select[name*=\"state\" i] >> visible=true",
+    "street1": "input[name*=\"address1\" i]",
+    "zip": "input[id*=\"zip\" i] >> visible=true"
+  }
+}

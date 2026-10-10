@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "allegiantair.com",
+  "kind": "merchant",
+  "hosts": ["allegiantair.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "automation-blocked",
+    "details": "Cloudflare WAF serves 'Sorry, you have been blocked' (HTTP 403 block page with a Ray ID, no challenge to solve) on the homepage and on /booking for the proxy's patchright Chrome session from a residential/local egress. Seen on two separate runs (earlier HTTP 403, rechecked 2026-10-02). May be egress-dependent; recheck from a different egress before treating as permanent."
+  },
+  "exampleProductUrl": "https://www.allegiantair.com/",
+  "gotchas": [
+    "The Cloudflare block is a hard WAF block page, not a Turnstile/CAPTCHA: there is nothing to hand off, and retrying from the same IP only reinforces the block.",
+    "Both https://www.allegiantair.com/ and https://www.allegiantair.com/booking return the block page, so no search, fare, or payment selectors could be gathered."
+  ]
+}

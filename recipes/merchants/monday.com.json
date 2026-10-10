@@ -1,0 +1,62 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "monday.com",
+  "kind": "merchant",
+  "hosts": ["monday.com", "auth.monday.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://monday.com/pricing",
+  "gotchas": [
+    "Sign-in at auth.monday.com/login is email-first: #user_email then Enter, then #user_password then Enter. Both steps submit on Enter; there is no submit button to click.",
+    "A sign-in from a new browser lands on a 'New login detected' step asking for a code mailed to the account owner (one input[type=text], Enter submits). The code is the owner's to supply.",
+    "Signed in, the workspace sits under an invite-teammates dialog and a board-setup wizard whose overlay swallows clicks (click timeouts on See plans). Close each dialog by its aria-label close button, then 'See plans' opens the plan picker.",
+    "The plan picker has one 'Continue' button per paid plan; nth=0 is the cheapest (Basic). It opens a payment form in the same page: card number and security code each in their own iframe (title contains 'card number' / 'security code', one input each, the CVC input is name=cvc), expiry is a plain MM/YY input on the page. The submit reads Purchase / Complete / Pay.",
+    "Verified 2026-10-09 through the staging proxy with the public test card under a verification-only key: number, expiry and CVC filled (card_fields_verified), no aria-invalid. Stopped before the purchase click."
+  ],
+  "overrides": {
+    "cardExpiry": "input[placeholder*=\"MM\"]",
+    "cardNumber": "input",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"security code\" i]",
+    "placeOrder": "button:has-text(\"Purchase\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "auth.monday.com",
+      "url": "https://auth.monday.com/login"
+    },
+    {
+      "action": "manual",
+      "host": "monday.com",
+      "note": "Signed in, the workspace loads on the account's own subdomain (<account>.monday.com), under an invite-teammates dialog and a board-setup wizard. Close the dialog with its close button ([role=dialog] button[aria-label*=close i]); the wizard's overlay can block clicks until its own aria-label button closes it."
+    },
+    {
+      "action": "click",
+      "host": "monday.com",
+      "selector": "button:has-text(\"See plans\")"
+    },
+    {
+      "action": "click",
+      "host": "monday.com",
+      "selector": "button:has-text(\"Continue\") >> nth=0"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "auth.monday.com",
+        "url": "https://auth.monday.com/login"
+      }
+    ],
+    "fields": {
+      "email": "#user_email",
+      "password": "#user_password",
+      "continue": "#user_email",
+      "submit": "#user_password"
+    },
+    "signedIn": "button:has-text(\"See plans\")"
+  }
+}

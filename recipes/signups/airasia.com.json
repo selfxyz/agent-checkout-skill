@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airasia.com",
+  "kind": "signup",
+  "hosts": ["airasia.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "AirAsia MOVE member signup is a modal, not a page: on https://www.airasia.com/en/gb click the header text \"Log in/Sign up\"; the dialog 'AirAsia Log In and Member Sign Up' opens on Log in, so click its 'Sign up' toggle (\"Don't have an account? Sign up\") to switch to the signup tab.",
+    "Signup asks only for Email and Password (no name, DOB or confirm field at this step), with Google, Apple and WeChat social options. The email input is type=text with no name or id, and the 'Sign up' control is a div with role=button, not a <button>, so scope both to [role=\"dialog\"].",
+    "The dialog states 'This Platform is protected by reCAPTCHA', so expect an invisible reCAPTCHA check on submit (untested). The homepage itself loaded without a challenge on 2026-10-03; the flight search results page is behind Cloudflare Turnstile (see the merchant recipe), which is a different path.",
+    "Signup is a modal: header 'Log in/Sign up', then the 'Sign up' link (exact text) beside 'Don't have an account?' switches the dialog to signup.",
+    "The password input has maxlength 16: create the login with maxLength 16, or the vault's default 24-character password is refused as fill_rejected.",
+    "After 'Sign up' the same dialog asks for profile details: Given name and Family name (input[id*=first i] / input[id*=last i]), gender radios (click the label text 'Female' / 'Male'), a native dial-code select (default from egress, e.g. +60; selectOption('1') gives +1), a REQUIRED mobile number (input[id*=mobile i]), then Continue. An E.164 number was refused there ('Please enter a valid Mobile number.') under both +60 and +1, so it needs the national phone token.",
+    "No CAPTCHA appeared on submit from the staging proxy on 2026-10-07, despite the reCAPTCHA notice."
+  ],
+  "overrides": {
+    "email": "[role=\"dialog\"] input[type=\"text\"]",
+    "firstName": "[role=\"dialog\"] input[id*=\"first\" i]",
+    "lastName": "[role=\"dialog\"] input[id*=\"last\" i]",
+    "password": "[role=\"dialog\"] input[type=\"password\"]",
+    "phone": "[role=\"dialog\"] input[id*=\"mobile\" i]",
+    "submit": "[role=\"dialog\"] [role=\"button\"]:has-text(\"Sign up\")"
+  },
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://www.airasia.com/en/gb"
+}

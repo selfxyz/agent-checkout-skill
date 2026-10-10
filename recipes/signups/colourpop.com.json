@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "colourpop.com",
+  "kind": "signup",
+  "hosts": ["colourpop.com"],
+  "platform": "shopify-customer-accounts",
+  "status": "unverified",
+  "evidence": "Read-only DOM read on 2026-09-21: colourpop.com/account redirects to account.colourpop.com/authentication/login, Shopify's passwordless customer accounts. The email input matched exactly one visible element, and both submit buttons belong to its form. Nothing was typed or submitted.",
+  "signupUrl": "https://colourpop.com/account"
+}

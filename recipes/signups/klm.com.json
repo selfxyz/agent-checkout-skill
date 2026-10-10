@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "klm.com",
+  "kind": "signup",
+  "hosts": ["klm.com", "klm.co.uk"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Signup is the Flying Blue enrolment on the shared Air France-KLM identity host, https://identity.airfranceklm.com/enrol/flyingblue (off this host). From www.klm.co.uk: /information/flying-blue -> 'Join Flying Blue' card. The homepage 'Sign up for Flying Blue' card points to that info page; the header 'Log in' button opened a transparent cdk overlay backdrop that then intercepted clicks on the page.",
+    "Cookie wall 'KLM uses cookies' on both klm.co.uk and the identity host: click button:has-text(\"Reject\").",
+    "One question per screen: the first screen is 'Hi there! What is your name?' (first and last name exactly as on passport/ID; input[formcontrolname=\"firstName\"] / input[formcontrolname=\"lastName\"]) with a Continue button that stays disabled until both are filled. Inputs have no name/id/autocomplete attributes. Later screens (email, password, DOB etc.) were not observed.",
+    "identity.airfranceklm.com/enrol/flyingblue opened directly answers 400 Invalid Request; enter via the klm.co.uk 'Join Flying Blue' card.",
+    "Screen 2: residence combobox, DOB month combobox (option 'January'), role=textbox[name=\"day\"] / [name=\"year\"], Title combobox (Mr/Ms/Mx/I'd rather not say).",
+    "Screen 3 email -> screen 4 emailed one-time PIN (input[autocomplete=one-time-code]) BEFORE the password; the login must be created for airfranceklm.com, the identity host."
+  ],
+  "overrides": {
+    "email": "input[formcontrolname*=\"mail\" i]",
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]",
+    "phone": "input[formcontrolname*=\"phone\" i]",
+    "submit": "button:has-text(\"Continue\")"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.klm.co.uk/information/flying-blue",
+  "stepped": true
+}

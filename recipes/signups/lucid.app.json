@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "lucid.app",
+  "kind": "signup",
+  "hosts": ["lucid.app"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. The work email went into input[name=\"init-username\"]; Continue with email brought up a reCAPTCHA, which the account owner solved in a handoff. The page then showed a sign-up form with a name box and a password box (and a pre-ticked checkbox, left as it was); submitting it moved to a verify-your-email page, and an email from support@app.lucid.co arrived at the signup address with both a code and a verify button. The account owner verified the address with the button. A fresh sign-in through the proxy was not completed: after Log in with password, the form re-rendered as each field was filled and the password box and Log in button did not stay on screen.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for a work email first and decides from it. A NEW address is shown a name box and a password box to set on the next step.",
+    "The email box's id is generated (a8); its name, init-username, is stable.",
+    "The submit is a button labelled 'Continue with email'; 'Log in with password' beside it is for existing accounts.",
+    "Lucidchart, Lucidspark and Lucidscale accounts live on lucid.app; lucidchart.com is the marketing site.",
+    "Continue with email can bring up a reCAPTCHA, which belongs to the account owner: hand it off.",
+    "After signup Lucid sends an email with a code and a verify button to confirm the address; both belong to the account owner.",
+    "A cookie consent banner ('Close this consent banner') covers the page, including the login form, until dismissed.",
+    "2026-10-09: dismissing the cookie banner ('Reject Non-Essential') re-renders the form back to the email step; dismiss it before typing. A new address gets a 'Full name' box (no id or name; the only text input besides init-username) and a password box, then 'Create account', which brought up a visible reCAPTCHA challenge through the proxy.",
+    "2026-10-09 attended run: after Create account no reCAPTCHA was shown this time (it is not raised on every visit; when it is, hand it off). Lucid then asked for a 6-digit code sent by email, entered in six input[type=number] boxes, one digit each, then Enter on the last box. The code belongs to the account owner. The next page stayed blank through the proxy; a fresh sign-in ('Log in with password', then the password, Enter) reached the documents page with the account menu.",
+    "The Full name box rejected a vault identity full_name fill ('Full name required' after a fill the proxy reported as done) while a typed name was accepted. Check that the identity has a full name stored before relying on the token here."
+  ],
+  "overrides": {
+    "email": "input[name=\"init-username\"]",
+    "fullName": "input[type=\"text\"]:not([name=\"init-username\"])",
+    "password": "input[type=\"password\"]"
+  },
+  "ownerSteps": ["captcha", "email_link"],
+  "signupUrl": "https://lucid.app/users/login",
+  "stepped": true
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dropbox.com",
+  "kind": "signup",
+  "hosts": ["dropbox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "A cookie banner covers the page on a fresh profile: decline it first, or the fill targets nothing. Recorded from a completed signup by hand (#626); a proxy browser starts with an empty profile every run, so it re-arms each time.",
+    "Observed 2026-10-09 through the proxy: the email (input[name=\"susi_email\"], submit with Enter) leads to 'Sign up for Dropbox' with First name (input[name=\"fname\"]), Last name (input[name=\"lname\"]), Password (input[type=\"password\"], autocomplete new-password; #credential-autofill-hint no longer exists) and 'Agree and sign up'.",
+    "The cookie banner's Decline button sits in an untitled iframe (the second iframe on the page); iframe[src*=consent] matches nothing.",
+    "On 2026-10-09, three submits from the proxy's egress left the form disabled behind a spinner that never cleared, with no error, no detected challenge and no mail. Whether the account exists was not established."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "input[name=\"susi_email\"]",
+    "password": "input[type=\"password\"]",
+    "submit": "button:has-text(\"Agree and sign up\")"
+  },
+  "signupUrl": "https://www.dropbox.com/register",
+  "stepped": true
+}

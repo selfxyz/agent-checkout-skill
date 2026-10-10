@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "turkishairlines.com",
+  "kind": "signup",
+  "hosts": ["turkishairlines.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "captcha",
+    "details": "A PerimeterX/HUMAN 'Before we continue... Press & Hold to confirm you are a human' modal (iframe#px-captcha-modal, #px-captcha) is visible over the Miles&Smiles sign-up form as soon as it loads (2026-10-03, staging proxy). Agents must not solve it; it needs the account owner via a challenge handoff."
+  },
+  "gotchas": [
+    "Miles&Smiles sign-up form: https://www.turkishairlines.com/en-int/miles-and-smiles/sign-up-form/ . The shorter /en-int/miles-and-smiles/sign-up/ is a 'page that does not exist' 404, and the header 'SIGN IN or sign up' control did not navigate anywhere when clicked.",
+    "Single page, three sections: membership details (First/Middle name and Surname as on ID, Language, Nationality, Date of birth, Title), contact details (Country/Region, City, Zip, Address, Email, mobile Area code + number) and security details (Create password, Confirm password), then consent checkboxes (General Terms and Conditions is required) and an unlabelled submit button.",
+    "Labels are not tied to inputs, so the textboxes have no accessible names; use the ids (input#name, input#surname, input#password, input#confirmPassword). Language, Nationality, Title, Country/Region, City and Area code are custom comboboxes, not native selects. The submit button has no accessible name and was not pinned down."
+  ],
+  "overrides": {
+    "confirmPassword": "input#confirmPassword",
+    "email": "input[id*=\"mail\" i]",
+    "firstName": "input#name",
+    "lastName": "input#surname",
+    "password": "input#password"
+  },
+  "signupUrl": "https://www.turkishairlines.com/en-int/miles-and-smiles/sign-up-form/"
+}

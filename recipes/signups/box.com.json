@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "box.com",
+  "kind": "signup",
+  "hosts": ["box.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network; all four selectors matched. Create Free Account brought up an hCaptcha, which the account owner solved in a handoff. With a test-inbox address (agentmail.to) Create Free Account then showed nothing at all; the owner, repeating it by hand, saw the signup request answered with HTTP 422 (unprocessableEntityError), which the page does not display. With an address on the owner's own domain it moved to a check-your-email page (with Resend); the owner opened the verification link, and a fresh sign-in with the same credentials (email, Next, password) reached Box's welcome page signed in.",
+  "gotchas": [
+    "Field ids are generated (input-95df); the name attributes are stable.",
+    "On an earlier run (2026-09) an hCaptcha appeared after submitting; a challenge is the account owner's — hand it off with request_challenge_handoff.",
+    "Box refuses some email domains without saying so: on 2026-09-30 an agentmail.to test-inbox address got an HTTP 422 (unprocessableEntityError) that the page never shows, so Create Free Account appeared to do nothing. The account owner's own domain was accepted.",
+    "After Create Free Account a check-your-email page appears; the account is confirmed by a link sent by email, which belongs to the account owner.",
+    "Sign-in (account.box.com/login) is stepped: Email Address, Next, then the password."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "fullName": "input[name=\"fullName\"]",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["captcha", "email_link"],
+  "signupUrl": "https://account.box.com/signup/personal"
+}

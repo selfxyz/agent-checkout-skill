@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "grammarly.com",
+  "kind": "merchant",
+  "hosts": ["grammarly.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-split",
+  "exampleProductUrl": "https://www.grammarly.com/upgrade",
+  "gotchas": [
+    "/upgrade is a three-step flow (Account Creation, Plan Selection, Payment Completion) and opens a \"Sign in to your account\" dialog first. Email + Enter (a top-level Continue click times out), then password + Enter.",
+    "After the password a visible reCAPTCHA challenge appeared on both runs (2026-10-06 and 2026-10-07): an account-owner handoff. Once solved, reload /upgrade signed in.",
+    "Choose Your Plan shows three visible \"Select\" buttons; the first was used.",
+    "Payment: click the card option (text matching /card/) to reveal Stripe split iframes. Only the card-number iframe is visible at first; the expiration and CVC iframes are attached but hidden until a number is typed. Fill expiry marked as a card field so it moves after the CVC: number, CVC, then expiry.",
+    "Verified 2026-10-07 through the proxy (US tunnel) with the public test card under a verification-only key: number, CVC and expiry filled, no invalid state. Stopped before payment was submitted."
+  ],
+  "overrides": {
+    "cardNumber": "input[name=\"cardnumber\"]",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cardOption": "text=/card/i >> visible=true",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"CVC\" i]",
+    "expiry": "input[name=\"exp-date\"]",
+    "expiryFrame": "iframe[title*=\"expir\" i]",
+    "loginEmail": "input[type=\"email\"]",
+    "loginPassword": "input[type=\"password\"]",
+    "planSelect": "button:visible:has-text(\"Select\")"
+  },
+  "preconditions": ["account_required"]
+}

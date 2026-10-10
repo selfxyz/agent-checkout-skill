@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hilton.com",
+  "kind": "signup",
+  "hosts": ["hilton.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Driven through the proxy on 2026-09-29 (tunnel egress from a US address). Every field was filled from vault tokens: first and last name, phone, country, ZIP, email, password and confirmation. Submit replaced the join form with a page whose heading contains \"Welcome\"; no challenge, no error, and no emailed-code step. The run report recorded identity, address, login_email and login_password fills and a created login. A \"Welcome to Hilton Honors\" mail carrying the member number reached the registered mailbox the same day. Selectors as discovered read-only on 2026-09-28 by scripts/signup-selectors.ts (session arm); each matched exactly one visible element.",
+  "gotchas": [
+    "Phone is required: a country-code select (defaults to United States +1) beside a text input, input[name*=\"phone\" i]. Fill it with the identity's national-number token. An identity with no phone on file cannot complete this form: the vault refuses the token.",
+    "Country/Region and ZIP are required. The country select is select[name*=\"country\" i]:not([name*=\"phone\" i]) (defaults to United States) and ZIP is input[name*=\"zip\" i]; fill both from the address tokens.",
+    "A field filled with an empty value (an identity with no first or last name on file) is accepted by the fill and flagged only on submit: the form stays put with aria-invalid on those inputs and no page-level error. Check the identity carries names and a phone before starting.",
+    "Password rules: 8 to 32 characters, one uppercase, one lowercase, and one digit or special character. Pass maxLength 32 to create_login.",
+    "No emailed code at signup; the account is live on submit. The welcome mail, with the member number, is the owner's to read."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm) on 2026-09-28; driven end to end through the proxy on 2026-09-29.",
+  "overrides": {
+    "confirmPassword": "#confirmPassword",
+    "email": "input[name=\"email.emailAddress\"]",
+    "firstName": "input[name=\"name.firstName\"]",
+    "lastName": "input[name=\"name.lastName\"]",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.hilton.com/en/hilton-honors/join/"
+}

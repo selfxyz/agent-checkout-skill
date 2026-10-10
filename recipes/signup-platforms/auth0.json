@@ -1,0 +1,42 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "auth0",
+  "kind": "signup-platform",
+  "name": "Auth0 Universal Login",
+  "status": "partial",
+  "evidence": "Read-only discovery (scripts/signup-selectors.ts, enclave arm) and a DOM read on 2026-09-21 against Auth0's own tenant, auth0.auth0.com/u/signup/identifier (meta ulp-version=1.142.4); nothing typed. Then a REAL signup there on 2026-09-28 through the proxy: every selector below matched exactly one element, the email was verified with the six-digit code Auth0 mailed, and the password was accepted, after which the page moved on to account onboarding. `partial`, not `verified`: one tenant, and the completed account was not re-confirmed by signing in, because the sign-in page hung the proxy session. The route claims auth0.com paired with /u/signup/identifier, the exact path of the identifier-first screen; a password-first tenant serves /u/signup, a different form, and is deliberately not claimed.",
+  "detect": {
+    "selectors": ["meta[name=\"ulp-version\"]", "form._form-signup-id"],
+    "routes": [
+      {
+        "hosts": ["auth0.com"],
+        "paths": ["/u/signup/identifier"]
+      }
+    ]
+  },
+  "fields": {
+    "email": ["#email", "form._form-signup-id input[name=\"email\"]"],
+    "password": "input[name=\"password\"]",
+    "submit": [
+      "button._button-signup-id",
+      "form:has(input[name=\"password\"]) button[type=\"submit\"][value=\"default\"]"
+    ]
+  },
+  "gotchas": [
+    "Do not target button[name=\"action\"] on its own, even scoped to the signup form: two 'Continue' buttons with name=action and value=default sit inside it. Only button._button-signup-id names the primary one alone.",
+    "The social 'Continue with ...' buttons are type=submit as well; they carry data-provider rather than name=action.",
+    "The hashed classes (c0d577f2f and the like) change between Universal Login versions. The underscore-prefixed classes (_form-signup-id, _button-signup-id) are Auth0's stable hooks.",
+    "Whether an emailed code comes before the password is the tenant's setting, not the platform's. After the email step, wait for whichever appears: the password field, or a code screen (hand that to the owner).",
+    "The SIGN-IN form differs from signup: its identifier is input[name=\"username\"] (not email) inside form._form-login-id, and its button is button._button-login-id.",
+    "The route claim reaches only the hosted page on an Auth0 address (<tenant>.auth0.com). Many products put their own form in front of Auth0 or serve it from a custom domain (auth.example.com); neither is reached by the route, and each needs a host-keyed recipe."
+  ],
+  "notes": "New Universal Login, identifier-first: the first screen asks for the email alone. What follows is the tenant's configuration. On the observed tenant (Auth0's own) it was an emailed six-digit code, THEN a password screen; a tenant without email verification before signup would go straight to the password.",
+  "stepped": true,
+  "steps": {
+    "open": "Open the site's signup entry point. On Auth0 New Universal Login the signup screen lives under /u/signup, reached from the site's 'Sign up' link. The state parameter in that URL is per-session: never reuse a recorded one.",
+    "fill": "Identifier-first: fill #email with the email token, then submit. On the password screen, fill input[name=\"password\"] with the password token; there is no confirm field.",
+    "submit": "The email screen: button._button-signup-id. The password screen has no _button-* hook: form:has(input[name=\"password\"]) button[type=\"submit\"][value=\"default\"] (both are in fields.submit, in that order).",
+    "outcome": "After the password is accepted the tenant continues to its application (on the observed tenant, Auth0's account onboarding). Read the page; do not assume it.",
+    "verify": "If the tenant verifies the email BEFORE the password (the observed tenant did), an emailed-code screen appears after the email step. That code is the account owner's: call request_challenge_handoff and let them enter it. Never read, guess or type it. Once they release the page, continue with the password screen."
+  }
+}

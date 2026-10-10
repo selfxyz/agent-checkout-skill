@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "easyjet.com",
+  "kind": "signup",
+  "hosts": ["easyjet.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: easyJet's MyEasyJet Register page ('Your easyJet.com log in', 'Your account details'). Nothing was typed or submitted. A driven attempt through the proxy the same day (tunnel egress from a US address): every field took a vault token; the first two submits were refused client-side on the password (see gotchas) and the third, with a 20-character letters-and-digits password, left the form for a page carrying a checkbox reCAPTCHA and a sign-in heading, with no welcome text, no error and no emailed code. No welcome or activation mail reached the registered mailbox within 20 minutes. The sign-in paths under /en/secure/ then answered an Akamai \"Access Denied\" page from the same address, so the account could not be tested by signing in. Whether the account exists is undetermined.",
+  "gotchas": [
+    "The email is asked twice (#EmailAddressCheck), which no field in this recipe covers: type the same address there.",
+    "The form also requires a title, address and a preferred departure airport; they are the account owner's to supply.",
+    "A session-timeout dialog (Yes / No) may appear on a slow fill.",
+    "Password: at most 20 characters, letters and digits only. The vault's default 24-character password with symbols is refused client-side, with the error under #Password naming the length cap, special characters and spaces. Pass maxLength 20 and noSymbols to create_login, or rotate the password before filling.",
+    "Filling #EmailAddressCheck: a second fill_login call carrying only the username half, with the same email token.",
+    "Selectors for the required fields beyond this recipe's: a title select (select[id*=\"Title\" i], five options, none neutral), #Address1, #City, #PostalCode, the country of residence select #Country (defaults to United Kingdom) and a mobile phone #MobilePhone with its dialling-code select select[id*=\"Mobile\" i] (defaults to United Kingdom +44). The country and dialling-code selects did not take the address and phone country tokens; selecting the option label (\"United States\", \"United States(+1)\") works. #Address2 and three preferred-airport selects (select[id*=\"Airport\" i]) are present; the airports were left unset and drew no validation error.",
+    "The submit control is a plain \"Register now\" button, not button[type=\"submit\"]; click it by its snapshot ref or by text.",
+    "The 20-minute inactivity dialog (#sessionTimeoutDialog_yesButton) sits off-screen and cannot be clicked; the form survived it here.",
+    "After a submit the page can come back with a checkbox reCAPTCHA and a sign-in heading rather than a welcome. That is a challenge for the owner to hand off, and it can arrive without any mail being sent.",
+    "The sign-in paths (/en/secure/MyEasyJet.mvc and /Login) answered an Akamai Access Denied page from a US VPN address on 2026-09-29 while the Register page loaded fine, so a post-signup sign-in test may be walled by egress.",
+    "The submit is a link: a:has-text(\"Register now\"), not a button.",
+    "#MobilePhone is validated against the dialling-code select select[id*=\"Mobile\" i]; the whole E.164 phone token is refused as invalid. Needs phone_national.",
+    "The 'I don't have a mobile phone' link did not remove the mobile requirement."
+  ],
+  "overrides": {
+    "city": "#City",
+    "confirmPassword": "#PasswordCheck",
+    "country": "#Country",
+    "email": "#EmailAddress",
+    "firstName": "#FirstName",
+    "lastName": "#LastName",
+    "password": "#Password",
+    "phone": "#MobilePhone",
+    "street1": "#Address1",
+    "submit": "a:has-text(\"Register now\")",
+    "zip": "#PostalCode"
+  },
+  "ownerSteps": ["captcha"],
+  "signupUrl": "https://www.easyjet.com/en/secure/MyEasyJet.mvc/Register",
+  "stepped": false
+}

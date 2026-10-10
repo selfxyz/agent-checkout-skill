@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airasia.com",
+  "kind": "merchant",
+  "hosts": ["airasia.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "turnstile",
+    "details": "The flight search results page (/flights/search/) is behind a Cloudflare 'Performing security verification' page with an interactive Turnstile 'Verify you are human' checkbox, both from the homepage search form and from a deep link. The homepage itself loads without a challenge."
+  },
+  "exampleProductUrl": "https://www.airasia.com/en/gb",
+  "gotchas": [
+    "Homepage https://www.airasia.com/en/gb loads with a cookie banner (dismiss via its close icon); the browser egress geolocates the 'From' box to the nearest airports.",
+    "Search form: click 'One way', then the From and To textboxes are plain inputs with no stable id; type an IATA code (e.g. KUL, PEN) and click the airport row in the suggestion list, then pick a day in the calendar and click Done, then Search.",
+    "The homepage re-renders often and is heavy: accessibility snapshots time out intermittently (retry after a few seconds) and aria refs go stale between calls.",
+    "Search deep link: https://www.airasia.com/flights/search/?origin=KUL&destination=PEN&departDate=DD%2FMM%2FYYYY&tripType=O&adult=1&child=0&infant=0&locale=en-gb&currency=MYR&cabinClass=economy - it lands on the same Cloudflare Turnstile wall.",
+    "From the homepage form, Search leaves a blank page with a spinner that never resolves (results never render)."
+  ]
+}

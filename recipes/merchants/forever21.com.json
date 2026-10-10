@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "forever21.com",
+  "kind": "merchant",
+  "hosts": ["forever21.com"],
+  "platform": "shopify",
+  "status": "unverified",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://www.forever21.com/search?q=socks",
+  "gotchas": [
+    "Forever 21 US is a Shopify store (cdn.shopify.com scripts) on its own domain, so *.myshopify.com host detection does not match; this recipe names the platform.",
+    "Guest path: /search?q=… -> a /products/ link (pressing Enter on the link worked where a click was covered) -> Add to bag (button[name=\"add\"]; no size prompt on the item tried) -> /cart -> button[name=\"checkout\"] -> Shopify one-page checkout. No account prompt.",
+    "The one-page checkout shows contact, delivery and the card-fields iframes (number, expiry, verification, name) together, with #checkout-pay-button.",
+    "Card frames confirmed present read-only on 2026-10-06; nothing was typed or filled, so the recipe is unverified.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared.",
+    "2026-10-09 (staging proxy): the product page's add button is 'Add to cart' (button:has-text(\"Add to cart\")), not button[name=add]; /cart.js shows item_count. Opening /checkout directly from a non-empty cart lands on the one-page checkout.",
+    "2026-10-09: set select[name=countryCode] to US first; fill the first (delivery) set of name/address inputs (>> nth=0). order.total resolves on strong.notranslate (18.67 USD for a .99 item). Card filled through the card-fields iframes (name and expiry literals marked cardField, then number and CVV tokens): card_fields_verified with the public test card, no aria-invalid; stopped before #checkout-pay-button."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardExpiryFrame": "iframe[name*=\"card-fields-expiry\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[name*=\"card-fields-number\"]",
+    "city": "input[name=\"city\"] >> nth=0",
+    "country": "select[name=\"countryCode\"]",
+    "cvv": "input[name=\"verification_value\"]",
+    "cvvFrame": "iframe[name*=\"card-fields-verification\"]",
+    "email": "#email",
+    "firstName": "input[name=\"firstName\"] >> nth=0",
+    "lastName": "input[name=\"lastName\"] >> nth=0",
+    "orderTotal": "strong.notranslate",
+    "phone": "input[name=\"phone\"] >> nth=0",
+    "placeOrder": "#checkout-pay-button",
+    "state": "select[name=\"zone\"]",
+    "street1": "input[name=\"address1\"] >> nth=0",
+    "zip": "input[name=\"postalCode\"] >> nth=0"
+  },
+  "route": [
+    {
+      "host": "forever21.com",
+      "url": "https://www.forever21.com/search"
+    },
+    {
+      "action": "manual",
+      "host": "forever21.com",
+      "note": "Search an item (e.g. q=socks) and open a /products/ link (press Enter on it), then click Add to cart."
+    },
+    {
+      "host": "forever21.com",
+      "url": "https://www.forever21.com/checkout"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "cathaypacific.com",
+  "kind": "merchant",
+  "hosts": ["cathaypacific.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.cathaypacific.com/cx/en_US.html",
+  "gotchas": [
+    "Start at https://www.cathaypacific.com/cx/en_US.html. A 'Cookies settings' modal blocks the page; 'Reject all' dismisses it. An 'Elevate your experience as a Cathay member' popover stays over the right half of the booking panel and over its dropdowns.",
+    "Booking panel: set the 'Trip type' combobox to 'One way'. The origin input[placeholder=\"Select a departure city\"] is covered by div.bookTripPanel__odInputFieldSmall, so click that div first, clear the prefilled geo-located city, type a city name and click the first visible [role=\"option\"]. Destination: type into input[placeholder=\"Select a destination\"] and pick the option whose name contains the IATA code, e.g. '(TPE)'.",
+    "Dates: the 'Calendar Start Date' button opens the picker; day cells carry aria-label like 'October 23'; then Done. Search with #flight-booking-search-btn; its click can time out waiting for navigation though the search did start, so do not treat that as a failure.",
+    "Results (HKG-TPE, Light fare HKD 1,704 one way): click 'from HKD ... Lowest fare', then 'Select' on the fare family, then 'Continue with Light' in the 'Upgrade to Essential' drawer. The booking engine carries a reCAPTCHA (invisible badge).",
+    "Passenger page (Trip Summary): a 'Sign in' dialog offers 'Continue as guest'. 'Add passenger information' opens a drawer: Title is input[data-path=\"name.title\"] (role=combobox, type=button), names are input[data-path=\"name.firstName\"] / input[data-path=\"name.lastName\"], then 'Save and continue'. Then Contact Information, travel insurance radios, and 'Select seat and extras' or 'Review and pay'.",
+    "Through the proxy this flow is slow and unstable: one session went dead (screenshot unanswered for 180s) inside the passenger drawer, and a fresh session's repeat search ended in 'An error occurred while processing your request. Please try again later.' Payment page not reached yet.",
+    "Start at https://www.cathaypacific.com/cx/en_US.html. The first load can render only the header and the 'Elevate your experience' popover with an empty body (seen on two egresses, 2026-10-07); reload once. Then 'Reject all' on the cookie modal.",
+    "Booking panel: the 'Trip type' combobox, then [role=option] 'One way'. Six inputs share placeholder 'Select a departure city': click div.bookTripPanel__odInputFieldSmall (visible, first), then type into input[placeholder=\"Select a departure city\"][aria-expanded=true] and pick the visible [role=option] containing the IATA code. Destination: input[placeholder=\"Select a destination\"] >> visible=true, option containing '(TPE)'. Date: click the text 'Select a departure date', then [aria-label*='October 23'], then Done. Search: #flight-booking-search-btn.",
+    "The booking engine (book.cathaypacific.com/tsp, api.cathaypacific.com/tsp-svc) can answer with an 'An error occurred while processing your request' dialog when its create-session / air-calendar / add-flight calls fail. Recovery that worked once: Reset (or the homepage), then the 'Continue your search' card. Opening /tsp/en_US/flight-selection directly shows fares under a 'Data error occurred' modal and cannot be used.",
+    "Results: 'from HKD ... Lowest fare', 'Select', then 'Continue with Light'. Passenger page (seen 2026-10-02): 'Continue as guest', 'Add passenger information' drawer (input[data-path=\"name.title\"] combobox, name.firstName / name.lastName, 'Save and continue'), Contact Information, insurance radios, 'Review and pay'. Payment page not reached yet."
+  ],
+  "overrides": {
+    "firstName": "input[data-path=\"name.firstName\"]",
+    "lastName": "input[data-path=\"name.lastName\"]"
+  }
+}

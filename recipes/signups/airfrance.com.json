@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airfrance.com",
+  "kind": "signup",
+  "hosts": ["airfrance.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Signup is the Flying Blue enrolment on the shared Air France-KLM identity host, https://identity.airfranceklm.com/enrol/flyingblue (off this host; the same wizard klm.com uses). From wwws.airfrance.co.uk: header 'Flying Blue' -> /information/flyingblue -> 'Join Flying Blue'. /information/flying-blue (with a hyphen) is a 404 on Air France.",
+    "Cookie wall on load: click button:has-text(\"Reject\").",
+    "One question per screen: the first screen is 'Hi there! What is your name?' (first and last name exactly as on passport/ID; input[formcontrolname=\"firstName\"] / input[formcontrolname=\"lastName\"]) with a Continue button that stays disabled until both are filled. Inputs have no name/id/autocomplete attributes. Later screens (email, password, DOB etc.) were not observed."
+  ],
+  "overrides": {
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]"
+  },
+  "signupUrl": "https://identity.airfranceklm.com/enrol/flyingblue",
+  "stepped": true
+}

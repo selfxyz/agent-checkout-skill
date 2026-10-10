@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "southwest.com",
+  "kind": "signup",
+  "hosts": ["southwest.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "One page. Also #confirmEmail (repeat the email) and #countryCode for the phone.",
+    "Password: 8-16 characters, at least one uppercase and one number, must not start with a special character; only !@#$%^*();:/\\,. allowed.",
+    "Username has a 'Check availability' button. On 2026-10-02 and 2026-10-07 (local egress) it answered 'We are unable to process your request. Please try again.' (XHR 401), a soft block; check it before create_login."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "city": "#city",
+    "dateOfBirth": "#dateOfBirth",
+    "email": "#email",
+    "firstName": "#firstName",
+    "gender": "#gender",
+    "lastName": "#lastName",
+    "password": "#password",
+    "phone": "#phoneNumber",
+    "state": "input[id*=\"state\" i]",
+    "street1": "input[id^=\"street\" i]",
+    "submit": "button[type=\"submit\"]",
+    "username": "#username",
+    "zip": "#postalCode"
+  },
+  "signupUrl": "https://www.southwest.com/loyalty/enroll/"
+}

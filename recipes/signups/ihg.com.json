@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ihg.com",
+  "kind": "signup",
+  "hosts": ["ihg.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Driven through the proxy on 2026-09-29 (tunnel egress from a US address). Every field was filled from vault tokens: first and last name, email, country, city, state, postal code and password. Enter on the Join button replaced the form with a page carrying a \"Welcome\" heading and a visible sign-out control, with the header's Sign in and Join links gone; no challenge, no error, no emailed-code step. The run report recorded identity, address, login_email and login_password fills. The account owner confirmed the registration mail at the registered mailbox the same day.",
+  "gotchas": [
+    "The name inputs are Angular form controls: fill input[formcontrolname=\"firstName\"] and input[formcontrolname=\"lastName\"]. A selector on id or name substrings matches a different input on the page and leaves the real fields untouched and invalid.",
+    "Country/Region is a required select (select[formcontrolname*=\"country\" i]:visible). Choosing a country then reveals city (input[formcontrolname*=\"city\" i]), state (select[formcontrolname*=\"state\" i]) and postal code (input[formcontrolname*=\"zip\" i], input[formcontrolname*=\"postal\" i]); all three are required. Fill them from the address tokens after the country.",
+    "Two consent checkboxes are required, in a separate form from the fields. Their inputs are hidden; click the styled checkbox elements (the snapshot refs) rather than the inputs.",
+    "The Join button is disabled until every control is valid, and once enabled it sits under the terms-and-conditions component, which intercepts clicks. Press Enter on the button instead.",
+    "A cookie banner (button \"Continue\") and a language prompt (\"No\") sit on the page at load; dismiss the banner before clicking anything.",
+    "Password rules: at least 8 characters with three of uppercase, lowercase, digit, special character. The vault's default 24-character password passes.",
+    "No emailed code at signup; the account is live on submit and the page lands signed in. The registration mail is the owner's to read."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm) on 2026-09-28; driven end to end through the proxy on 2026-09-29.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]",
+    "password": "#password",
+    "submit": "button[type=\"submit\"][data-testid=\"joinNowButton\"]"
+  },
+  "signupUrl": "https://www.ihg.com/rewardsclub/gb/en/join"
+}

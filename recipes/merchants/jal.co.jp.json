@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "jal.co.jp",
+  "kind": "merchant",
+  "hosts": ["jal.co.jp"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.jal.co.jp/jp/en/",
+  "gotchas": [
+    "English site https://www.jal.co.jp/jp/en/ ; a third-party-data banner at the bottom has a 'Confirmed' button. The page is heavy: the first snapshot can time out and one session's tab died on load, so retry.",
+    "Booking widget: tab 'One-way trip', then input[aria-label=\"From\"] / input[aria-label=\"To\"] (visible ones; hidden duplicates exist) - type the IATA code and click the suggestion row; 'Outbound flight date' button opens a two-month calendar, click the day then Confirm; then the red Search button.",
+    "Japan domestic HND-ITM works for guests: results list fare buttons named like 'JPY 14,230 One-way Economy Class Seats Available Saver'; after picking one, a 'Proceed as guest' button appears beside 'Log in and continue'.",
+    "Customer information (guest): Last name, First name (romaji capitals), 'Age at time of boarding' (input[aria-label*=\"Age\"], a number, not a date of birth), Gender radios, phone type radios (Mobile/Home/Office) + country button + number, email and a confirmation email (the second input with the same placeholder), then Next.",
+    "The first Next can answer with a dialog 'The fare has changed. Please return to the seat availability results page and reselect a flight.'; reselect a fare and re-enter the passenger form.",
+    "Review page: an agreement checkbox, then 'Purchase (With selecting seats)', 'Purchase (Without selecting seats)' and 'Pay later'. The stepper (Select flights > Enter customer information > Review > Complete booking > Go to purchase) puts 'Complete booking' BEFORE the payment step, so these buttons create the reservation before any card field exists. An unattended test that must not book stops here; the card form was not seen."
+  ],
+  "overrides": {
+    "email": "input[placeholder=\"e.g. tabito.oozora@example.com\"] >> nth=0",
+    "firstName": "input[placeholder=\"e.g. TABITO\"]",
+    "lastName": "input[placeholder=\"e.g. OOZORA\"]",
+    "phone": "input[placeholder=\"e.g. 090XXXXXXXX\"]"
+  }
+}

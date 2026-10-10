@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hilton.com",
+  "kind": "merchant",
+  "hosts": ["hilton.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.hilton.com/en/search/?query=Dallas%2C%20TX&arrivalDate=2026-10-22&departureDate=2026-10-23&flexibleDates=false&numRooms=1&numAdults=1",
+  "gotchas": [
+    "Guest booking, no login needed. Flow: search results -> 'View Rates' (opens a NEW TAB: wait_for_popup) -> Step 1 Select a Room ('Book From $..') -> Step 2 Select a Rate ('Select Flexible Rate for $..') -> Step 3 Payment and Guest Details, one page.",
+    "A search deep link works: /en/search/?query=<City%2C%20ST>&arrivalDate=YYYY-MM-DD&departureDate=YYYY-MM-DD&flexibleDates=false&numRooms=1&numAdults=1. Results take a few seconds to replace a 'Finding hotels...' placeholder.",
+    "Flexible rates are 'Pay when you stay': the card is a guarantee only ('No deposit required') and the form has NO security-code field, so the card leg is the number alone. Non-refundable and Honors Discount rates are also offered; the Honors Discount ones assume a member.",
+    "Card fields are inline (not in an iframe): number input[autocomplete=cc-number], expiry as two native selects select[autocomplete=cc-exp-month] (option labels like '02 Feb') and select[autocomplete=cc-exp-year]. Fill expiry before the number. There is no cardholder-name field.",
+    "'Join Hilton Honors for free' is PRE-CHECKED on the guest form; uncheck it, or the booking enrols the guest in Honors. Unchecking reveals no password field.",
+    "Country/Region is a native select defaulting to USA; State a native select (autocomplete address-level1); Address line 1 is an autocomplete combobox, so press Tab after the address block to close its suggestion list.",
+    "The order total is in the Reservation summary: 'dl:last-of-type dd' resolved to the stay total (taxes included) as an order.total hint. The final button is 'Book Reservation'.",
+    "Button and link names live in aria-label, so :has-text on the full accessible name does not match. Stable selectors: room button[aria-label^=\"Book From\"][aria-label$=\"for <room name>\"], and the Honors box is the only checked checkbox on the guest form (input[type=checkbox]:checked). Expiry month selects by value '02'.",
+    "The Non-refundable rate is prepaid and its payment form DOES carry a security code (input[name*=cvv i], labelled 'Security code') and a cardholder name ([autocomplete=cc-name]); pick it to exercise the full card leg. Flexible rates still show no CVV.",
+    "Since 2026-10 there is a 'Step 3 of 4 Customize Your Stay' page (room upgrade offer, special requests) before payment: click 'Continue to Payment'. Rate buttons' aria-label selectors ('Select Non-refundable for') did not match via CSS here; click by role/name."
+  ],
+  "overrides": {
+    "cardExpiryMonth": "select[autocomplete=\"cc-exp-month\"]",
+    "cardExpiryYear": "select[autocomplete=\"cc-exp-year\"]",
+    "cardName": "[autocomplete=\"cc-name\"]",
+    "cardNumber": "[autocomplete=\"cc-number\"]",
+    "city": "[autocomplete=\"address-level2\"]",
+    "cvv": "input[name*=\"cvv\" i]",
+    "email": "[autocomplete=\"email\"]",
+    "firstName": "[autocomplete=\"given-name\"]",
+    "lastName": "[autocomplete=\"family-name\"]",
+    "phone": "[autocomplete=\"tel\"]",
+    "state": "select[autocomplete=\"address-level1\"]",
+    "street1": "[autocomplete=\"address-line1\"]",
+    "zip": "[autocomplete=\"postal-code\"]"
+  },
+  "route": [
+    {
+      "host": "www.hilton.com",
+      "url": "https://www.hilton.com/en/search/"
+    },
+    {
+      "action": "manual",
+      "host": "www.hilton.com",
+      "note": "Search deep link with query/arrivalDate/departureDate/numRooms=1/numAdults=1 (query is dropped from route urls); View Rates opens a new tab; Book From on the first room; Select Non-refundable (prepaid, shows a Security code field); Step 3 Customize Your Stay -> Continue to Payment."
+    }
+  ]
+}

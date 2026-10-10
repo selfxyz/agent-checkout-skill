@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "theguardian.com",
+  "kind": "merchant",
+  "hosts": ["theguardian.com", "support.theguardian.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-split",
+  "exampleProductUrl": "https://support.theguardian.com/us/contribute",
+  "gotchas": [
+    "Digital plans are on support.theguardian.com/<country>/contribute (Support, All-access digital, Digital plus); /<country>/subscribe lists only the print Guardian Weekly, which needs a delivery address.",
+    "Guest checkout on one page, no sign-in: email, confirm email, first/last name, State <select> and ZIP (US), then the payment method radio. Contact values can be synthetic.",
+    "Credit/Debit card must be selected (press Space on the first radio) before the card iframes mount. Card fields are split Stripe Elements iframes (card number, expiration date, CVC), each addressed by its title. A \"Security check\" (reCAPTCHA) sits under the card fields.",
+    "The submit button reads \"Pay $<amount> per month\" and enrols a recurring plan.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: fields filled, no alert. Stopped before Pay.",
+    "A Sourcepoint consent dialog (iframe titled 'The Guardian consent message') covers the plan links and takes every click until answered: 'No, thank you' inside it dismisses it (2026-10-09).",
+    "The cheapest plan is the first tier link (a[data-qm-trackable=\"tier-1-button\"], Support, monthly); it leads to /us/checkout with the same one-page form.",
+    "The State control is a <select>: fill is refused on it; focus it and press ArrowDown.",
+    "The total reads as a paragraph '<amount>/month' under 'Your support'; it has no id or class to hint at (a hint refuses :has-text).",
+    "Verified again 2026-10-09 through the staging proxy under a verification-only key: card number, CVC and expiry (cardField literal) filled with card_fields_verified, no invalid state; stopped before Pay. Contact fields were typed as synthetic values."
+  ],
+  "overrides": {
+    "cardNumber": "input[name=\"cardnumber\"]",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cardRadio": "input[type=\"radio\"] >> nth=0",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"CVC\" i]",
+    "email": "input[name=\"email\"]",
+    "expiry": "input[name=\"exp-date\"]",
+    "expiryFrame": "iframe[title*=\"expiration date\" i]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]",
+    "placeOrder": "button:has-text(\"Pay\")",
+    "planSelect": "a[aria-label^=\"All-access digital\"]",
+    "state": "select"
+  },
+  "route": [
+    {
+      "host": "support.theguardian.com",
+      "url": "https://support.theguardian.com/us/contribute"
+    },
+    {
+      "action": "click",
+      "host": "support.theguardian.com",
+      "selector": "a[data-qm-trackable=\"tier-1-button\"]"
+    },
+    {
+      "action": "wait",
+      "host": "support.theguardian.com",
+      "selector": "iframe[title*=\"card number\" i]"
+    }
+  ]
+}

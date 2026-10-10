@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "easyjet.com",
+  "kind": "merchant",
+  "hosts": ["easyjet.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.easyjet.com/en/",
+  "gotchas": [
+    "Homepage /en/: cookie banner 'Decline Advertising Cookies'. The search form is input#from / input[name=\"from\"] plus a To textbox, a When textbox and 'Show flights'.",
+    "'Show flights' opens the easyJet results in a NEW tab and sends the original tab to Booking.com (the 'search with Booking.com' default), so take the popup page before continuing.",
+    "Search deep link /deeplink?lang=EN&dep=LGW&dest=EDI&dd=2026-10-23&apax=1&cpax=0&ipax=0&isOneWay=on lands on /en/buy/flights and also fills the homepage form on the next visit.",
+    "/en/buy/flights first shows a 'Welcome to easyJet' dialog; a CSS click on its Continue timed out, but pressing Enter on the snapshot ref works.",
+    "Blocking (2026-10-02, staging proxy, local egress geo-located to Switzerland): after the welcome dialog, /en/buy/flights shows an 'Error [ID: ...] something has gone wrong' dialog instead of flights, every time (LGW-EDI and LTN-BFS, via the deep link and via the homepage form). No visible CAPTCHA. An earlier signup run saw an Akamai Access Denied on /en/secure/ from the same kind of address, so a bot-manager block on the availability API is likely.",
+    "The availability API (POST /funnel/api/query) returns 403 from this egress; the page shows 'Pick flights' with nothing to pick and no error dialog."
+  ]
+}

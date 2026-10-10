@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "miro.com",
+  "kind": "signup",
+  "hosts": ["miro.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (both selectors matched). Miro is passwordless: after the email it sends a sign-in link. With the account owner's own work address the submit went straight through, the owner opened the emailed link and reached the Miro app, and Miro's \"Welcome to Miro!\" mail arrived.",
+  "gotchas": [
+    "Passwordless: the screen asks for a work email alone and Miro then emails a sign-in link (page text: \"No password required. You'll receive a sign-in link.\"); the link belongs to the account owner.",
+    "The page is headed 'Your canvas is ready' and the submit reads 'Take me to my canvas' (seen once as 'Take me to my board'); it is still the account signup.",
+    "A link 'Sign up to a different region or a private cloud' changes where the account is hosted; the default region is used unless the account owner says otherwise.",
+    "An address on a shared test-inbox domain was refused after submit with \"this email cannot be registered, please try another domain\"; the owner's own domain was accepted.",
+    "On 2026-09-29 a visible reCAPTCHA checkbox appeared after submit for the refused test-inbox address and not for the accepted one; it is the account owner's to complete."
+  ],
+  "overrides": {
+    "email": "#email",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://miro.com/signup/",
+  "stepped": true
+}

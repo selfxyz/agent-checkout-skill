@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "humblebundle.com",
+  "kind": "signup",
+  "hosts": ["humblebundle.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); all three selectors matched. No code or challenge after Sign up; Humble Bundle's \"email verification\" mail arrived at the signup address and the account owner opened its link. A later sign-in with the same credentials was accepted (the site then asked for its new-device check).",
+  "gotchas": [
+    "The password must be at least 8 characters (the field's own label); no maximum was shown.",
+    "The promotions checkbox is ticked by default.",
+    "After Sign up the account must be confirmed by a link sent by email (no code); the link belongs to the account owner.",
+    "A privacy-consent dialog is open when the page loads; it did not block the form."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-29, see evidence.",
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://www.humblebundle.com/signup"
+}

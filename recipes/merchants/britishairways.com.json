@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "britishairways.com",
+  "kind": "merchant",
+  "hosts": ["britishairways.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "iframe[name$=\"--cvv\"]",
+  "exampleProductUrl": "https://www.britishairways.com/travel/home/public/en_gb/",
+  "gotchas": [
+    "Guest checkout, no login. Flow: homepage search -> Outbound flight -> fare card (Select Economy Basic and continue) -> upsell page (Continue with selected) -> Flight summary (Continue to passenger details) -> Passenger details -> Seats (Skip this step) -> Baggage (Continue to Review your booking) -> Review (Agree and continue to Payment) -> Payment. Payment ends in 'Pay now', which is the final purchase button.",
+    "Start at /travel/home/public/en_gb/. A country-guess banner ('We think you're visiting from ...', Close) and a cookie dialog ('Reject All') both show; the search widget stays a skeleton until the cookie dialog is answered. The Reject All button was clickable only via the snapshot ref, not by a CSS :has-text probe.",
+    "Search widget: trip type is the first visible <select> (label 'One way'); From/To are input[aria-label=\"input\"] (nth 0 and 1), type a name and click the suggestion button such as 'London, Heathrow (LHR), United Kingdom'. The Depart calendar opens from the button next to textbox 'Depart' and shows a fare per day, then 'Find flights'.",
+    "Card number and CVV are Datatrans Secure Fields iframes whose names carry a random prefix: iframe[name$=\"--cardNumber\"] (input[autocomplete=\"cc-number\"]) and iframe[name$=\"--cvv\"] (input[autocomplete=\"cc-csc\"]). Expiry is two plain inputs on the page: month input[id*=\"month\" i] (MM) and year input[id*=\"year\" i] (YY); fill both before the card number.",
+    "Payer details on the payment page: title select[id*=\"title\" i], first/last input[name*=\"first\" i]/input[name*=\"last\" i], email input[id*=\"mail\" i], phone input[name*=\"hone\" i]. The billing section has only a country select (select[id*=\"billing\" i]), no street/city/postcode fields.",
+    "Order total: the only order.total hint that resolved before a fill was [data-testid$=\"-total\" i][data-testid*=\"basket\" i], and it read GBP 87 against a page total of GBP 81.47 (the donation radios on the page carry 'Total cost' amounts). After the first token fill the hint is refused for comparing an attribute value, so declare it before any fill or find a class/id.",
+    "The tab can die mid-flow (the SDK then reports 'Unknown pageId' or 'Target page, context or browser has been closed'); a fresh proxy session replays the whole search in about a minute.",
+    "2026-10-07: card number and CVV verified with a verification-only key: both Datatrans frames took the test card (cvv frame is iframe[name$=\"--cvv\"]).",
+    "order.total: [data-testid$=\"-total\" i][data-testid*=\"basket\" i] resolves but reads the largest donation radio's total (GBP 91 vs page GBP 85.47); no class/id selector resolved.",
+    "The proxy browser can die on reaching /nx/b/checkout/en/gbr/payment; relaunch and replay (~4 min).",
+    "Search: input[aria-label=\"input\"] nth 0/1 need pressSequentially (fill shows no suggestions); a 'Close' banner and 'Reject All' sit past the first snapshot page."
+  ],
+  "overrides": {
+    "cardExpiryMonth": "input[id*=\"month\" i]",
+    "cardExpiryYear": "input[id*=\"year\" i]",
+    "cardFrame": "iframe[name$=\"--cardNumber\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "country": "select[id*=\"billing\" i]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[id*=\"mail\" i]",
+    "expiry": "input[id*=\"month\" i]",
+    "firstName": "input[name*=\"first\" i]",
+    "lastName": "input[name*=\"last\" i]",
+    "phone": "input[name*=\"hone\" i]"
+  }
+}

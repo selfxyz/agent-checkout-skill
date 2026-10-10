@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "forever21.com",
+  "kind": "signup",
+  "hosts": ["forever21.com"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-09",
+  "evidence": "2026-10-09: real signup through the Agent Vault staging proxy (pre-approved login forever21.com, plain test-inbox address). /account/login redirected to shopify.com/70278479906/account; the login's email token was refused there (host lock), so the plain inbox address was typed; Continue (aria-label) sent a code from support@forever21.com; the code, supplied by the account owner, signed in (Orders link, get_session_outcome success). No captcha. A fresh session repeated the sign-in with a new code and reached the same page.",
+  "gotchas": [
+    "Shopify new customer accounts: passwordless. /account/login redirects to Shopify's hosted sign-in, which asks for an email and then emails a 6-digit code; there is no password, and the same flow both creates the account and signs in.",
+    "The sign-in page also has a 'Continue with Shop' button that opens shop.app in a NEW TAB; a bare button:has-text(\"Continue\") matches it first. Use button[aria-label=\"Continue\"] for the email step.",
+    "The code goes into a single input[autocomplete=\"one-time-code\"]; it signs in on fill, with no separate submit. It is valid 15 minutes and belongs to the account owner: it is supplied by the account owner.",
+    "Signed in shows the account page with an Orders link (a[href*=\"/orders\"]).",
+    "Forever 21's hosted sign-in is on shopify.com/70278479906/account (Shopify's own host, not a forever21.com subdomain). fill_login with the forever21.com login's token is refused there ('login is locked to its registered website'), so the email had to be typed as plain text. The address is not a secret, but a recipe that relies on the vault token needs shopify.com covered by the login's sign-in hosts."
+  ],
+  "overrides": {
+    "email": "input[type=\"email\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.forever21.com/account/login",
+  "stepped": true
+}

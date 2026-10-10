@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ana.co.jp",
+  "kind": "signup",
+  "hosts": ["ana.co.jp"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "English signup: on https://www.ana.co.jp/en/us/ click the header 'Join', then 'Join ANA Mileage Club', which opens the 'New Membership Registration' form in a POPUP (waitForPopup). The ja/jp page in signupUrl asks for Kanji names.",
+    "passwordSetBySite: no. The form needs TWO secrets: a Web password (8 to 16 half-width letters and digits; create the login with maxLength 16 and noSymbols) AND a required 'AMC password' of exactly 4 half-width digits (+ re-enter). The vault has no token for the second numeric PIN, so the signup cannot be completed unattended; an agent must not invent one.",
+    "Also required: romaji Family/First name (23 characters max in total), Gender, Date of birth as yyyy/mm/dd text, mailing address with 'Outside of Japan' residence, a home phone number, email typed twice, card type, and the terms checkbox."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#apiWebPswd_confirmation",
+    "email": "#apiHomeEmalAddr",
+    "firstName": "#apiNameKanji2",
+    "lastName": "#apiNameKanji",
+    "password": "#apiWebPswd",
+    "submit": "#registerSubmit"
+  },
+  "signupUrl": "https://www.ana.co.jp/en/us/"
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "evernote.com",
+  "kind": "signup",
+  "hosts": ["evernote.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); both selectors matched. After the email a password field appeared on the same page; on submit a visible hCaptcha checkbox was shown, which the account owner completed in a handoff, and Create account was then accepted. No signup mail arrived. A fresh sign-in with the same credentials, after the owner completed the sign-in hCaptcha and an emailed login code, succeeded.",
+  "gotchas": [
+    "Email-first: after the email, a password field appears on the same page (it has no id or name; input[type=\"password\"] is the selector). Submitting then shows a visible hCaptcha checkbox, the account owner's to complete, before Create account goes through.",
+    "On 2026-09-30, after a submit that did not go through, the page stopped registering filled values and Continue stayed disabled; a freshly loaded page took them.",
+    "Sign-in to the new account asked for the same hCaptcha checkbox and then a login code sent by email; both are the account owner's.",
+    "2026-10-09: the owner completed the hCaptcha in a handoff that reported released_unsolved; pressing Create account once more then went through to a Welcome / Get started page. Check the page before handing off again.",
+    "The sign-in login code arrives by email in the subject line ('Evernote Login Code - XXXXXX', six letters, not digits) and goes, supplied by the account owner, into the single visible input."
+  ],
+  "overrides": {
+    "email": "#email",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["captcha"],
+  "signupUrl": "https://accounts.evernote.com/registration",
+  "stepped": true
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "theatlantic.com",
+  "kind": "merchant",
+  "hosts": ["theatlantic.com", "accounts.theatlantic.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "exampleProductUrl": "https://www.theatlantic.com/subscribe/",
+  "gotchas": [
+    "/subscribe/ renders its plan cards a few seconds after load (only the footer at first). Digital ($89.99/yr) is the first \"Select\" link and needs no shipping.",
+    "Checkout is Account → Payment → Confirmation. Account asks \"Your Email\" first (Continue stays disabled until filled); an email with an account then shows a password field; Enter submits. A one-time email link is offered as an alternative. reCAPTCHA (invisible) is on the page; none was shown.",
+    "Payment is a Stripe Payment Element (iframe src elements-inner-payment) with number, expiry, cvc only; no postal code or country inside it in the US run. A Zendesk chat widget iframe sits in the corner.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: fields filled, no aria-invalid. Stopped before subscribing.",
+    "2026-10-09 (staging proxy, local egress): signed in first at accounts.theatlantic.com/login/ (#username, Continue, then the password and the submit button). A Sourcepoint consent dialog (iframe[id^=\"sp_message_iframe\"]) covers the sign-in form and swallows the submit click; press Enter on button[title*=\"Reject\"] inside that frame first. Signed in, the first Select went straight to Payment (no Account step); number, expiry and CVC filled with the test card (card_fields_verified), no aria-invalid. Stopped before subscribing.",
+    "/subscribe/ and accounts.theatlantic.com/login/ sometimes answer \"Sorry—we’re experiencing an issue.\" (seen three times on 2026-10-09); a reload a little later loads normally."
+  ],
+  "overrides": {
+    "accountContinue": "button:has-text(\"Continue\"):not([disabled])",
+    "accountEmail": "input >> visible=true >> nth=0",
+    "cardFrame": "iframe[src*=\"elements-inner-payment\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[src*=\"elements-inner-payment\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[src*=\"elements-inner-payment\" i]",
+    "expiry": "input[name=\"expiry\"]",
+    "expiryFrame": "iframe[src*=\"elements-inner-payment\" i]",
+    "planSelect": "a:has-text(\"Select\")"
+  },
+  "route": [
+    {
+      "host": "www.theatlantic.com",
+      "url": "https://www.theatlantic.com/subscribe/"
+    },
+    {
+      "action": "click",
+      "host": "www.theatlantic.com",
+      "selector": "a:has-text(\"Select\") >> visible=true >> nth=0"
+    },
+    {
+      "action": "wait",
+      "host": "www.theatlantic.com",
+      "selector": "iframe[src*=\"elements-inner-payment\" i]"
+    }
+  ]
+}

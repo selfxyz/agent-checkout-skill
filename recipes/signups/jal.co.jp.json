@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "jal.co.jp",
+  "kind": "signup",
+  "hosts": ["jal.co.jp"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "https://www.jal.co.jp/jp/en/jmb/enroll/ is the page for residents of Japan. Its 'Open in New Window Online Membership Application' link opens a POPUP (call waitForPopup). The popup is the Japan-resident enrolment, so follow its 'American Region' (or Europe/Middle East/Africa, Asia/Oceania) link, which opens another popup.",
+    "Step 1 'Rules and Conditions, Country of Residence': tick the JMB Rules checkbox (click its wrapper, the input is hidden), choose the country in the native select (e.g. 'USA'), then the 'To e-mail authentication' link.",
+    "Step 2 'Send enrollment e-mail': two input[name*=mail i] (address and confirmation), then Send. JAL emails a URL. Customer information and the password come only after that link, so the link is the account owner's step: record the site as waiting and do not follow it.",
+    "The confirmation email field must match the first; fill the same email token into both."
+  ],
+  "overrides": {
+    "email": "input[name*=\"mail\" i] >> nth=0",
+    "submit": "button:has-text(\"Send\")"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://www.jal.co.jp/jp/en/jmb/enroll/"
+}

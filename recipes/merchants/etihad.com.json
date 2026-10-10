@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "etihad.com",
+  "kind": "merchant",
+  "hosts": ["etihad.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "varies",
+  "cvvTarget": "#cvvIframe >>> #value",
+  "exampleProductUrl": "https://www.etihad.com/en-us/",
+  "gotchas": [
+    "Start at https://www.etihad.com/en-us/ ; close the top banner. Booking widget: tab 'One way', origin #fsporigin and destination #fspdestination are comboboxes - type a city and click the option whose name ends with the IATA code (e.g. 'airport Abu Dhabi, United Arab Emirates Zayed International Airport AUH'). 'Guests and Cabin' opens first with a Continue button, then the two-month 'Travel dates' calendar (day cells are generics with the day number; a hidden previous month also matches, pick the clickable one), then Search.",
+    "The booking flow moves to digital.etihad.com (same site). Results: open a flight's Economy 'View', then 'Continue' under Basic; a 'Value fare is ideal' dialog needs the 'Accept basic fare restrictions' checkbox before 'Continue with Basic' enables (click it inside [role=\"dialog\"]; dialogs blank the accessibility names of the page behind them).",
+    "Guests page (guest checkout, no login): Title mat-select, input[formcontrolname=\"firstName\"/\"lastName\"], a calling-code combobox (offered only AE +971 from a European egress), input[placeholder=\"Contact number\"], email (disablepaste), and two marketing checkboxes pre-ticked (news, WhatsApp) - untick them. Then Continue.",
+    "Seats: 'Add seats later' then 'Continue without seats' in the dialog. Bags: Continue, then Continue in the 'You have selected Basic' dialog. Extras: 'Continue without extras'. Then Payment.",
+    "Payment (Amadeus checkout SDK): card number is in iframe#panIframe (prd.payment.amadeus.com .../pan.html) input#value; CVV is in iframe#cvvIframe input#value (maxlength 3). Card holder #cardholderName (letters, space and apostrophe only, max 30), expiry two inline inputs #expiryMonth / #expiryYear (2 digits each), email is prefilled from the guest step, billing 'Country' combobox needs an option click. Terms checkbox before 'Pay now'.",
+    "Order total is span.price[data-amount] inside .price-description-total ('Total: AED335'); an order.total hint on it (text or data-amount) came back resolved:false on 2026-10-02, so the vault may not read the amount here.",
+    "Start at https://www.etihad.com/en-us/ ; click #onetrust-reject-all-handler first (the OneTrust filter intercepts every click). Booking widget: li[role=tab][data-tab=tab1] is 'One way'; #fsporigin / #fspdestination: type a city and click the visible [role=option] containing the IATA code. 'Guests and Cabin' opens with a Continue button, then the Travel dates calendar (several month grids are in the DOM, so click the clickable '23' cell), then Search.",
+    "The first search in a session often shows 'No flights available' because the api-des.etihad.com search POSTs get no response. Click 'Modify search and try again', then the Search button inside .cdk-overlay-container. Fares came back on 3 of 3 retries (2026-10-07).",
+    "Results: Economy 'View', then 'Continue' under Basic. The dialog is either 'You have selected Basic' with a plain Continue, or (2026-10-02) 'Value fare is ideal' with an 'Accept basic fare restrictions' checkbox before 'Continue with Basic'.",
+    "Guests page: Title is the first mat-select (option 'Ms'). The calling-code input[role=combobox] lists only the egress country until you clear it; cleared, all countries appear (mat-option 'United States'). The Contact number box takes a NATIONAL number: the E.164 phone token is marked invalid there. Identity first/last name tokens filled but were marked 'Please enter first name' on 2026-10-07. Untick the two pre-ticked marketing mat-checkboxes (latest news, WhatsApp).",
+    "Seats: 'Add seats later' then 'Continue without seats'. Bags: Continue, then Continue in the Basic dialog. Extras: 'Continue without extras'. On 2026-10-07 that last click fired a POST that got no response, and a full-page .loading-view .ey-loader never cleared, in two sessions. detectChallenge reported nothing.",
+    "Payment (Amadeus checkout SDK, seen 2026-10-02): number in iframe#panIframe input#value, CVV in iframe#cvvIframe input#value (maxlength 3), #cardholderName (letters, space, apostrophe, max 30), #expiryMonth / #expiryYear (2 digits each), billing Country combobox, Terms checkbox before 'Pay now'.",
+    "order.total: [class*=total] span.price[data-amount] is unique and visible on the guest page, but the hint came back accepted:false, resolved:false (2026-10-02 and 2026-10-07)."
+  ],
+  "overrides": {
+    "cardNumber": "input#value",
+    "cardNumberFrame": "#panIframe",
+    "cardholderName": "#cardholderName",
+    "cvv": "input#value",
+    "cvvFrame": "#cvvIframe",
+    "email": "input[type=\"email\"]",
+    "expiryMonth": "#expiryMonth",
+    "expiryYear": "#expiryYear",
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]",
+    "orderTotal": "[class*=total] span.price[data-amount]",
+    "phone": "input[placeholder=\"Contact number\"]"
+  }
+}

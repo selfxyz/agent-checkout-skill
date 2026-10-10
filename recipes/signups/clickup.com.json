@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "clickup.com",
+  "kind": "signup",
+  "hosts": ["clickup.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: driven through the Agent Vault proxy with this recipe, with browser egress through the owner's tunnel on a US network. On app.clickup.com/signup the form (Full name, Work email, Password, Sign up with Email) took the vault login's values through all three selectors, and submit answered that the email is already registered: the account had been created with the same vault login in an earlier session. A fresh sign-in on app.clickup.com/login with those credentials was accepted, then asked for a code sent by email, which the account owner entered in a handoff (outcome solved), and the session reached ClickUp's onboarding signed in. The original signup's own steps were not re-observed in this run.",
+  "gotchas": [
+    "The form has a Full name box (role=textbox named Full name) besides the email and password; Sign up with Email stays disabled until they are filled.",
+    "Signing in from a new browser asks for a code sent by email after the password (\"enter the code we sent\"); it belongs to the account owner: hand it off."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-30, see evidence.",
+  "overrides": {
+    "email": "#login-email-input",
+    "password": "#password-input",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://app.clickup.com/signup"
+}

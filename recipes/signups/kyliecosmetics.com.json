@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "kyliecosmetics.com",
+  "kind": "signup",
+  "hosts": ["kyliecosmetics.com"],
+  "platform": "shopify-classic-accounts",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-25",
+  "evidence": "Read-only DOM read on 2026-09-21 at kyliecosmetics.com/account/register, then a REAL account creation on 2026-09-25 through the proxy, unattended after the owner's one approval. Every selector on the shopify-classic-accounts platform matched exactly one visible element, confirmPassword included; the names came from identity tokens and the email and password from the vault, the same password token into both password fields. Confirmed out of band: a \"Customer account confirmation\" mail from kyliecosmetics.com arrived after the submit and later than the pre-run baseline, so it belongs to this run and not to an earlier one. The page also replaced the register form with a signed-in account view. Two gates had to be cleared first; see gotchas.",
+  "gotchas": [
+    "The theme's privacy-policy checkbox (#CreateCustomer-PrivacyPolicy) is REQUIRED here, not decorative. Submitting with it unchecked returns \"Please agree to our Terms, Privacy Policy, and Rewards Program Terms to create an account\" and creates nothing. The platform field map has no entry for it, so check it as its own step before the submit.",
+    "A OneTrust cookie banner overlays the form on a fresh profile and intercepts the submit click -- the same click-interception shape that defeats a run elsewhere, not a wrong selector. Dismiss it first (#onetrust-accept-btn-handler, \"Accept All\"), or reach the control with a key press, which runs no hit test. A proxy browser starts with an empty profile every run, so this re-arms every time."
+  ],
+  "preconditions": ["consent_gate"],
+  "signupUrl": "https://kyliecosmetics.com/account/register"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hyatt.com",
+  "kind": "signup",
+  "hosts": ["hyatt.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: 'Join World of Hyatt' (first and last name, email, country, password, Join Now); /en-US/member/enroll redirects to /member/en-US/enroll. Nothing was typed or submitted. 2026-09-30: through the Agent Vault proxy with browser egress through the owner's tunnel on a US network, the enroll page stayed blank (only a Kasada KPSDK script) for over a minute; no form rendered and no challenge was shown, so nothing could be attempted.",
+  "gotchas": [
+    "Field ids are generated (be-input-:1:); the name attributes are stable, which is what these selectors use.",
+    "The form also requires a country or region (a select labelled Country / Region), which is the account owner's to choose.",
+    "On 2026-09-30, through the Agent Vault proxy (US egress), the enroll page stayed blank behind a Kasada bot-protection script (window.KPSDK) with no visible challenge; the form never rendered."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]",
+    "password": "#enrollment-password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.hyatt.com/en-US/member/enroll"
+}

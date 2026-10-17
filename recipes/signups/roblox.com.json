@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "roblox.com",
+  "kind": "signup",
+  "hosts": ["roblox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Roblox's /CreateAccount (birthday, username, password, Sign Up); no email is asked on this form. Nothing was typed or submitted. 2026-10-06: account created through the Agent Vault proxy (US tunnel egress) and a fresh sign-in in a new session reached /my/account showing the new handle.",
+  "gotchas": [
+    "The birthday (#MonthDropdown, #DayDropdown, #YearDropdown) is required and is the account owner's to supply.",
+    "The account is keyed by username, not email; the username must be unique on Roblox.",
+    "A verification puzzle may appear after Sign Up; it is the account owner's — hand it off.",
+    "Observed 2026-10-06: the puzzle after Sign Up is PerimeterX (#px-captcha). After the owner solved it the page showed 'Sorry! an unexpected error occurred'; pressing Sign Up again landed on the signed-in home page. Sign-in: /login with #login-username, #login-password, #login-button.",
+    "The birthday is three <select> elements (#MonthDropdown, #DayDropdown, #YearDropdown; dateOfBirth names the first): a fill is refused on them; focus each and press ArrowDown to pick a value (2026-10-09).",
+    "On 2026-10-09 Sign Up landed straight on the signed-in home page with no PerimeterX puzzle (the puzzle is not on every run).",
+    "Sign-in at roblox.com/login: #login-username takes the recorded handle (tokens.username), #login-password, then #login-button; signed in shows #nav-settings. No emailed code was asked."
+  ],
+  "overrides": {
+    "dateOfBirth": "#MonthDropdown",
+    "password": "#signup-password",
+    "submit": "#signup-button",
+    "username": "#signup-username"
+  },
+  "ownerSteps": ["captcha"],
+  "signupUrl": "https://www.roblox.com/CreateAccount"
+}

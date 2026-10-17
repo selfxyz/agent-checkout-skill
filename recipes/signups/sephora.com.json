@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "sephora.com",
+  "kind": "signup",
+  "hosts": ["sephora.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: heading \"Create Account\", Continue beside Sign In. Nothing was typed or submitted. 2026-10-01: driven through the Agent Vault proxy with browser egress through the owner's tunnel on a US network. Before anything was filled, the staging network log showed the site's sensor script (a GET to a random-looking path ending /fp) and its auth refreshToken endpoint answering 429; a real Chrome on the owner's own machine (same day, non-US network) got the same two 429s and loaded the site normally, so they are not a sign of a block. The email went into #email and Continue was pressed; the proxy then lost the page (Unknown pageId) as the site replaced it. On a second attempt the page was replaced before the email could be filled. No account was created, so this is not verified.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email belongs to the account owner: hand it off.",
+    "On 2026-10-01, through the Agent Vault proxy (US egress), the page was replaced underneath the session soon after loading or after Continue, and every later call answered Unknown pageId. Before any fill, the site's sensor script and its auth refreshToken endpoint were already answering 429 — but a real Chrome on the owner's machine got the same 429s, so they do not explain the replacement."
+  ],
+  "overrides": {
+    "email": "#email",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.sephora.com/register",
+  "stepped": true
+}

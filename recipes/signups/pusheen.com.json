@@ -1,0 +1,10 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "pusheen.com",
+  "kind": "signup",
+  "hosts": ["pusheen.com"],
+  "platform": "shopify-classic-accounts",
+  "status": "unverified",
+  "evidence": "Read-only discovery (enclave arm) and a DOM read on 2026-09-21 at pusheen.com/account/register, reached from shop.pusheen.com/account/register. Classic customer accounts; every selector on the shopify-classic-accounts platform matched exactly one visible element here, except confirmPassword, which this theme does not have. Nothing was typed or submitted.",
+  "signupUrl": "https://pusheen.com/account/register"
+}

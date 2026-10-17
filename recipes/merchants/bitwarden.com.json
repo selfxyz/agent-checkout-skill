@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "bitwarden.com",
+  "kind": "merchant",
+  "hosts": ["bitwarden.com", "vault.bitwarden.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-split",
+  "gotchas": [
+    "Premium is bought inside the signed-in web vault: vault.bitwarden.com/#/settings/subscription/premium (a hash route, so the route below opens the vault and the last step names it).",
+    "The page's last visible Upgrade button opens a dialog with split Stripe iframes (titles contain 'card number', 'expiration date', 'CVC'), a billing country select and a plain postal-code input; fill the postal code in an earlier call than the card number.",
+    "Sign-in is email-first: the email box and Continue, then the master password (Enter submits). After the first sign-in an onboarding page about the browser extension shows instead of the vault.",
+    "2026-10-09 (staging proxy, local egress): number, expiry (MM/YY) and CVC filled with the public test card under a verification-only key (card_fields_verified). Stopped before the purchase button; nothing was submitted."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"exp-date\"]",
+    "cardExpiryFrame": "iframe[title*=\"expiration date\" i]",
+    "cardNumber": "input[name=\"cardnumber\"]",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"CVC\" i]",
+    "planSelect": "button:has-text(\"Upgrade\") >> visible=true >> nth=-1",
+    "zip": "input[autocomplete=\"postal-code\"]"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "vault.bitwarden.com",
+      "url": "https://vault.bitwarden.com/"
+    },
+    {
+      "action": "manual",
+      "host": "vault.bitwarden.com",
+      "note": "Open #/settings/subscription/premium in the signed-in vault, then click the last visible Upgrade button."
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "vault.bitwarden.com",
+        "url": "https://vault.bitwarden.com/"
+      }
+    ],
+    "fields": {
+      "email": "input[formcontrolname=\"email\"]",
+      "password": "input[type=\"password\"]",
+      "continue": "button:has-text(\"Continue\")",
+      "submit": "button[type=\"submit\"]"
+    }
+  }
+}

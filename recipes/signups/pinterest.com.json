@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "pinterest.com",
+  "kind": "signup",
+  "hosts": ["pinterest.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. Email, password and birthday (#birthdate, a date input) were filled; each field's validation error cleared once filled. Continue submits and Pinterest then replaces the page: on the first attempts it reloaded onto the signup form or the logged-out homepage with no account created. One attempt sent an email from pinbot@account.pinterest.com with a code, but no page asked for it and the login still answered that the email belongs to no account. On the next attempt the replacement page was Pinterest's onboarding, signed in, and a fresh sign-in with the same credentials reached the signed-in home. No code, link or CAPTCHA was needed to create the account.",
+  "gotchas": [
+    "The address bar changes to the homepage when the form opens; the form is still on the page.",
+    "The form also requires a birthday (#birthdate, a date input, filled as yyyy-mm-dd), which no field in this recipe covers; ask the account owner for it.",
+    "The form's Continue is the button named \"Continue creating your Pinterest account\"; the page carries other buttons (Log in, Sign up, Join Pinterest).",
+    "Continue replaces the page rather than updating it, so a tab handle held from before the click can go stale. What loads next varies: on 2026-09-30 it was the signup form again or the logged-out homepage (no account) on several attempts, and Pinterest's onboarding, signed in, on the one that created the account. Check sign-in before concluding either way.",
+    "Pinterest may send a code by email (pinbot@account.pinterest.com) that no page asks for; on 2026-09-30 the account was created and signed in without it. A code belongs to the account owner.",
+    "The log-in form has no #email; its boxes are the Email and Password textboxes inside the form named \"login form\"."
+  ],
+  "overrides": {
+    "email": "#email",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.pinterest.com/signup/"
+}

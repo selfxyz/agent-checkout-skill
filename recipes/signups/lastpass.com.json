@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "lastpass.com",
+  "kind": "signup",
+  "hosts": ["lastpass.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: lastpass.com/create-account.php redirects to www.lastpass.com/trial/free, headed 'Create an account', an email box and Continue. Nothing was typed or submitted.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The master password the next step asks for is the account's only key; LastPass cannot recover it."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "submit": "#FORM_SUBMIT"
+  },
+  "signupUrl": "https://lastpass.com/create-account.php",
+  "stepped": true
+}

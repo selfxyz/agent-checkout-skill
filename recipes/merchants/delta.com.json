@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "delta.com",
+  "kind": "merchant",
+  "hosts": ["delta.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "automation-blocked",
+    "details": "Search results load, but selecting any fare (Main Basic or Main Classic) redirects to Book a Flight with 'We're sorry, but there was a problem processing your request. Please go back and try again. #SFAF039_444'. Reproduced three times on 2026-10-02 in fresh proxy sessions, with both the Switzerland-English and United States-English locales. No CAPTCHA is shown and detectChallenge() reports nothing."
+  },
+  "exampleProductUrl": "https://www.delta.com/us/en",
+  "gotchas": [
+    "From a non-US egress a 'Language Selection' dialog opens on load; 'Select other Location and Language' -> North America -> United States - English, then confirm 'United States - English' in the second dialog. A cookie banner ('Accept All') also shows.",
+    "Search form: click role=button[name=/^Origin,/], type the code into role=textbox[name=\"Origin\"] key by key and click the role=option starting with the code; same for the destination button (name ends 'Destination'). Trip Type is a combobox with a 'One Way' option; dates via role=button[name=/^Flight Date Field/] then role=gridcell[name=\"October 23, 2026\"] and the 'Done Button'. Then 'Find Flights'.",
+    "On results, the 'Delta Main' button opens a product-info modal; click the price under it to open 'Select an Experience to Continue'. Main Basic's Select needs the 'Accept Restrictions' checkbox; Main Classic's Select does not.",
+    "Fare selection then fails with error #SFAF039_444 (see deadEnd). The page can also crash the tab right after selection (Unknown pageId).",
+    "Search date: open 'Flight Date Field' and click [aria-label*=\"October 23, 2026\"] (role=gridcell matches two cells)."
+  ]
+}

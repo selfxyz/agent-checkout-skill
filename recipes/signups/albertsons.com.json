@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "albertsons.com",
+  "kind": "signup",
+  "hosts": ["albertsons.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Albertsons' 'Short Registration' (first and last name, mobile phone, email, Continue) — the same page Safeway serves. Nothing was typed or submitted. 2026-10-06: driven through the Agent Vault proxy (US tunnel): Continue led to a six-digit verification-code step; after the code the page showed the signed-in home; a welcome-type mail and a later sign-in code reached the registration inbox.",
+  "gotchas": [
+    "No password field on this step; what follows Continue was not observed — look at it before filling it. A code sent by text or email belongs to the account owner: hand it off.",
+    "The form also asks for a mobile phone number (#phonenumber), which is the account owner's to supply.",
+    "Leave the text and email offer checkboxes as the account owner wants them; they are marketing opt-ins, not part of the account.",
+    "Observed 2026-10-06: after Continue ('Did you get our text?') a six-digit code is sent to the PHONE by default. Click 'Email verification code instead' before handing off so the code goes to the registration email inbox, not the owner's phone. The phone code expired during a slow handoff; 'Resend Code' is on the same page.",
+    "There is no password at signup. Sign in at /account/sign-in.html: email into #enterUsername, then 'Sign in without a password' — a code is emailed (input[aria-label*='verification code']). On 2026-10-06 the code was accepted but the browser landed on a bare 'Not Found' page and the session did not show as signed in afterwards."
+  ],
+  "overrides": {
+    "email": "#emailAddress",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "phone": "#phonenumber",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.albertsons.com/account/short-registration.html",
+  "stepped": true
+}

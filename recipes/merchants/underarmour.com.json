@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "underarmour.com",
+  "kind": "merchant",
+  "hosts": ["underarmour.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.underarmour.com/en-us/search?q=t-shirt",
+  "gotchas": [
+    "Use the /en-us/ storefront (e.g. /en-us/search?q=…). Many sock listings showed every colour 'Out of Stock' on 2026-10-06; a t-shirt worked. Size is a radio group (press Space on input[type=radio][name*=size]); the add button is button[data-pdp-add-to-bag=\"true\"] (two match; use the visible one).",
+    "An Attentive 'Sign Up via Text' overlay (iframe#attentive_creative) covers the page and takes clicks; close it by pressing Enter on #closeIconContainer in that frame. A cookie banner also shows.",
+    "Checkout starts as a guest directly: Shipping -> Payment -> Contact Information, each with its own continue button. 'Continue to Payment' (#btn-shipping-submit) first opens a 'Member Checkout' dialog; choose 'Continue As Guest'.",
+    "State is a custom combobox (combobox 'State' next to a hidden textbox): open it and click the two-letter option (e.g. 'CA'). The address typeahead (api.edq.com) offers suites; an address without a suite at a multi-unit building gets a 'Please Verify Your Address' dialog — 'Review Address', then pick a suggestion.",
+    "Payment: 'Credit Card' is pre-selected. Card number, expiry, security code and name on card are ALL in one iframe (iframe[id*=\"card\"]), addressed by aria-label. Billing 'Same as shipping address' is pre-checked. Then 'Continue to Contact' (email/phone come after the card on this site).",
+    "Card fields probed read-only on 2026-10-06 and not filled, so card selectors are unverified. Order summary shows 'Total:'; no order.total hint was settled.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared.",
+    "Observed 2026-10-06: through the proxy (US tunnel) every colour of a product that had been in stock hours earlier showed \"Out of Stock\" and Add to Bag did nothing, while the account owner's own browser on the same VPN saw it in stock at the same time. The sock page also showed Spanish breadcrumbs (\"Promo aniversario\" / \"Ver todo\") on /en-us/. Read an all-out-of-stock page as the site treating the automated browser differently (#739), not as real stock; inventory GraphQL calls still answered 200.",
+    "2026-10-17: the /en-us/ shipping form takes US addresses only (a required US State combobox), so a delivery address outside the US does not complete there.",
+    "2026-10-17: www.underarmour.com/fr-fr/ redirects to the separate host www.underarmour.fr/fr-fr/. A TrustArc consent dialog there takes every click until its 'Tout rejeter' button ([role=\"dialog\"] button:has-text(\"Tout rejeter\")) is clicked.",
+    "2026-10-17: on www.underarmour.fr through the proxy, three product pages in a row listed every colour as '(Épuisé)' and Ajouter au panier left /fr-fr/cart empty ('Oups. C'est vide !'), the same all-out-of-stock pattern as the 2026-10-06 note.",
+    "2026-10-17: /en-us/ opens with an 'Are you on the right Under Armour site?' location dialog (button 'Close Dialog') and a cookie bar ('I ACCEPT').",
+    "2026-10-17: account sign-in (optional; guest checkout exists). The header button [data-testid=\"rewards-header-label\"] ('Log In or Join') opens an Armour Access dialog with 'Join Now' and 'Log In'; 'Log In' goes to an Okta page on login.shop.underarmour.com. Email input[name=\"identifier\"] and password input[name=\"credentials.passcode\"] share one page, from the login's email and password tokens; submit is button[type=submit]. It returns to underarmour.com with button[data-testid^=\"my-account\"] (visible) in the header.",
+    "2026-10-17: UA pages carry an always-present empty [role=\"alert\"] element, so a bare [role=\"alert\"] matches with no error on screen."
+  ],
+  "overrides": {
+    "cardNumber": "input[aria-label=\"Enter card number\"]",
+    "cardNumberFrame": "iframe[id*=\"card\" i]",
+    "city": "input[name=\"city\"] >> visible=true",
+    "cvv": "input[aria-label=\"Enter security code\"]",
+    "cvvFrame": "iframe[id*=\"card\" i]",
+    "expiry": "input[aria-label=\"Enter expiration month and year\"]",
+    "expiryFrame": "iframe[id*=\"card\" i]",
+    "firstName": "input[name=\"firstName\"] >> visible=true",
+    "lastName": "input[name=\"lastName\"] >> visible=true",
+    "name": "input[aria-label=\"Enter name on card\"]",
+    "nameFrame": "iframe[id*=\"card\" i]",
+    "street1": "input[name=\"address1\"] >> visible=true",
+    "zip": "input[name=\"postalCode\"] >> visible=true"
+  }
+}

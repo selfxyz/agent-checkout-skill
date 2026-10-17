@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "box.com",
+  "kind": "merchant",
+  "hosts": ["box.com", "app.box.com", "account.box.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://app.box.com/",
+  "gotchas": [
+    "Sign-in is stepped: input[name=login], Next (button[type=submit]), then input[name=password], then Log In. An hCaptcha sometimes appears on the password step (owner handoff); on 2026-10-12 none appeared.",
+    "The app's Upgrade button opens the plan page in a new tab; switch with wait_for_popup.",
+    "The plan page has three Select buttons; nth=0 is Personal Pro. The card form is plain inputs on Box's own page (no iframe): autocomplete cc-number / cc-exp (MM/YY) / cc-csc, plus name, address line1/line2, city, state, postal code and one select.",
+    "Fill name and billing fields and the expiry first, then the card number, then the CVV as the very next field.",
+    "Verified 2026-10-12 through the staging proxy with the public test card (verification-only key): card_fields_verified, stopped before purchase."
+  ],
+  "overrides": {
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardholderName": "input[name*=name i]",
+    "city": "input[name*=city i]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "placeOrder": "button[type=submit]",
+    "state": "input[name*=state i]",
+    "street1": "input[name*=line1 i]",
+    "zip": "input[name*=postal i]"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "account.box.com",
+      "url": "https://account.box.com/login"
+    },
+    {
+      "action": "click",
+      "host": "app.box.com",
+      "note": "Opens the plan page in a NEW TAB: call wait_for_popup.",
+      "selector": "button:has-text(\"Upgrade\") >> nth=0"
+    },
+    {
+      "action": "click",
+      "host": "app.box.com",
+      "note": "First Select is Personal Pro; the payment form appears on the same page.",
+      "selector": "button:has-text(\"Select\") >> nth=0"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "account.box.com",
+        "url": "https://account.box.com/login"
+      }
+    ],
+    "fields": {
+      "email": "input[name=\"login\"]",
+      "password": "input[name=\"password\"]",
+      "continue": "button[type=\"submit\"]",
+      "submit": "button[type=\"submit\"]"
+    },
+    "signedIn": "[data-testid*=sidebar i]"
+  }
+}

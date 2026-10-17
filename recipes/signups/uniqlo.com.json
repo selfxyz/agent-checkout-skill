@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "uniqlo.com",
+  "kind": "signup",
+  "hosts": ["uniqlo.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "lastVerifiedAt": "2026-10-16",
+  "gotchas": [
+    "Reach the form from the home page: click the 'Membership / Purchase history' header link to land on Login, then click 'Create an account'. /us/en/member/register is a 404.",
+    "The form is email, password (8-20 characters, letters and numbers), an optional birthday (MM/DD/YYYY), a gender radio and two pre-checked newsletter boxes; no name or phone.",
+    "Submitting shows a verification-code field; a code sent by email belongs to the account owner: hand it off. UNIQLO and GU share one account.",
+    "Create the login with maxLength 20: the site caps passwords at 20 characters."
+  ],
+  "overrides": {
+    "dateOfBirth": "input[name=birthday], input[name=birthDate], input[name=dateOfBirth]",
+    "email": "input[type=email]",
+    "password": "input[type=password]",
+    "submit": "button:has-text('Register account')"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.uniqlo.com/us/en/",
+  "stepped": false
+}

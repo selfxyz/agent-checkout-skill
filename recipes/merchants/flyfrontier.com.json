@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "flyfrontier.com",
+  "kind": "merchant",
+  "hosts": ["flyfrontier.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://booking.flyfrontier.com/Flight/InternalSelect?o1=DEN&d1=LAS&dd1=Oct%2023,%202026&ADT=1&mon=true",
+  "gotchas": [
+    "frontierairlines.com redirects to flyfrontier.com; booking runs on booking.flyfrontier.com. Guest checkout, no login needed.",
+    "Working search deep link: https://booking.flyfrontier.com/Flight/InternalSelect?o1=DEN&d1=LAS&dd1=Oct%2023,%202026&ADT=1&mon=true (one-way, 1 adult).",
+    "Flow: Select flight -> Discount Den vs Standard price (pick Standard 'Continue') -> 'Upgrade to Economy' modal (tick the 'Basic Fare works for me' checkbox, then 'Continue with Basic' #ContinueBasic) -> GoWild Pass upsell drawer ('No thanks, continue with standard') -> Passenger Info -> Bundle (Continue, then 'Continue without a bundle' modal) -> Seats (Continue, then 'Continue without selecting seats') -> Bags (No Carry-On, No Checked Bags, Continue, then 'Continue without adding a Carry-On') -> Extras -> Payment.",
+    "The page is very heavy (380+ inputs, many hidden dialogs): clicks that navigate can take 30-60s to return and snapshots/screenshots can time out with ariaSnapshot 10s; give clicks a 60s timeout and retry the snapshot after a pause.",
+    "Passenger Info fields: #frontierPassengers_0__Name_First, #frontierPassengers_0__Name_Last, #frontierPassengers_0__Info_Gender (select), #date_of_birth_0 (type MM/DD/YYYY), contact #frontierContact_Name_First/_Last, #frontierContact_EmailAddress, #js_first_phone_number (digits only), #frontierContact_CountryCode, #frontierContact_PostalCode; submit #submit_passenger_info_button.",
+    "Extras step is blocking: Disruption Assistance and Cancel For Any Reason are radios inside two third-party iframes and an opt-out ('No thanks') must be chosen in each, plus Self-Service (#ibe-extras-agent-assist-radio-free), or Continue shows errors.",
+    "Payment: card fields are inline (no iframe). Expiry is two selects (#card_expiration_month, #card_expiration_year). Billing 'Same as contact information' is checked by default but the address/city/state/email inputs still render and are required. Address 1 has maxlength 30.",
+    "Order total for the spending guard: #payment_cart_total_amount (resolves, e.g. $92.98 USD). The final button is 'PURCHASE & ACCEPT' (a.js-paymentSubmitButton), disabled until the terms checkbox is ticked - never click it.",
+    "Re-run 2026-10-03 (owner had authorized booking.flyfrontier.com): order.total hint resolved, expiry selects, #cardholder_name (full-name token), #billing_payment_zipcode, #billing_payment_city, #billing_payment_state (selectOption with the state token) and #billing_payment_email all filled from vault tokens.",
+    "#billing_payment_address_1 (maxlength 30) refused a longer street token with fill_rejected (truncated value); use a short street1 or type a shortened address line by the owner.",
+    "Fill the card number and CVV back to back after all billing fields; on 2026-10-03 both were refused with limit_reached by the account spending guard, so card selectors are still unverified."
+  ],
+  "overrides": {
+    "cardNumber": "#card_number",
+    "cardholderName": "#cardholder_name",
+    "city": "#billing_payment_city",
+    "country": "#billing_payment_country",
+    "cvv": "#card_cvv",
+    "email": "#billing_payment_email",
+    "expiryMonth": "#card_expiration_month",
+    "expiryYear": "#card_expiration_year",
+    "orderTotal": "#payment_cart_total_amount",
+    "state": "#billing_payment_state",
+    "street1": "#billing_payment_address_1",
+    "zip": "#billing_payment_zipcode"
+  }
+}

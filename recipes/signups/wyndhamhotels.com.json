@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "wyndhamhotels.com",
+  "kind": "signup",
+  "hosts": ["wyndhamhotels.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Discovered read-only by scripts/signup-selectors.ts (session arm). 2026-10-01: the join form was looked at through the Agent Vault proxy and not driven, at the account owner's choice, because it verifies the account by a text message or a phone call to the number given. No vault login was created and nothing was submitted.",
+  "gotchas": [
+    "The join form shows first name (#firstName), last name (#lastName), a country select with no default, a postal code, a phone number with a country-code combobox, email (#emailAddress), password (#password) and its confirmation (#confirmPassword), then Join Now, which stays disabled until the form is valid.",
+    "The form asks how to verify the account: by Text Message (the default) or by Phone Call, to the phone number given. That verification goes to the account owner's phone and is theirs to complete: hand it off.",
+    "A required 'Accept the Terms' checkbox must be ticked before Join Now; accepting is the account owner's agreement."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "confirmPassword": "#confirmPassword",
+    "email": "#emailAddress",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "password": "#password",
+    "submit": "#liteEnroll button",
+    "username": "#username"
+  },
+  "signupUrl": "https://www.wyndhamhotels.com/wyndham-rewards/join",
+  "stepped": true
+}

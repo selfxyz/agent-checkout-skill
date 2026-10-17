@@ -1,0 +1,33 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "wyndhamhotels.com",
+  "kind": "merchant",
+  "hosts": ["wyndhamhotels.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.wyndhamhotels.com/hotels/dallas-texas?brand_id=ALL&checkInDate=10/22/2026&checkOutDate=10/23/2026&useWRPoints=false&children=0&adults=1&rooms=1",
+  "gotchas": [
+    "Search deep link: /hotels/<city>-<state>?brand_id=ALL&checkInDate=MM/DD/YYYY&checkOutDate=MM/DD/YYYY&useWRPoints=false&children=0&adults=1&rooms=1. Each brand books under its own path (e.g. /laquinta/...).",
+    "On the results page, click the hotel's 'From $NN USD /Night' price link (a[href*=<brand>][href*=<hotel-slug>]); the hotel-name heading link goes to an overview page with no room list. The room list renders several seconds after navigation.",
+    "Rooms list each rate in an li with an h4 name: 'Standard Rate' (non-member) and 'Wyndham Rewards Rate' use 'Book & Pay Later'; 'Member Advance Purchase Rate, Non-Refundable' uses 'Book'. The booking page is one page: guest information, payment, 'Complete Reservation'.",
+    "The 'Yes, I would like to enroll in Wyndham Rewards' checkbox (#enroll) is PRE-CHECKED and its validation message reads 'You must be a Wyndham Rewards member or Join to book this rate', even on the Standard Rate. Its label intercepts clicks on the input. It was left checked to fill; nothing creates an account until Complete Reservation.",
+    "Guest fields carry no ids or autocomplete attributes; the name-attribute selectors in the overrides resolve. Country and State are native selects; Country starts at 'Select Country'. The phone has a country-code combobox beside it and MOBILE/OTHER radios, hence the :not() filters on the phone selector.",
+    "Card fields are inline (no payment iframe): number input[autocomplete=cc-number], expiry text input[aria-label='Expiration date field'] (MM/YY, e.g. '02/30'), and a separate card ZIP input[aria-label='ZIP or Postal code field'] (fill from the address zip token). CVV inputs exist in the DOM but stay hidden, and did not appear after the number on the Standard Rate (pay at hotel, card is a guarantee). The snapshot does not list the card number field; count finds it.",
+    "A required terms checkbox must be ticked before 'Complete Reservation'; that is the owner's agreement.",
+    "The FIRST fill of saved details on this host triggers the owner's destination approval. When that first fill was a tokenized <select> (country), the SDK's 180s default deadline for selectOption expired while the approval was still pending and the connection died, twice. Fill the text fields first (value fills get the long human-wait deadline), and the selects after the host is approved."
+  ],
+  "overrides": {
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "city": "input[name*=\"city\" i]",
+    "country": "select[name*=\"country\" i]",
+    "email": "input[name*=\"email\" i]",
+    "expiry": "input[aria-label=\"Expiration date field\"]",
+    "firstName": "input[name*=\"first\" i]",
+    "lastName": "input[name*=\"last\" i]",
+    "phone": "input[name*=\"phone\" i]:not([type=\"radio\"]):not([type=\"hidden\"])",
+    "state": "select[name*=\"state\" i]",
+    "street1": "input[name*=\"address\" i]",
+    "zip": "input[name*=\"postal\" i]"
+  }
+}

@@ -2,14 +2,46 @@
   "$schema": "../../schema/recipe.schema.json",
   "id": "ellenescapes.gumroad.com",
   "kind": "merchant",
-  "hosts": [
-    "ellenescapes.gumroad.com"
-  ],
+  "hosts": ["ellenescapes.gumroad.com", "gumroad.com"],
   "platform": "gumroad",
   "status": "partial",
-  "lastVerifiedAt": "2026-07-20",
-  "evidence": "Bench dry run (--test-card) reached `fill`: 'I want this!' → /checkout → Stripe Payment Element filled. No submit, so NOT purchase-verified.",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "2026-10-16 staging proxy, guest checkout with identity tokens: product page 'I want this!' → gumroad.com/checkout; email, full name and country filled from tokens; order.total hint accepted; Stripe Payment Element expiry, number and CVV filled (card_fields_verified, public test card). Pay clicked once: the payment form was replaced by a [role=alert] error reading 'Your card was issued…' with a 'try again' instruction; no receipt text, no confirmation recorded.",
   "cardSurface": "stripe-payment-element",
   "exampleProductUrl": "https://ellenescapes.gumroad.com/l/czmhuf",
-  "notes": "Fixed-price $2.99 digital product. Third independent Gumroad store to reach `fill` with no selector overrides."
+  "notes": "Fixed-price digital product, about USD 3 plus VAT, priced in the geo-detected currency. Guest checkout; no account needed.",
+  "gotchas": [
+    "2026-10-16: The product page has two 'I want this!' links (sticky bar + body); click `article a:has-text(\"I want this!\")`, which opens the checkout on gumroad.com/checkout (a different host).",
+    "2026-10-16: Contact fields: email `[aria-label=\"Payment form\"] input[type=email]` (identity email token), full name `fieldset:has(label:text-is(\"Full name\")) input` (identity full_name token), country `fieldset:has(label:text-is(\"Country\")) select` (select, address country token). Fill the country before the card: it recomputes VAT. No postal code was asked for a France billing country.",
+    "2026-10-16: Pay (`[aria-label=\"Payment form\"] button:text-is(\"Pay\")`) stays disabled until the Stripe card fields are complete.",
+    "2026-10-16: Test card declined: after Pay the payment form disappears and `[role=alert]` shows a message beginning 'Your card was issued' telling the buyer to try again; it took over 25 s to settle. Not a receipt: no 'successful' or 'charged' text.",
+    "2026-10-16: The checkout loads reCAPTCHA Enterprise and Stripe's invisible hCaptcha; neither challenged on this run."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[title=\"Secure payment input frame\"]",
+    "cardNumber": "input[name=number]",
+    "country": "fieldset:has(label:text-is(\"Country\")) select",
+    "cvv": "input[name=cvc]",
+    "email": "[aria-label=\"Payment form\"] input[type=email]",
+    "fullName": "fieldset:has(label:text-is(\"Full name\")) input",
+    "orderTotal": "footer h4 + *",
+    "placeOrder": "[aria-label=\"Payment form\"] button:text-is(\"Pay\")"
+  },
+  "route": [
+    {
+      "host": "ellenescapes.gumroad.com",
+      "url": "https://ellenescapes.gumroad.com/l/czmhuf"
+    },
+    {
+      "action": "click",
+      "host": "ellenescapes.gumroad.com",
+      "selector": "article a:has-text(\"I want this!\")"
+    },
+    {
+      "action": "wait",
+      "host": "gumroad.com",
+      "selector": "iframe[title=\"Secure payment input frame\"]"
+    }
+  ]
 }

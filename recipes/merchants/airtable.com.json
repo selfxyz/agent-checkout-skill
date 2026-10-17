@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airtable.com",
+  "kind": "merchant",
+  "hosts": ["airtable.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "exampleProductUrl": "https://airtable.com/pricing",
+  "gotchas": [
+    "Sign in at airtable.com/login: email-first (#emailLogin, Continue), then the password field appears; submit with the form's submit button.",
+    "Signed in, /pricing has an upgrade link in the Team column (a[href*=\"upgrade\"]:has-text(\"Team\")); it opens the billing page in the same tab.",
+    "Card number, expiry and CVC are one Stripe frame (iframe title 'Secure payment input frame', input[name=number|expiry|cvc]). The submit on the page reads Subscribe.",
+    "Verified 2026-10-09 through the proxy with the public test card under a verification-only key: number, expiry and CVC filled with no field error. Stopped before Subscribe."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"Secure payment input\" i]",
+    "expiryFrame": "iframe[title*=\"Secure payment input\" i]",
+    "placeOrder": "button[type=\"submit\"]:has-text(\"Subscribe\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "airtable.com",
+      "url": "https://airtable.com/pricing"
+    },
+    {
+      "action": "click",
+      "host": "airtable.com",
+      "selector": "a[href*=\"upgrade\"]:has-text(\"Team\")"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "airtable.com",
+        "url": "https://airtable.com/login"
+      }
+    ],
+    "fields": {
+      "email": "#emailLogin",
+      "password": "input[type=\"password\"]",
+      "continue": "button[type=\"submit\"]:has-text(\"Continue\")",
+      "submit": "button[type=\"submit\"]"
+    },
+    "signedIn": "[aria-label*=\"Account\" i]"
+  }
+}

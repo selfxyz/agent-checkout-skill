@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "bloomingdales.com",
+  "kind": "signup",
+  "hosts": ["bloomingdales.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Discovered read-only by scripts/signup-selectors.ts (session arm). 2026-10-01: driven through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network (a VPN address in Dallas). All five selectors matched, and the birth month, birth day and phone were filled. Five submits over two sessions, with two different phone numbers (the second the identity's own), were each answered \"Something went wrong\", with no code dialog, no challenge and no mail at the signup address. No account was created, so this is not verified. The run reports showed no denied fills and covered the whole run. While the Attentive overlay was open, a proxy click reported a CAPTCHA or bot wall; after the overlay was closed, detect_challenge found none.",
+  "gotchas": [
+    "Password: a password of at most 16 characters, with symbols limited to ! @ # $ *, passed the form's validation.",
+    "Birth month and birth day are native selects (select:has(option:text-is(\"January\")) and select:has(option:text-is(\"31\"))): choose an option rather than typing into them. The phone is input[type=\"tel\"].",
+    "The email-offers box is ticked by default (Space unticks it).",
+    "The submit (#ca-profile-submit) stays disabled until every field is valid.",
+    "An Attentive 'sign up via text' overlay (#attentive_overlay, with iframe#attentive_creative) opens after a few interactions. It takes focus and clicks, and field values are cleared while it is open. Close it by pressing Enter on #closeIconContainer inside iframe#attentive_creative, then check the fields again.",
+    "On a freshly loaded page the first email fill (#email) was cleared; a second fill on its own held.",
+    "On 2026-10-01, from a US egress, every submit answered \"Something went wrong\" with no code dialog and no mail. macys.com gave the same answer from the proxy's own egress on 2026-09-29."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-10-01, see evidence.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "#first-name",
+    "lastName": "#last-name",
+    "password": "#pwd",
+    "submit": "#ca-profile-submit"
+  },
+  "signupUrl": "https://www.bloomingdales.com/account/createaccount"
+}

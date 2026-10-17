@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "vimeo.com",
+  "kind": "signup",
+  "hosts": ["vimeo.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password). After the email, a name and new-password step appeared, then a confirm-password field after the first submit; with both filled the account was accepted and Vimeo's \"Verify your email address\" mail arrived at the signup address. The account owner opened its link, and a fresh sign-in with the same credentials was then accepted.",
+  "gotchas": [
+    "Email-first, one screen for log-in and sign-up: after the email, a new account gets a name and new-password step (#password_login), and a confirm-password field appears after the first submit. The account is confirmed by a link sent by email, which belongs to the account owner.",
+    "After the email is entered, \"Continue with email\" can stay disabled for a minute or more while an hCaptcha frame runs in the background; on 2026-09-30 it passed on its own and the next step appeared without anyone solving anything.",
+    "The new-account step has an optional checkbox to receive updates; it was left unticked."
+  ],
+  "overrides": {
+    "email": "#unified_auth_email",
+    "fullName": "input[type=\"text\"]",
+    "password": "#password_login",
+    "submit": "button:has-text(\"Continue with email\")"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://vimeo.com/join",
+  "stepped": true
+}

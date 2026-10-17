@@ -1,0 +1,35 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "hawaiianairlines.com",
+  "kind": "signup",
+  "hosts": ["hawaiianairlines.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "HawaiianMiles is gone: signup is the shared Alaska/Hawaiian Atmos Rewards join form, served on this host at https://www.hawaiianairlines.com/atmosrewards/enroll (same form as alaskaair.com/atmosrewards/enroll). The old /my-account/join-hawaiianmiles URL redirects to the homepage. A 'Pre-Qualify ... Atmos Rewards Card' modal ('No, thanks') and an advisory banner can show on the homepage.",
+    "Fields are Auro web components (auro-input / auro-button) in shadow DOM; plain button selectors miss the submit, use auro-button:has-text(\"Join Atmos Rewards\").",
+    "Required beyond name/email/password: Gender (custom combobox), Date of birth (Month combobox + Day/Year spinbuttons), phone (country code combobox + input[name=\"phoneNumber\"]; no phone token, type a synthetic number), and a full mailing address (Country, Address line 1, Zip, City, State combobox). Middle name, suffix and preferred airport are optional.",
+    "User ID: email or a 7+ character ID with at least 1 letter, no spaces or symbols. Password: 8+ characters with 1 uppercase, 1 lowercase and 1 number. There are two input[type=\"password\"] on the page, so target input[name=\"password\"].",
+    "Ad/analytics frames load on the page; a reCAPTCHA Enterprise frame was seen on the identical alaskaair.com form, so expect one here too. Challenge on submit untested.",
+    "The marketing email checkbox is pre-checked.",
+    "Inputs are hidden under floating labels: click the label text ('First name', 'Phone number', 'User ID', ...) before filling the input by name.",
+    "Gender and DOB Month are comboboxes: click, then the role=option ('Female', 'January'). Day and Year are separate inputs. Country code and Country default to United States.",
+    "User ID accepts the email address, so the email token can fill it.",
+    "Phone is required and takes the national number (no spaces or dashes): fill phone_national. If the identity has no phone, stop; it is an owner step.",
+    "2026-10-07 the reCAPTCHA Enterprise badge showed 'ERROR for site owner: Invalid domain for site key'; submit untested."
+  ],
+  "overrides": {
+    "city": "input[name*=\"city\" i]",
+    "dateOfBirth": "input[name*=\"day\" i], input[name*=\"year\" i]",
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]",
+    "password": "input[name=\"password\"]",
+    "phone": "input[name=\"phoneNumber\"]",
+    "street1": "input[name*=\"address\" i] >> nth=0",
+    "submit": "auro-button:has-text(\"Join Atmos Rewards\")",
+    "username": "input[name=\"userId\"]",
+    "zip": "input[name*=\"postal\" i]"
+  },
+  "signupUrl": "https://www.hawaiianairlines.com/atmosrewards/enroll"
+}

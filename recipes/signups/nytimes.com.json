@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "nytimes.com",
+  "kind": "signup",
+  "hosts": ["nytimes.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-10-01",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: myaccount.nytimes.com/auth/login, which redirects to /auth/enter-email, headed 'Log in or create an account'. Nothing was typed or submitted. 2026-10-01: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. The first page load answered 403 and then redirected through on its own (no challenge was shown). The email went into #email and submit moved a new address to a create-account step with a #password box (the email shown read-only, a hidden checkbox left as it was). With a test-inbox address (agentmail.to, with and without a +tag) the create-account POST was answered 400 and the page said 'Please enter a valid email address.'; with an address on the account owner's own domain the same submit was answered 200 and the page moved on to a signed-in subscribe offer. No code, link or CAPTCHA was asked for. After closing the session, a fresh sign-in with the same credentials (email, then the returning-user password step, then submit) left the site with account links showing. Read with the staging network log (#734).",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "A New York Times account is free; reading beyond the free allowance is a paid subscription, which is not part of this signup.",
+    "For a new address the step after the email is a create-account page with a single #password box and the same submit button; a known address gets a returning-user password step instead.",
+    "The test inbox's domain (agentmail.to) is refused at the create-account step: the request is answered 400 and the page shows 'Please enter a valid email address.', even though the email step accepted it. Use an address on a domain the site accepts."
+  ],
+  "overrides": {
+    "email": "#email",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://myaccount.nytimes.com/auth/login",
+  "stepped": true
+}

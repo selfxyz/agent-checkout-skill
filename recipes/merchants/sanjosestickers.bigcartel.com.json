@@ -2,11 +2,66 @@
   "$schema": "../../schema/recipe.schema.json",
   "id": "sanjosestickers.bigcartel.com",
   "kind": "merchant",
-  "hosts": [
-    "sanjosestickers.bigcartel.com"
-  ],
+  "hosts": ["sanjosestickers.bigcartel.com"],
   "platform": "bigcartel",
   "status": "partial",
   "exampleProductUrl": "https://sanjosestickers.bigcartel.com/product/retro-1980s-san-jose-sticker-1",
-  "notes": "4-step wizard (Cart→Details→Shipping→Payment); advance via 'Next'×2 then the payment step. Stripe Card/Payment Element preloads early — don't fill until past the last step. Checkout load is flaky run-to-run (sometimes no Details form renders); hCaptcha-invisible present."
+  "notes": "4-step wizard (Cart, Details, Shipping, Payment); advance with Next twice. Guest checkout, no customer accounts.",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "2026-10-16: guest checkout walked cart to payment, card fill landed, Pay now clicked once and Stripe declined the test card.",
+  "cardSurface": "stripe-payment-element",
+  "gotchas": [
+    "Fill the Stripe card only on the Payment step, after Next twice; the frame is iframe[name^=\"__privateStripeFrame\"][src*=\"elements-inner-payment\"], with expiry, then postalCode, then number, then cvc right after.",
+    "Test card declined (2026-10-16): after Pay now, `text=Your card was declined` appears, reading 'Your card was declined. Your request was in live mode, but used a known test card.'",
+    "Checkout shows a Loading screen first; wait for input[autocomplete=email] before filling.",
+    "The Stripe Link box in the card frame may say 'Too many log in attempts'; ignore it and fill the card fields below.",
+    "Total on the Payment step was $3.10 for the $1.00 sticker ($2.00 shipping, $0.10 tax); the order.total hint on the Order total text was not accepted.",
+    "Checkout load is flaky run-to-run (sometimes no Details form renders): re-navigate up to 3 times.",
+    "2026-10-17: the Country control is select[autocomplete=\"country-name\"], defaulting to United States; its options match the country's English name (France), and the vault's country token did not match an option.",
+    "2026-10-17: with France selected the State / Province / Region select is replaced by a text input, input[autocomplete=address-level1], filled from the address state token.",
+    "2026-10-17: with every Details field filled (France address), Next (button[aria-label=\"Continue to Shipping address\"]) stayed on Details in two page loads: no error text, no aria-invalid field, no request after the click, and one 429 among the requests made while the fields were filled."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[name^=\"__privateStripeFrame\"][src*=\"elements-inner-payment\"]",
+    "cardNumber": "input[name=number]",
+    "city": "input[autocomplete=address-level2]",
+    "country": "select[autocomplete=\"country-name\"]",
+    "cvv": "input[name=cvc]",
+    "email": "input[autocomplete=email]",
+    "firstName": "input[autocomplete=given-name]",
+    "lastName": "input[autocomplete=family-name]",
+    "next": "button:has-text(\"Next\")",
+    "placeOrder": "button:has-text(\"Pay now\")",
+    "postalCode": "input[autocomplete=postal-code]",
+    "state": "select[autocomplete=address-level1]",
+    "street1": "input[autocomplete=address-line1]",
+    "zip": "input[name=postalCode]"
+  },
+  "route": [
+    {
+      "host": "sanjosestickers.bigcartel.com",
+      "url": "https://sanjosestickers.bigcartel.com/product/retro-1980s-san-jose-sticker-1"
+    },
+    {
+      "action": "click",
+      "host": "sanjosestickers.bigcartel.com",
+      "selector": "button:has-text(\"Add to Cart\")"
+    },
+    {
+      "action": "click",
+      "host": "sanjosestickers.bigcartel.com",
+      "selector": "button:has-text(\"Checkout\")"
+    },
+    {
+      "action": "wait",
+      "host": "sanjosestickers.bigcartel.com",
+      "selector": "input[autocomplete=email]"
+    },
+    {
+      "action": "manual",
+      "host": "sanjosestickers.bigcartel.com",
+      "note": "Type email, first and last name, address, city, state, postal code into the autocomplete= inputs, click button:has-text(\"Next\") twice (shipping keeps Standard) until the Stripe card frame shows."
+    }
+  ]
 }

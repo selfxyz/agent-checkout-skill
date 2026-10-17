@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "marriott.com",
+  "kind": "signup",
+  "hosts": ["marriott.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: 'Join Marriott Bonvoy for Free' (first and last name, zip, mobile phone, email, password, confirm, Join Today). Nothing was typed or submitted. 2026-09-30: driven through the Agent Vault proxy twice with browser egress through the owner's tunnel on a US network; all selectors matched and Join Today was accepted by the page, but the answer was a generic could-not-complete / try-again message with no challenge, and no mail arrived. No account was created, so this is not verified.",
+  "gotchas": [
+    "Field ids are generated per build (:Raad6:-Email); the name attributes are stable, which is what these selectors use.",
+    "The form also requires a zip or postal code and a mobile phone number; they are the account owner's to supply.",
+    "button[type=\"submit\"] matches two buttons on this page; the recipe's submit is the one labelled Join Today.",
+    "Password rule shown on focus: 8-20 characters, an uppercase and a lowercase letter, and numbers or any of $ ! # & @ ? % =.",
+    "The zip or postal code field (input[name=\"input-text-Zip/Postal Code\"]) shows once Country/Region is set; it defaulted to USA through the proxy on 2026-09-29.",
+    "The email-offers box is ticked by default.",
+    "On 2026-09-30, through the Agent Vault proxy (also from a US egress), Join Today answered with a generic could-not-complete / try-again message, with no challenge shown and no mail sent; the sign-in page gave the same kind of message for the credentials used."
+  ],
+  "overrides": {
+    "confirmPassword": "#confirmPassword",
+    "email": "input[name=\"input-text-Email\"]",
+    "firstName": "input[name=\"input-text-First Name\"]",
+    "lastName": "input[name=\"input-text-Last Name\"]",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]:has-text(\"Join Today\")"
+  },
+  "signupUrl": "https://www.marriott.com/loyalty/createAccount/createAccountPage1.mi"
+}

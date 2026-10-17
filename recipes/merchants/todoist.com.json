@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "todoist.com",
+  "kind": "merchant",
+  "hosts": ["todoist.com", "app.todoist.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://app.todoist.com/app/settings/subscription",
+  "gotchas": [
+    "Sign-in at app.todoist.com/auth/login takes email and password on one page; 'Log in' submits. No code or captcha on 2026-10-09.",
+    "A first sign-in lands on onboarding (Welcome button, a name box + Next, a how-will-you-use-it radio, then more Next steps). The onboarding's later Next button stops advancing; skip it by opening /app/settings/subscription directly, which loads the app with the subscription dialog.",
+    "In the subscription dialog, the 'Pro' button shows the plan, then 'Get' (Get Pro) opens a hosted Stripe Checkout page: plain card inputs on the page (autocomplete cc-number, cc-exp, cc-csc, cc-name) and a country select, below an Apple/Google Pay express frame. The submit reads 'Start trial'.",
+    "Verified 2026-10-09 through the staging proxy with the public test card under a verification-only key: number, expiry and CVC filled (card_fields_verified), no aria-invalid. Stopped before Start trial."
+  ],
+  "overrides": {
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardholderName": "input[autocomplete=\"cc-name\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "placeOrder": "button[type=\"submit\"]"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "app.todoist.com",
+      "url": "https://app.todoist.com/app/settings/subscription"
+    },
+    {
+      "action": "click",
+      "host": "app.todoist.com",
+      "selector": "button:has-text(\"Pro\")"
+    },
+    {
+      "action": "click",
+      "host": "app.todoist.com",
+      "selector": "button:has-text(\"Get\")"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "app.todoist.com",
+        "url": "https://app.todoist.com/auth/login"
+      }
+    ],
+    "fields": {
+      "email": "input[type=\"email\"]",
+      "password": "input[type=\"password\"]",
+      "submit": "button:has-text(\"Log in\")"
+    },
+    "signedIn": "text=/inbox|today|upcoming/i"
+  }
+}

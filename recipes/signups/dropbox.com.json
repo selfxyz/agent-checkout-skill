@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dropbox.com",
+  "kind": "signup",
+  "hosts": ["dropbox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "A cookie banner covers the page on a fresh profile: decline it first, or the fill targets nothing. Recorded from a completed signup by hand (#626); a proxy browser starts with an empty profile every run, so it re-arms each time.",
+    "Observed 2026-10-09 through the proxy: the email (input[name=\"susi_email\"], submit with Enter) leads to 'Sign up for Dropbox' with First name (input[name=\"fname\"]), Last name (input[name=\"lname\"]), Password (input[type=\"password\"], autocomplete new-password; #credential-autofill-hint no longer exists) and 'Agree and sign up'.",
+    "The cookie banner's Decline button sits in an untitled iframe (the second iframe on the page); iframe[src*=consent] matches nothing.",
+    "On 2026-10-09, three submits from the proxy's egress left the form disabled behind a spinner that never cleared, with no error, no detected challenge and no mail. Whether the account exists was not established.",
+    "Completed 2026-10-11 through the staging proxy (default egress): /register is now email-first (input[name=susi_email] + the page's submit 'Continue' — button[type=submit] is unique there, unlike text 'Continue'), then fname / lname / password and the single button[type=submit]. The identity first_name/last_name tokens must have values in the owner's identity: on 2026-10-11 an identity with no name filled empty and Dropbox answered 'Please enter your first name' (#778). With the name set, submit created the account with no challenge, no spinner and no email code, landing on the plan picker. The cookie banner did not need dismissing."
+  ],
+  "notes": "Driven end to end through the staging proxy on 2026-10-11 (#626).",
+  "overrides": {
+    "email": "input[name=\"susi_email\"]",
+    "firstName": "input[name=\"fname\"]",
+    "lastName": "input[name=\"lname\"]",
+    "password": "input[type=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.dropbox.com/register",
+  "stepped": true
+}

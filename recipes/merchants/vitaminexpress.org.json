@@ -1,0 +1,58 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "vitaminexpress.org",
+  "kind": "merchant",
+  "hosts": ["vitaminexpress.org"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "Guest checkout walked on 2026-10-16: cart, contact and address step, card option, Adyen secured-field fill (verification card), Pay clicked once and the page answered with a payment-failed message. Signup and sign-in were not proven.",
+  "cardSurface": "varies",
+  "cvvTarget": "iframe[title*=\"Sicherheits\" i] >> input[data-fieldtype=\"encryptedSecurityCode\"]",
+  "exampleProductUrl": "https://vitaminexpress.org/ch-de",
+  "gotchas": [
+    "Accept the cookie banner with #cookiescript_accept first: it has no reject button and its overlay blocks every click.",
+    "Cart add buttons carry digits in their aria-label; click [role=group]:has(h4:has-text(\"<product name>\")) button:has(svg) instead.",
+    "Checkout contact inputs: [name=email], [name=firstName], [name=lastName], [name=streetName], [name=streetNumber], [name=postalCode], [name=city]; the street field is a combobox.",
+    "Card fields are three Adyen frames: expiry iframe[title*=\"Ablauf\" i] (format 01/30), number iframe[title*=\"Kartennummer\" i], CVV iframe[title*=\"Sicherheits\" i]; fill expiry, then number and CVV back to back.",
+    "Pay button is the visible button containing 'zahlungspflichtig'; clicked once, the page showed a payment-failed message matching text=/Zahlung.*(nicht|fehl)/i (exact element not pinned down).",
+    "Account signup at /ch-de/customer/account/create: [name=email], password, [name=passwordConfirm], [name=firstName], [name=lastName]; submit raised no visible error but no signed-in state or mail followed, so signup and sign-in are unproven."
+  ],
+  "overrides": {
+    "cardExpiry": "input[data-fieldtype=\"encryptedExpiryDate\"]",
+    "cardFrame": "iframe[title*=\"Kartennummer\" i]",
+    "cardNumber": "input[data-fieldtype=\"encryptedCardNumber\"]",
+    "cvv": "input[data-fieldtype=\"encryptedSecurityCode\"]",
+    "placeOrder": "button:has-text(\"zahlungspflichtig\"):visible"
+  },
+  "route": [
+    {
+      "host": "vitaminexpress.org",
+      "url": "https://vitaminexpress.org/ch-de"
+    },
+    {
+      "action": "click",
+      "host": "vitaminexpress.org",
+      "selector": "#cookiescript_accept"
+    },
+    {
+      "action": "click",
+      "host": "vitaminexpress.org",
+      "selector": "[role=group]:has(h4:has-text(\"Zink\")) button:has(svg)"
+    },
+    {
+      "host": "vitaminexpress.org",
+      "url": "https://vitaminexpress.org/ch-de/checkout"
+    },
+    {
+      "action": "click",
+      "host": "vitaminexpress.org",
+      "selector": "button:has-text(\"Zur Kasse\")"
+    },
+    {
+      "action": "manual",
+      "host": "vitaminexpress.org",
+      "note": "On the contact step type email, firstName, lastName, streetName, streetNumber, postalCode and city (Switzerland is preselected), click 'Zum Versand & Zahlung', then pick the card payment option by its 'Karte' label."
+    }
+  ]
+}

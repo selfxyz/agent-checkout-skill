@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gog.com",
+  "kind": "signup",
+  "hosts": ["gog.com", "login.gog.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "On www.gog.com, JOIN GOG opens the form inside an iframe from login.gog.com; open login.gog.com/register top-level (signupUrl) so sign-in fills can reach the fields.",
+    "Three fields: email, a username (handle you choose; type it as plain text, then record it with set_login_username once the site accepts it), password. No checkbox.",
+    "A reCAPTCHA checkbox appears after the first submit (\"captcha\" error, fields cleared). The account owner solves it via challenge handoff; then re-fill all three fields and submit again.",
+    "Success: the form disappears and a \"Welcome to GOG.com\" mail arrives. No email code or link was needed to sign in afterwards."
+  ],
+  "overrides": {
+    "email": "#register_email",
+    "password": "#register_password",
+    "submit": "#register_register",
+    "username": "#register_username"
+  },
+  "signupUrl": "https://login.gog.com/register?client_id=46755278331571209&redirect_uri=https%3A%2F%2Fembed.gog.com%2Fon_login_success%3Forigin%3Dclient&response_type=code&layout=default"
+}

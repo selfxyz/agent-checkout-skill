@@ -7,17 +7,13 @@
   "cardSurface": "shopify-card-fields",
   "cvvTarget": "iframe[name*=card-fields-verification]:input[name=verification_value]",
   "detect": {
-    "hosts": [
-      "*.myshopify.com"
-    ],
+    "hosts": ["*.myshopify.com"],
     "selectors": [
       "script[src*=\"cdn.shopify.com\"]",
       "link[href*=\"cdn.shopify.com\"]",
       "meta[name=\"shopify-checkout-api-token\"]"
     ],
-    "urlPatterns": [
-      "\\.myshopify\\.com/checkouts/"
-    ]
+    "urlContains": [".myshopify.com/checkouts/"]
   },
   "gotchas": [
     "Only the PLURAL /checkouts/ path is Shopify's; singular /checkout/ is WooCommerce and others.",

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "zara.com",
+  "kind": "signup",
+  "hosts": ["zara.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Zara's /signup, 'Personal details' with email, password, name, last name and phone above a Create Account button. Nothing was typed or submitted.",
+  "gotchas": [
+    "Field ids change on every load (email_R_…); the name attributes are stable, which is what these selectors use.",
+    "The form also requires a phone number (input[name=\"phone.number\"]) and acceptance of the Privacy Statement (input[name=\"privacyCheck\"]); both are the account owner's to give.",
+    "A dialog may ask whether to stay on the United States store; the region is the owner's choice.",
+    "The submit is a button labelled Create Account with no type or id."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]",
+    "password": "input[name=\"password\"]"
+  },
+  "signupUrl": "https://www.zara.com/us/en/signup"
+}

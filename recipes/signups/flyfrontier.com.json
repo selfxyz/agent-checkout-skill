@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "flyfrontier.com",
+  "kind": "signup",
+  "hosts": ["flyfrontier.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Frontier Miles registration (frontierairlines.com redirects to flyfrontier.com), redirecting to /FrontierMiles/Register. Nothing was typed or submitted.",
+  "gotchas": [
+    "The form repeats the email in a Confirm Email field (input[name=\"confirm_email\"]), which no field in this recipe covers: type the same address there.",
+    "The form also requires gender, date of birth, phone, country, street address, city, state and zip code; they are the account owner's to supply.",
+    "No submit button was visible when the page was read; look for it below the form before submitting."
+  ],
+  "overrides": {
+    "confirmPassword": "input[name=\"confirm_password\"]",
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"first_name\"]",
+    "lastName": "input[name=\"last_name\"]",
+    "password": "input[name=\"password\"]"
+  },
+  "signupUrl": "https://booking.flyfrontier.com/myfrontier/Register"
+}

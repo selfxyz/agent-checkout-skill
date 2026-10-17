@@ -1,0 +1,14 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "qatarairways.com",
+  "kind": "merchant",
+  "hosts": ["qatarairways.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.qatarairways.com/en-us/homepage.html",
+  "gotchas": [
+    "Homepage https://www.qatarairways.com/en-us/homepage.html loads with a OneTrust banner and no bot wall. The search form is Angular Material: From/To are role=combobox inputs (aria-label From / To); type a city and click the mat-option. Trip type: click the radio 'One way' in the form (a second 'One way' button lower on the page belongs to a fare-finder widget). Departure date opens a two-month calendar: click gridcell '23 October 2026', then the calendar's 'Continue', then 'Search flights'.",
+    "Flight selection deep link format: https://www.qatarairways.com/app/booking/flight-selection?widget=QR&searchType=F&addTaxToFare=Y&minPurTime=0&selLang=en&tripType=O&fromStation=DOH&toStation=DXB&departing=2026-10-23&bookingClass=E&adults=1&children=0&infants=0&ofw=0&teenager=0&flexibleDate=off&allowRedemption=N",
+    "On 2026-10-02 through the proxy (local egress) the flight-selection page rendered the date-price tabs but then showed a 'Something happened - You will need to search for your flights again. Error reference: undefined' dialog for every search (DOH-DXB via the homepage form and the deep link, DOH-BAH via the deep link). No CAPTCHA or challenge was detected, so it looks like silent bot mitigation on the availability call; the fare, passenger and payment steps could not be reached."
+  ]
+}

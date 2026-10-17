@@ -1,0 +1,46 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "redbus.in",
+  "kind": "merchant",
+  "hosts": ["redbus.in"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.redbus.in/bus-tickets/bangalore-to-chennai",
+  "gotchas": [
+    "Guest checkout, no sign-in. From a route search page, 'View seats for <operator>' opens a dialog with three tabs: Select seats, Board/Drop point, Passenger Info.",
+    "The seat map is a canvas. Its accessible overlay has one button per seat after the text 'This seat is not selected': take a free one's ref from snapshot_page and click it. Keyboard also works (focus #seat-canvas-wrapper, Enter, then Space).",
+    "After the seat, press 'Select boarding & dropping points' and pick one radio in each of the two radiogroups; the dialog moves to Passenger Info on its own.",
+    "Passenger Info: phone input[type=tel] (+91 national number), email input[type=email], name and age inside the passenger region, a gender radio (absent on a seat reserved for one gender, which shows the gender as text), and State of Residence (click the text input, then the state's name). Decline the Free Cancellation, Trip Guarantee and Insurance radios, then 'Continue booking'.",
+    "Payment page /paymentDetails: open 'Add credit/debit card'. The card fields are plain inputs in the page, no iframe: #cardNumber-input, #cardHoldersName-input, #expiryDate-input (MM/YY in one box) and #cvv-input (type=password, maxlength 4).",
+    "The CVV rejects a value inserted with fill(): 'Please enter valid cvv' on Pay with no request sent. Type it key by key.",
+    "When the card number field loses focus, redBus requests redbus.in/redPay/api/cardDetails, and the response (~300 ms later) clears the CVV and a cardholder name typed after the number. Fill expiry and name BEFORE the number; the proxy waits for that lookup before typing the code (#1142).",
+    "Pay passes its own card check by opening a 'Secure your card and enjoy' dialog, which moves on to the Cashfree gateway (api.cashfree.com) by itself after a few seconds. Stop at the dialog.",
+    "Verified 2026-10-16 through the proxy with the public test card under a key set to fill the test card: Pay opened the 'Secure your card' dialog with no field error. Stopped there."
+  ],
+  "overrides": {
+    "cardExpiry": "#expiryDate-input",
+    "cardNumber": "#cardNumber-input",
+    "cardholderName": "#cardHoldersName-input",
+    "cvv": "#cvv-input",
+    "email": "[role=\"dialog\"] input[type=\"email\"]",
+    "phone": "[role=\"dialog\"] input[type=\"tel\"]",
+    "placeOrder": "button:has-text(\"Pay\")"
+  },
+  "route": [
+    {
+      "host": "www.redbus.in",
+      "url": "https://www.redbus.in/bus-tickets/bangalore-to-chennai"
+    },
+    {
+      "action": "click",
+      "host": "www.redbus.in",
+      "selector": "role=button[name=/^View seats for/] >> nth=0"
+    },
+    {
+      "action": "manual",
+      "host": "www.redbus.in",
+      "note": "Pick a free seat on the canvas seat map (snapshot ref, or Enter then Space on #seat-canvas-wrapper), press 'Select boarding & dropping points', pick a boarding and a dropping radio, fill Passenger Info (phone, email, name, age, gender if shown, State of Residence), decline the three add-ons, press 'Continue booking', then open 'Add credit/debit card'."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "marriott.com",
+  "kind": "merchant",
+  "hosts": ["marriott.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "varies",
+  "exampleProductUrl": "https://www.marriott.com/search/findHotels.mi?destinationAddress.destination=Dallas%2C%20TX%2C%20USA&fromDate=10%2F22%2F2026&toDate=10%2F23%2F2026&roomCount=1&numAdultsPerRoom=1",
+  "gotchas": [
+    "Guest booking, no login needed. The search deep link /search/findHotels.mi?destinationAddress.destination=<City%2C%20ST%2C%20USA>&fromDate=MM%2FDD%2FYYYY&toDate=MM%2FDD%2FYYYY&roomCount=1&numAdultsPerRoom=1 works; dismiss the privacy notice ('x'). Results card 'View Rates' (same tab) -> 'Select a Room and Rate' -> a room's 'View Rates' button -> each rate offers Member and Non-Member 'Select' buttons (aria-label 'Select <rate> Non-Member Rate') -> 'Complete Your Booking', one page. The room is held for about 15 minutes.",
+    "Guest fields carry no autocomplete attributes; the name-attribute substrings in the overrides resolve. Country/Region defaults to USA; the phone has a country-code select (+1 USA) beside input[type=tel].",
+    "The card form is Gr4vy secure fields: four iframes, all iframe[src*='secure-fields.marriott.gr4vy.app/input.html'] with no distinguishing title. By position: nth=0 card number (cc-number), nth=1 expiry (cc-exp, MM/YY), nth=2 CVC (cc-csc, required), nth=3 card postal code (postal-code). Pass `frame` as \"iframe[src*='gr4vy.app/input.html'] >> nth=N\".",
+    "The card postal code lives on the Gr4vy host, so filling it from the address token raises a SEPARATE destination approval for secure-fields.marriott.gr4vy.app, after the one for marriott.com. Two owner prompts plus the live CVC is a lot to land inside the room hold: warn the owner before the card step.",
+    "Final button not reached in testing; nothing was submitted."
+  ],
+  "overrides": {
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "city": "input[name*=\"City\" i]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[name*=\"email\" i]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "firstName": "input[name*=\"first\" i]",
+    "lastName": "input[name*=\"last\" i]",
+    "phone": "input[type=\"tel\"]",
+    "state": "select[name*=\"State\" i]",
+    "street1": "input[name*=\"line1\" i], input[name*=\"street\" i], input[name*=\"address1\" i]",
+    "zip": "input[name*=\"Zip\" i], input[name*=\"Postal\" i]"
+  }
+}

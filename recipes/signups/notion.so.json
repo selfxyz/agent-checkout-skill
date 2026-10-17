@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "notion.so",
+  "kind": "signup",
+  "hosts": ["notion.so", "notion.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (the email selector matched). After the email Notion asked for a signup code sent by email; the account owner entered it through a challenge handoff and the page went on to onboarding, with the session signed in. Notion's \"Your Notion signup code\" mail arrived at the signup address, and the account owner later signed in with a login code and reached the workspace onboarding.",
+  "gotchas": [
+    "Email-first: after the work email, Notion asks for a signup code sent by email; the code belongs to the account owner: hand it off.",
+    "notion.so redirects to notion.com; the app lives on app.notion.com.",
+    "The email box's id is generated; match it by type.",
+    "The code box is an input of type password with autocomplete=\"one-time-code\", so it can read as a password step; it takes the emailed code, not a password."
+  ],
+  "overrides": {
+    "email": "input[type=\"email\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://app.notion.com/signup",
+  "stepped": true
+}

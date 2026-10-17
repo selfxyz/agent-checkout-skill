@@ -1,0 +1,27 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "economist.com",
+  "kind": "signup",
+  "hosts": ["economist.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password); all five selectors matched. After Create account the page went to the Economist home page with no log-in link and no code or challenge; a fresh sign-in with the same credentials was accepted, and The Economist's welcome mail (\"Your curiosity has a new home\") arrived at the signup address about 13 minutes later.",
+  "gotchas": [
+    "Field ids are generated (input-10); the name attributes are stable, which is what these selectors use.",
+    "The password must be at least 8 characters.",
+    "The form also requires a job title and an industry; they are the account owner's to supply.",
+    "A free account; reading beyond the free allowance is a paid subscription, which is not part of this signup.",
+    "Job title and industry are autocomplete fields: typing opens a list, and an option has to be picked from it (for example Analyst; an industry beginning Media).",
+    "The offers checkbox is unticked by default.",
+    "The welcome mail can take over ten minutes to arrive; the account is usable at once."
+  ],
+  "overrides": {
+    "email": "input[name=\"emailAddress\"]",
+    "firstName": "input[name=\"firstname\"]",
+    "lastName": "input[name=\"lastname\"]",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://myaccount.economist.com/s/login/SelfRegister"
+}

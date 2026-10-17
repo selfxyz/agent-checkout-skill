@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "economist.com",
+  "kind": "merchant",
+  "hosts": ["economist.com", "subscribenow.economist.com", "myaccount.economist.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://subscribenow.economist.com/",
+  "gotchas": [
+    "A digital subscription, so no shipping. subscribenow.economist.com lists plans (US region pre-selected, Premium Annual pre-checked); \"Continue to payment\" opens a three-step checkout: Account, Payment, Review.",
+    "A consent dialog (iframe[id^=\"sp_message_iframe\"]) covers the page and takes clicks: press Enter on its Continue button inside that frame. On www.economist.com/subscribe it blocks the plan links; open subscribenow.economist.com directly.",
+    "Account step asks for an email first (\"we'll create an account for you if you don't already have one\"). An email that already has an account shows a password field next: fill it and press Enter. No code was asked. reCAPTCHA (invisible) is on the page.",
+    "Payment: click the credit/debit card option to reveal a Zuora hosted iframe (iframe[src*=\"zuora\"]). Card holder name, expiry month and year are <select>s (month as \"06\", year \"2030\"), then number and security code. Fill name and expiry first, then number and CVC back to back.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: fields filled, no error in the Zuora frame. Stopped before Review/subscribe.",
+    "2026-10-09 (staging proxy, local egress): signed in first at myaccount.economist.com/s/login/ (input[name=\"username\"] takes the email, input[type=\"password\"], Enter submits); signed in, \"Continue to payment\" went straight to Payment, skipping the Account step. The consent dialog's button was button[title*=\"Accept\"] in that frame this time. The card option is button:has-text(\"Card\"); name, expiry selects (kind select, \"08\"/\"2030\"), number and security code filled with the test card (card_fields_verified), no error in the frame. Stopped before Review."
+  ],
+  "overrides": {
+    "accountEmail": "input[type=\"email\"]",
+    "cardFrame": "iframe[src*=\"zuora\" i]",
+    "cardNumber": "#input-creditCardNumber",
+    "cardNumberFrame": "iframe[src*=\"zuora\" i]",
+    "continueToPayment": "button:has-text(\"Continue to payment\")",
+    "cvv": "#input-cardSecurityCode",
+    "cvvFrame": "iframe[src*=\"zuora\" i]",
+    "expiryMonth": "select#input-creditCardExpirationMonth",
+    "expiryMonthFrame": "iframe[src*=\"zuora\" i]",
+    "expiryYear": "select#input-creditCardExpirationYear",
+    "expiryYearFrame": "iframe[src*=\"zuora\" i]",
+    "name": "#input-creditCardHolderName",
+    "nameFrame": "iframe[src*=\"zuora\" i]",
+    "payWithCard": "button:has-text(\"Card\")"
+  },
+  "route": [
+    {
+      "host": "subscribenow.economist.com",
+      "url": "https://subscribenow.economist.com/"
+    },
+    {
+      "action": "click",
+      "host": "subscribenow.economist.com",
+      "selector": "button:has-text(\"Continue to payment\") >> visible=true"
+    },
+    {
+      "action": "click",
+      "host": "subscribenow.economist.com",
+      "selector": "button:has-text(\"Card\")"
+    },
+    {
+      "action": "wait",
+      "host": "subscribenow.economist.com",
+      "selector": "iframe[src*=\"zuora\" i]"
+    }
+  ]
+}

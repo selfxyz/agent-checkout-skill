@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "squareup.com",
+  "kind": "signup",
+  "hosts": ["squareup.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Square's /signup, 'Enter your email' and 'Create a password' above a Continue button. Nothing was typed or submitted.",
+  "gotchas": [
+    "The page adds a country_code to its own URL from the visitor's location; the country decides which Square products the account gets.",
+    "The submit is a Continue button with no type attribute and no stable id; press the button labelled Continue.",
+    "This is a Square seller account; later screens ask about the business."
+  ],
+  "overrides": {
+    "email": "#email",
+    "password": "#password"
+  },
+  "signupUrl": "https://app.squareup.com/signup"
+}

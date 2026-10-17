@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "snapfish.com",
+  "kind": "signup",
+  "hosts": ["snapfish.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-29",
+  "evidence": "2026-09-29: real signup through the Agent Vault proxy using this recipe (MCP session, vault-minted password), with submit corrected to the visible Create Account control. No code or challenge after submit; the page showed a signed-in header (no Sign in/Join), and \"Welcome to Snapfish\" arrived at the signup address within a minute.",
+  "gotchas": [
+    "input[type=\"submit\"] is present but hidden; the visible Create Account control is a link styled as a button, which is what the recipe's submit now names.",
+    "On 2026-09-29, with the names filled first, the email field was emptied by the page on each later fill; on a freshly loaded page, filling email and password first and the names after held.",
+    "The mobile number field is optional.",
+    "The page states new users will receive offers and promotions by email and mail."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-29, see evidence.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstname",
+    "lastName": "#lastname",
+    "password": "#password",
+    "submit": "a:has-text(\"Create Account\")"
+  },
+  "signupUrl": "https://www.snapfish.com/signup",
+  "stepped": true
+}

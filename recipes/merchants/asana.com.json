@@ -1,0 +1,62 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "asana.com",
+  "kind": "merchant",
+  "hosts": ["asana.com", "app.asana.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://asana.com/pricing",
+  "gotchas": [
+    "Sign-in at app.asana.com/-/login is email-first: input[type=email] then Enter, then input[type=password] then Enter. No new-device code and no reCAPTCHA were asked on 2026-10-11.",
+    "Onboarding is driven by [role=button] divs, not <button>s: Continue, Back and 'Go to Asana' are all [role=button]. The layout step's radios are filled by clicking their <label>; Continue is aria-disabled until then.",
+    "The workspace starts on a trial ('days left'); the sidebar's 'Add billing info' [role=button] opens the plan picker. Each plan has a Select [role=button]; the one containing 'Starter' (nth=0) opens a Stripe Payment Element.",
+    "Card number, expiry and CVC are all in the first iframe whose title contains 'Secure' (autocomplete cc-number / cc-exp / cc-csc). Fill expiry first, then number, then CVC as the very next field. The submit is [role=button] 'Confirm'.",
+    "Verified 2026-10-11 through the staging proxy with the public test card under a verification-only key: expiry, number and CVC filled (card_fields_verified). Stopped before Confirm."
+  ],
+  "overrides": {
+    "cardExpiry": "input[autocomplete=cc-exp]",
+    "cardExpiryFrame": "iframe[title*=\"Secure\" i] >> nth=0",
+    "cardNumber": "input[autocomplete=cc-number]",
+    "cardNumberFrame": "iframe[title*=\"Secure\" i] >> nth=0",
+    "cvv": "input[autocomplete=cc-csc]",
+    "cvvFrame": "iframe[title*=\"Secure\" i] >> nth=0",
+    "placeOrder": "[role=button]:has-text(\"Confirm\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "app.asana.com",
+      "url": "https://app.asana.com/-/login"
+    },
+    {
+      "action": "manual",
+      "host": "app.asana.com",
+      "note": "A new account lands on a short onboarding: a first step with one text input (what you're working on) whose Continue works with the field left empty, then a 'Let's…' layout step with three radio options (Continue stays aria-disabled until one is picked; click its label), then an 'Invite your team' step: leave the invite inputs empty and press 'Go to Asana'."
+    },
+    {
+      "action": "click",
+      "host": "app.asana.com",
+      "selector": "[role=button]:has-text(\"Add billing\")"
+    },
+    {
+      "action": "click",
+      "host": "app.asana.com",
+      "selector": "[role=button]:has-text(\"Select\"):has-text(\"Starter\") >> nth=0"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "app.asana.com",
+        "url": "https://app.asana.com/-/login"
+      }
+    ],
+    "fields": {
+      "email": "input[type=email]",
+      "password": "input[type=password]",
+      "continue": "input[type=email]",
+      "submit": "input[type=password]"
+    },
+    "signedIn": "[role=button]:has-text(\"Add billing\")"
+  }
+}

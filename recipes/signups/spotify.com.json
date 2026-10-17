@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "spotify.com",
+  "kind": "signup",
+  "hosts": ["spotify.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: heading \"Sign up to start listening\", Next beside social sign-up. Nothing was typed or submitted. 2026-10-01: driven again through the Agent Vault proxy using this recipe (vault-minted password, test-inbox address), with browser egress through the owner's tunnel on a US network (a commercial VPN address). The email step needed a second Enter; the password step (#new-password) advanced only after a keystroke in the field and Enter; the profile step took #displayName, #year, select#month, #day and a gender radio; the last step had an optional checkbox (left as it was) and a Sign up button. After Sign up, the [data-testid=\"error-banner\"] appeared with text mentioning VPN/proxy/device, and the form stayed. No account was created.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email belongs to the account owner: hand it off.",
+    "The email input is id=\"username\" name=\"username\" type=\"email\"; after the first step it stays in the DOM but goes HIDDEN, so a count still reports 1 while a fill waits out its timeout.",
+    "The profile step has three visible text inputs — date of birth, gender, and a REQUIRED #displayName. Missing displayName fails validation.",
+    "The email step can need two submits, and a \"Next\" button click does not always advance it; Enter on the email input does.",
+    "Earlier attempts completed the form and were REJECTED server-side with a banner at [data-testid=\"error-banner\"] citing VPN/proxy/device — reproduced from a cloud IP, a commercial VPN and a residential IP. observe_page does not flag the banner; read it with count right after submitting. No account was created.",
+    "The password step's Next did not advance after the fill alone; a keystroke in #new-password (End) and Enter did."
+  ],
+  "overrides": {
+    "email": "#username"
+  },
+  "signupUrl": "https://www.spotify.com/signup",
+  "stepped": true
+}

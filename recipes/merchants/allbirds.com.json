@@ -1,0 +1,74 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "allbirds.com",
+  "kind": "merchant",
+  "hosts": ["allbirds.com"],
+  "platform": "shopify",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "2026-10-16: guest checkout reached from the product page; contact, name, street, city and postal code filled from vault tokens, then expiry, name on card, card number and CVV filled into the four card-fields iframes (proxy reported 4 of 4 filled, test card). Pay (#checkout-pay-button) was clicked once and stayed on the page with 'Select a state / province': the vault address is outside the US and the checkout ships to the US only, so no payment request was made and no decline was seen.",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://www.allbirds.com/products/anytime-crew-sock-natural-black",
+  "gotchas": [
+    "Custom domain, not *.myshopify.com — the shopify platform recipe's own notes flag a detect regression on custom-domain stores; on this run detect worked fine (script[src*=cdn.shopify.com] etc. matched, cart and checkout reached normally).",
+    "Add to cart via the /cart/<variantId>:1 permalink, then /cart, then the visible checkout button (button[name=\"checkout\"] / #cart-drawer-checkout-button — which one renders varies by entry path). A direct goto to /checkout can 302/abort depending on cart state; going through the cart page's own button is the reliable path.",
+    "2026-10-16: /cart redirects to the home page with the cart drawer open; the drawer shows only express buttons (Amazon Pay, Google Pay, PayPal, Shop Pay), #cart-drawer-checkout-button is attached but hidden and button[name=\"checkout\"] is absent. A direct goto to /checkout with a non-empty cart opened the one-page checkout without a redirect.",
+    "Card surface is the split card-fields iframes (iframe[name*=\"card-fields-number\"] / -expiry / -verification / -name); all four mounted and the name/expiry frames accepted pressSequentially. Number/CVV were not attempted with a real value in this run (see note).",
+    "2026-10-16: all four card frames filled from vault tokens in the order expiry, name, number, CVV (input[name=expiry], input[name=name], input[name=number], input[name=verification_value]).",
+    "2026-10-16: a 'Where are we shipping to?' geofence modal covers the store on first visit from outside the US and intercepts every click until a country button is picked; the United States button is [id$=\"__geofencing\"] button:has(img[alt=\"United States\"]). Other countries' buttons lead to separate regional storefronts.",
+    "2026-10-16: /products/mens-wool-runner-2 now lands on the Men's Shoes collection; socks ($14–$18) are the cheapest items, at /collections/socks.",
+    "2026-10-16: the checkout's Country/Region select (select[name=\"countryCode\"]) offers United States only. State (select[name=\"zone\"]) is required: Pay with no state stays on the page with select[name=\"zone\"][aria-invalid=\"true\"] and the message 'Select a state / province', before any payment request. An address outside the US cannot complete this checkout.",
+    "2026-10-16: each shipping field name (firstName, lastName, address1, address2, city, postalCode) matches two inputs, the second a hidden autofill twin; input[name=…][aria-required] (and input[name=\"address1\"][role=\"combobox\"]) select the visible one.",
+    "2026-10-16: sign-in at /account/login is Shopify customer accounts: an Email box and a Continue button, then an emailed one-time code. There is no password field, so a vault login's password token has no field to fill there. Guest checkout needs no account.",
+    "2026-10-16: the 'Mobile phone (optional)' box under 'Remember me' at checkout creates a Shop account when filled; it is not required for the order."
+  ],
+  "overrides": {
+    "address1": "input[name=\"address1\"][role=\"combobox\"]",
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardExpiryFrame": "iframe[name*=\"card-fields-expiry\"]",
+    "cardFrame": "iframe[name*=\"card-fields-number\"]",
+    "cardName": "input[name=\"name\"]",
+    "cardNameFrame": "iframe[name*=\"card-fields-name\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "city": "input[name=\"city\"][aria-required]",
+    "country": "select[name=\"countryCode\"]",
+    "cvv": "input[name=\"verification_value\"]",
+    "cvvFrame": "iframe[name*=\"card-fields-verification\"]",
+    "email": "#email",
+    "firstName": "input[name=\"firstName\"][aria-required]",
+    "lastName": "input[name=\"lastName\"][aria-required]",
+    "placeOrder": "#checkout-pay-button",
+    "postalCode": "input[name=\"postalCode\"][aria-required]",
+    "state": "select[name=\"zone\"]"
+  },
+  "route": [
+    {
+      "host": "www.allbirds.com",
+      "url": "https://www.allbirds.com/products/anytime-crew-sock-natural-black"
+    },
+    {
+      "action": "click",
+      "host": "www.allbirds.com",
+      "selector": "[id$=\"__geofencing\"] button:has(img[alt=\"United States\"])"
+    },
+    {
+      "action": "click",
+      "host": "www.allbirds.com",
+      "selector": "button[aria-label^=\"Select size M\"]"
+    },
+    {
+      "action": "click",
+      "host": "www.allbirds.com",
+      "selector": "aside button:has-text(\"Add to Cart\")"
+    },
+    {
+      "host": "www.allbirds.com",
+      "url": "https://www.allbirds.com/checkout"
+    },
+    {
+      "action": "wait",
+      "host": "www.allbirds.com",
+      "selector": "iframe[name*=\"card-fields-number\"]"
+    }
+  ]
+}

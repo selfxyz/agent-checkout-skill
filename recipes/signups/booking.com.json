@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "booking.com",
+  "kind": "signup",
+  "hosts": ["booking.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: account.booking.com/sign-in, headed 'Sign in or create an account', with 'Continue with email'. Nothing was typed or submitted.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off."
+  ],
+  "overrides": {
+    "email": "#username",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://account.booking.com/sign-in",
+  "stepped": true
+}

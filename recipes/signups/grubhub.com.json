@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "grubhub.com",
+  "kind": "signup",
+  "hosts": ["grubhub.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); not driven.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "password": "#password",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.grubhub.com/create-account"
+}

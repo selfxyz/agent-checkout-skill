@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "adidas.com",
+  "kind": "signup",
+  "hosts": ["adidas.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: adidas.com/us/account-login, headed 'Join our adiClub & get 15% off', an email box and Continue (a two-step form). Nothing was typed or submitted. 2026-10-01: driven through the Agent Vault proxy using this recipe (test-inbox address), with browser egress through the owner's tunnel on a US network. The page is 'Log in or sign up' with #username, a pre-ticked 'Keep me logged in' checkbox and #two-step-form-button (Continue, disabled until the email is filled; clicking it joins adiClub per the text beside it). Continue was answered, among the site's own requests, by a POST with status 428 and the page stayed on the email step with no password or code step, no visible error and no challenge (detect_challenge); Enter on #username changed nothing. A fresh load in a new session gave the same 428 and the same stall. No account was created, so this is not verified.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "adidas redirects to a country store by the visitor's location (adidas.co.in from India); the /us/ path is the US store.",
+    "On 2026-10-01, through the Agent Vault proxy (US egress), Continue on the email step drew a 428 from the site and the page did not advance, with no error or challenge shown. Treat a stuck email step with a 428 as a likely bot refusal, not a selector problem."
+  ],
+  "overrides": {
+    "email": "#username",
+    "submit": "#two-step-form-button"
+  },
+  "signupUrl": "https://www.adidas.com/us/account-login",
+  "stepped": true
+}

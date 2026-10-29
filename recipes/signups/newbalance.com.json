@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "newbalance.com",
+  "kind": "signup",
+  "hosts": ["newbalance.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: New Balance's /login/?action=register, the registration form (first and last name, email, password, optional mobile number). Nothing was typed or submitted.",
+  "gotchas": [
+    "The same page also carries the sign-in form (#login-form-loginID); use the registration-form fields.",
+    "The submit button was not read; it sits under the registration form."
+  ],
+  "overrides": {
+    "email": "#registration-form-email",
+    "firstName": "#registration-form-fname",
+    "lastName": "#registration-form-lname",
+    "password": "#registration-form-password"
+  },
+  "signupUrl": "https://www.newbalance.com/login/?action=register"
+}

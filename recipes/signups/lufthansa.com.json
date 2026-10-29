@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "lufthansa.com",
+  "kind": "signup",
+  "hosts": ["lufthansa.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Signup is a Travel ID / Miles & More enrolment that lives OFF this host, at https://lufthansa.miles-and-more.com/web/row/en/enrolment.html . From lufthansa.com: footer 'Travel ID Account' -> /us/en/travel-id -> 'Register now' (opens a new tab). /us/en/registration renders an empty page, and the header 'Login' link did nothing visible in testing.",
+    "A OneTrust cookie wall covers lufthansa.com and intercepts clicks: click #onetrust-reject-all-handler first. The first homepage load in one proxy session was a Cloudflare 'Performing security verification' interstitial (challenges.cloudflare.com, detectChallenge = captcha) that did not clear; a fresh session loaded normally. An invisible Turnstile frame is present on the homepage.",
+    "Five steps: Registration (access details) -> Miles & More -> Personal data -> Communication -> Confirmation. Step 1 is only 'Travel ID (email address)' (input[name=\"email\"]) and a password (input[name=\"password\"], autocomplete new-password), then Continue. Later steps were not observed.",
+    "There are 4 'Continue' buttons and 12 submit buttons in the DOM (one per hidden step); only one is visible, so target button[type=\"submit\"]:visible (or role=button[name=\"Continue\"]). Two input[type=\"email\"] exist, so use the name."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]:visible"
+  },
+  "signupUrl": "https://lufthansa.miles-and-more.com/web/row/en/enrolment.html",
+  "stepped": true
+}

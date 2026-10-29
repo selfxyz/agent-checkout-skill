@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "cathaypacific.com",
+  "kind": "signup",
+  "hosts": ["cathaypacific.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: 'Sign up as a Cathay member', whose only field is 'Enter your mobile phone number' (a country code and a number) above Sign up now. Nothing was typed or submitted.",
+  "deadEnd": {
+    "type": "phone-required",
+    "details": "The membership sign-up asks for a mobile phone number and nothing else; the account is keyed to that number, which the account owner must supply and verify."
+  },
+  "gotchas": ["The phone number and any code sent to it are the account owner's; hand them off."],
+  "overrides": {
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.cathaypacific.com/cx/en_US/membership/sign-up.html"
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "aa.com",
+  "kind": "signup",
+  "hosts": ["aa.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "americanairlines.com redirects to aa.com. From a non-US connection the site serves a localized page; add ?locale=en_US.",
+    "A OneTrust consent wall covers the page on first load and intercepts clicks; dismiss it first.",
+    "One page: name, date of birth, gender (combobox), address (country/state comboboxes), email + confirm, phone (type and calling-code comboboxes), then 'Create account'. No password field on this form; it was not submitted, so how the password is set was not observed.",
+    "Date of birth: type the digits into input[placeholder*=\"MM\"]. Gender: selectOption by label timed out; selecting by index worked.",
+    "Type the email and confirmEmail key by key and Tab out; the + address is accepted.",
+    "Submitted 2026-10-02: the form is replaced by a welcome / check-your-email screen, and AA emails the account owner a temporary password. The vault-minted password is not the account's password until the owner signs in with the emailed one and changes it.",
+    "passwordSetBySite: AA emails a temporary password after signup; the vault-minted password is never set on the account, so sign-in with tokens.password fails ('Check your login information and try again.') until the owner sets the emailed password on the login."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "firstName": "input[name=\"firstName\"]",
+    "lastName": "input[name=\"lastName\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.aa.com/loyalty/enrollment/enroll"
+}

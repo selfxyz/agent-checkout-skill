@@ -2,10 +2,58 @@
   "$schema": "../../schema/recipe.schema.json",
   "id": "thesoundhorde.lemonsqueezy.com",
   "kind": "merchant",
-  "hosts": [
-    "thesoundhorde.lemonsqueezy.com"
-  ],
+  "hosts": ["thesoundhorde.lemonsqueezy.com"],
   "platform": "lemonsqueezy",
   "status": "unverified",
-  "notes": "Pay-what-you-want from $1; a Cloudflare Turnstile has been observed on checkout — if it fires, classify DEAD-END and hand off."
+  "notes": "Pay-what-you-want from $1; a Cloudflare Turnstile has been observed on checkout — if it fires, classify DEAD-END and hand off.",
+  "lastVerifiedAt": "2026-10-16",
+  "cardSurface": "stripe-payment-element",
+  "cvvTarget": "payment-frame:input[name=cvc]",
+  "exampleProductUrl": "https://thesoundhorde.lemonsqueezy.com/",
+  "gotchas": [
+    "2026-10-16: The store page lists three products; two are pay-what-you-want ($0.00+). Each product link opens its checkout on /checkout/buy/<uuid> on the same host; all inputs render disabled for a few seconds while it loads.",
+    "2026-10-16: At $0 the page is a free-order form ('Want this for free?', email + 'Submit order'). The card form only mounts after a non-zero price is entered in input[inputmode=\"decimal\"] and the field loses focus.",
+    "2026-10-16: Billing fields sit on the main page, not inside the Stripe frame: cardholder name #name, country select#country (United States by default). For the United States the form shows input[placeholder=\"Address line 1\"], a state search combobox, input#city and input[placeholder=\"ZIP\"]; for France it shows only input[placeholder=\"Postal code\"]. Filled this run: name from the full_name token, country and postal code from the address tokens.",
+    "2026-10-16: Email is a Stripe Link Authentication Element on js.stripe.com: iframe[src*=\"elements-inner-authentication\"] holds input[name=\"email\"]. An identity-token fill there is checked against js.stripe.com rather than the store host, so a destination approval scoped to the store does not cover it; this run the fill waited for a new-site approval that expired.",
+    "2026-10-16: Card fields are a Stripe Payment Element in iframe[title=\"Secure payment input frame\"]: input[name=number], input[name=expiry] (MM/YY), input[name=cvc]; Card is the selected tab (others: Cash App Pay, Alipay). An optional Link 'save my information' block with mobile number and full name sits under the card fields. The frame reads 'Live mode. Test data not accepted.'",
+    "2026-10-16: The Pay button reads 'Pay $<total>' and becomes enabled with the card, name and billing fields filled even while the email field is empty. A click in that state showed no on-page decline, error or confirmation within 20 seconds; the total shows in the summary as 'Total $2.00' for a $2 price.",
+    "2026-10-16: No Cloudflare Turnstile or other challenge was detected on the store page or the checkout. Stripe loads an invisible hCaptcha frame (name hcaptcha-invisible) on the checkout; no challenge surfaced from it."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardFrame": "iframe[title=\"Secure payment input frame\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardholderName": "#name",
+    "country": "select#country",
+    "customAmount": "input[inputmode=\"decimal\"]",
+    "cvv": "input[name=\"cvc\"]",
+    "placeOrder": "button:has-text(\"Pay\")",
+    "zip": "input[placeholder=\"Postal code\"]"
+  },
+  "route": [
+    {
+      "host": "thesoundhorde.lemonsqueezy.com",
+      "url": "https://thesoundhorde.lemonsqueezy.com/"
+    },
+    {
+      "action": "click",
+      "host": "thesoundhorde.lemonsqueezy.com",
+      "selector": "a:has-text(\"Intro Freebie\")"
+    },
+    {
+      "action": "wait",
+      "host": "thesoundhorde.lemonsqueezy.com",
+      "selector": "input[inputmode=\"decimal\"]:not([disabled])"
+    },
+    {
+      "action": "manual",
+      "host": "thesoundhorde.lemonsqueezy.com",
+      "note": "The product is pay-what-you-want ($0.00+). A non-zero price typed into input[inputmode=\"decimal\"] followed by Tab shows 'Processing...' and then mounts the paid form (Pay by Card / Pay with PayPal tabs, Stripe frames, billing fields)."
+    },
+    {
+      "action": "wait",
+      "host": "thesoundhorde.lemonsqueezy.com",
+      "selector": "select#country"
+    }
+  ]
 }

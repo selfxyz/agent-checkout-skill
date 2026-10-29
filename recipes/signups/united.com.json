@@ -1,0 +1,22 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "united.com",
+  "kind": "signup",
+  "hosts": ["united.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "No signup link on the homepage itself: open the Sign in flyout and follow 'Create a MileagePlus account'. Guessed /member/enrollment and /fly/mileageplus/enroll.html URLs are 404s.",
+    "Stepped form. Step 1 ('Tell us about yourself') asks for email, phone (country code combobox + number), first/last name, date of birth (Month combobox, Day and Year textboxes) and Gender (combobox), then 'Continue'. No password field on step 1; the later steps were not driven.",
+    "Marketing, SMS and flight-update checkboxes are pre-checked.",
+    "'Create a MileagePlus account' in the Sign in flyout opens a NEW TAB (waitForPopup).",
+    "Step 1 'Tell us about yourself': Email address*, Country/region code* combobox + Phone number* (required), Title, First name*, Middle, Last name*, Suffix, DOB Month/Day/Year, Gender* combobox, then Continue. The plain address (no +tag) is accepted.",
+    "Marketing email, SMS offers and flight-update checkboxes are pre-checked."
+  ],
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "phone": "role=textbox[name=\"Phone number\"]"
+  }
+}

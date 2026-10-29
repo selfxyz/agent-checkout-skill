@@ -1,0 +1,15 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dominos.com",
+  "kind": "merchant",
+  "hosts": ["dominos.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.dominos.com/en/",
+  "gotchas": [
+    "Homepage shows Carryout/Delivery mode buttons before any address/store form; press \"Delivery\" first.",
+    "After choosing Delivery, an address form appears with a street-address input matched by input[name*=\"treet\" i], input[id*=\"treet\" i]; city/zip/state inputs did not match the generic selectors tried (input[id*=\"ity\" i] / input[id*=\"ostal\" i] / select[id*=\"tate\" i]) and need per-field recon.",
+    "2026-10-16: www.dominos.com geo-redirects non-US egress to www.dominos.ch (Swiss storefront, CHF prices, 'Domino's Pizza Switzerland' footer); a login registered for dominos.com is then refused by its website lock. Run this recipe only from a US egress and confirm the page is not on dominos.ch before signing in."
+  ],
+  "preconditions": ["delivery_location"]
+}

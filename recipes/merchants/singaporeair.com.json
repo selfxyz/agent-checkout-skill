@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "singaporeair.com",
+  "kind": "merchant",
+  "hosts": ["singaporeair.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "captcha",
+    "details": "Submitting the flight search from the homepage lands on an 'Access Blocked - we've detected unusual browsing activity from your network ... complete the CAPTCHA below' page (in an iframe) instead of the results. Not solved."
+  },
+  "exampleProductUrl": "https://www.singaporeair.com/en_UK/us/home",
+  "gotchas": [
+    "Homepage https://www.singaporeair.com/en_UK/us/home loads cleanly; accept the cookie banner ('Accept'). The calendar follows the browser egress locale (German month names from a European egress).",
+    "Search form: origin #flightOrigin1 (name=origin) and destination input[name=\"destination\"] are comboboxes - type a city name and click the option whose name ends with the IATA code (e.g. 'Singapore, Singapore Changi SIN', 'Kuala Lumpur, Malaysia Kuala Lumpur Intl KUL').",
+    "Depart date #departDate1 is readonly and opens a calendar; the 'One-way' checkbox inside it is covered by its label, click label[for=\"oneway_id-default\"]. Day cells are li items in ul.calendar_days whose first text is the day number (the price sits in a child); then DONE, then Search.",
+    "After Search a 'Try our new booking experience' modal (Try Now / Not Now) can appear."
+  ]
+}

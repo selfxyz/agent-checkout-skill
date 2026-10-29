@@ -1,0 +1,97 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "headspace.com",
+  "kind": "merchant",
+  "hosts": ["headspace.com", "checkout.headspace.com", "auth.headspace.com"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "Run on 2026-10-16 through the proxy, in two fresh sessions. Session 1 (variant A) went from checkout.headspace.com/checkout through the quiz, the plan picker and Continue to the Auth0 Create-account page on auth.headspace.com, then 'Log in', the identifier-first sign-in, and back to the payment step. There the cardholder name, country, state, postcode, expiry selects, card number and CVV were filled inside the Zuora hosted payment frame #z_hppm_iframe. The proxy answered with a verification-only test card, and no field showed aria-invalid afterwards. Session 2 (variant B) proved the inline sign-in on checkout.headspace.com: after submit, #z_hppm_iframe appeared and the card number and CVV inputs counted visible. Pay ('Complete') was NOT clicked: every plan is a free trial, $0 today, and the card is charged when the trial ends.",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "#input-cardSecurityCode",
+  "gotchas": [
+    "2026-10-16: Every plan (Annual, Monthly) is a free trial, $0 today, with the card charged when the trial ends. 'Complete' starts a subscription that bills later, so it is the account owner's to click; this recipe does not click it and no decline was observed.",
+    "2026-10-16: /checkout is A/B tested after Skip. Variant B shows the plan picker with an inline Sign up form, and 'Log in' swaps in the inline login (#email-input, #password-input). Variant A shows the plan picker with a single Continue button, which leads to an Auth0 'Create your account' page on auth.headspace.com; its 'Log in' link goes to an identifier-first form: email input[name=\"username\"][type=\"email\"], tick input[type=\"checkbox\"], button[type=\"submit\"], then input[name=\"password\"] and button[type=\"submit\"]. That sign-in returns to /checkout at the payment step.",
+    "2026-10-16: Tick the Terms checkbox before submitting either login form. Inline: input[type=\"checkbox\"][aria-label=\"Terms and Conditions\"]. Auth0: the page's only input[type=\"checkbox\"].",
+    "2026-10-16: An exit-intent 'Get 40% off' dialog can open over the quiz and swallow clicks. Press Escape on [role=\"dialog\"] button to close it, then click again.",
+    "2026-10-16: Fill the Zuora billing fields (cardholder name from full_name, country select from the address country token, state, postcode) and the expiry selects ('01'-style month, four-digit year) in calls before the card number. Then fill #input-creditCardNumber and #input-cardSecurityCode back to back, all with frame #z_hppm_iframe.",
+    "2026-10-16: The proxy reports a reCAPTCHA (recaptcha.net) on the payment page, apparently Zuora's invisible check. It did not block filling; whether it challenges at 'Complete' is unknown.",
+    "2026-10-16: In variant A the plan buttons and Continue had no selector this run could prove (button:has-text(\"Monthly plan\") never resolved). The default plan is Annual."
+  ],
+  "overrides": {
+    "billingCountry": "#input-creditCardCountry",
+    "billingState": "#input-creditCardState",
+    "billingZip": "#input-creditCardPostalCode",
+    "cardExpiryMonth": "#input-creditCardExpirationMonth",
+    "cardExpiryYear": "#input-creditCardExpirationYear",
+    "cardFrame": "#z_hppm_iframe",
+    "cardNumber": "#input-creditCardNumber",
+    "cardholderName": "#input-creditCardHolderName",
+    "cvv": "#input-cardSecurityCode",
+    "placeOrder": "button[data-testid=\"button\"]:has-text(\"Complete\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "checkout.headspace.com",
+      "url": "https://checkout.headspace.com/checkout"
+    },
+    {
+      "action": "click",
+      "host": "checkout.headspace.com",
+      "selector": "#onetrust-reject-all-handler"
+    },
+    {
+      "action": "click",
+      "host": "checkout.headspace.com",
+      "selector": "button:has-text(\"Skip\")"
+    },
+    {
+      "action": "click",
+      "host": "checkout.headspace.com",
+      "selector": "a:has-text(\"Log in\")"
+    },
+    {
+      "action": "manual",
+      "host": "checkout.headspace.com",
+      "note": "Sign in here with signIn.fields: tick input[type=\"checkbox\"][aria-label=\"Terms and Conditions\"] first, then fill the login's email and password tokens and click Log in."
+    },
+    {
+      "action": "wait",
+      "host": "checkout.headspace.com",
+      "note": "The payment step: a Zuora hosted payment page iframe on the same page.",
+      "selector": "#z_hppm_iframe"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "checkout.headspace.com",
+        "url": "https://checkout.headspace.com/checkout"
+      },
+      {
+        "action": "click",
+        "host": "checkout.headspace.com",
+        "selector": "#onetrust-reject-all-handler"
+      },
+      {
+        "action": "click",
+        "host": "checkout.headspace.com",
+        "note": "Skips the 'Which goals should we work toward together?' quiz.",
+        "selector": "button:has-text(\"Skip\")"
+      },
+      {
+        "action": "click",
+        "host": "checkout.headspace.com",
+        "note": "Variant B: the plan page carries an inline Sign up form; this link swaps it for the inline Log in form.",
+        "selector": "a:has-text(\"Log in\")"
+      }
+    ],
+    "fields": {
+      "email": "#email-input",
+      "password": "#password-input",
+      "submit": "button:has-text(\"Log in\")"
+    },
+    "signedIn": "#z_hppm_iframe"
+  }
+}

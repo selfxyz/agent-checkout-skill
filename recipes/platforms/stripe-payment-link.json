@@ -7,10 +7,7 @@
   "cardSurface": "direct-inputs",
   "cvvTarget": "#cardCvc",
   "detect": {
-    "hosts": [
-      "buy.stripe.com",
-      "donate.stripe.com"
-    ]
+    "hosts": ["buy.stripe.com", "donate.stripe.com"]
   },
   "notes": "Card fill proven in the 2026-06 campaign; no receipt-verified purchase yet.",
   "selectors": {
@@ -27,7 +24,7 @@
     "addToCart": "None — the link IS the checkout. Donation/pay-what-you-want links show a custom-amount box (input[inputmode=decimal]); fill the explicit amount first.",
     "contact": "#email.",
     "outcome": "'Payment to … received' / 'Thank you'.",
-    "payment": "Direct inputs on Stripe's domain, no iframe: #cardNumber, #cardExpiry ('06 / 31'), #billingName, #billingPostalCode. Fill via pressSequentially; card-number token, then the CVV token into #cardCvc immediately after.",
+    "payment": "Direct inputs on Stripe's domain, no iframe. Fill #billingName, #billingPostalCode and #cardExpiry ('06 / 31') FIRST and let any total recompute settle — filling #cardNumber is when the order total is read and checked. Then #cardNumber, then the CVV token into #cardCvc immediately after the number, with nothing at all in between. Fill via pressSequentially.",
     "placeOrder": "The 'Pay' .SubmitButton, once."
   }
 }

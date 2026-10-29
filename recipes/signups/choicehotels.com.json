@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "choicehotels.com",
+  "kind": "signup",
+  "hosts": ["choicehotels.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: 'Join Choice Privileges Rewards', a loyalty-account enrollment with a Join Now button. Nothing was typed or submitted. 2026-10-01: driven through the Agent Vault proxy using this recipe, with browser egress through the owner's tunnel on a US network. The fields filled; the identity's phone number drew a field error, which cleared when a number was typed in the NNN-NNN-NNNN shape. Join Now was pressed three times (click, then Enter) and never advanced: no password step, no welcome page and no challenge, and get_session_outcome timed out. Inconclusive, so this is not verified.",
+  "gotchas": [
+    "No password field on this form; how the password is set after Join Now was not observed — look at the next screen before filling it.",
+    "The form also requires country, phone number, street address, city, state and postal code, which no field in this recipe covers; they are the account owner's to supply.",
+    "Fields: a country select (United States by default), first name (#firstName), last name (#lastName), email (#email), phone (input[type=\"tel\"]), street address (#address1), city (#city), a state select (select:has(option:text-is(\"Texas\")) matched it) and postal code (#postalCode), then Join Now (button:has-text(\"Join Now\")).",
+    "On 2026-10-01 the identity's phone number drew a field error (span[class*=error]), which cleared when a number was typed in the NNN-NNN-NNNN shape.",
+    "On 2026-10-01, from a US egress, Join Now (click, then Enter, three times) never advanced: no password step, no welcome page, no challenge, and no error message the probes could locate."
+  ],
+  "overrides": {
+    "email": "#email",
+    "firstName": "#firstName",
+    "lastName": "#lastName",
+    "submit": "button:has-text(\"Join Now\")"
+  },
+  "signupUrl": "https://www.choicehotels.com/choice-privileges/account/enroll"
+}

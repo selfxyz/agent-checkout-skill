@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "colourpop.com",
+  "kind": "signup",
+  "hosts": ["colourpop.com"],
+  "platform": "shopify-customer-accounts",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "Signup run 2026-10-16: email filled with the login's email token, Continue pressed, a 6-digit code arrived by email and was typed into the code field; the sign-in form was gone afterwards and an orders link showed.",
+  "gotchas": [
+    "2026-10-16: passwordless; there is no password field, the emailed code is the only secret. A code sent by email belongs to the account owner: hand it off.",
+    "2026-10-16: the code input is input[autocomplete=\"one-time-code\"]; it appears right after Continue.",
+    "2026-10-16: leave the 'Email me with news and offers' checkbox alone; it is optional."
+  ],
+  "overrides": {
+    "email": "#customer-authentication-web-email",
+    "submit": "button[type=\"submit\"][aria-label=\"Continue\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://colourpop.com/account"
+}

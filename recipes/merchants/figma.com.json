@@ -1,0 +1,50 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "figma.com",
+  "kind": "merchant",
+  "hosts": ["figma.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.figma.com/files",
+  "gotchas": [
+    "Sign in at figma.com/login (Email + Password on one page, submit with Enter; no code on 2026-10-07). page.goto on figma.com can exceed 45 s at domcontentloaded although the document committed: wait for the field instead of re-navigating. Lands on /files/team/<id>/recents-and-sharing.",
+    "Signed in, the pricing page's 'Select Professional plan' only reloads pricing. The working route is in-app: sidebar card 'See what's included' (Your plan and usage) -> 'Starter hub' dialog -> its 'Upgrade' (bottom-left) -> 'Which plan and seats would you like?' dialog.",
+    "In that dialog the Professional Monthly/Annual toggle defaults to Annual; the 'Monthly' label is covered by its radio, so click input[type=radio][value=monthly]. Two buttons read 'Upgrade and choose seats': Professional is first (nth=0), Organization second.",
+    "Full page 'Who are you upgrading to a Professional plan?' ('Just me' preselected) -> 'Next: Seats and payment' -> 'Enter your payment details.' (breadcrumb Solo or team > Seats & payment information > Review). 1 Full seat, $20/mo monthly.",
+    "Card number, expiry and CVC are one Stripe frame (iframe title 'Secure payment input frame', input[name=number|expiry|cvc]). On the page: Name on payment method, Billing address, Apt (optional), Country select (first <select>, US default), City, State (second <select>, option values are codes like CA), Zip code. A select:has(option:text-is(...)) selector timed out; use 'select >> nth=1' with value CA.",
+    "'Next: Review' goes to a Review step that shows the total with taxes; the charge happens there, not on this page.",
+    "Verified 2026-10-07 through the proxy (US tunnel) with the public test card under a verification-only key: billing fields and expiry/number/CVC filled with no field error. Stopped before Next: Review.",
+    "2026-10-09: billing details moved into a Stripe Address Element iframe (iframe[title*=address i]: input[name=name], select[name=country], input[name=addressLine1|addressLine2|locality|postalCode]); the page-level Name/Zip/State fields above were not present. Card frame unchanged.",
+    "Once any vault token is on the page, the proxy refuses selectors that test [value=...], so input[type=radio][value=monthly] stops working mid-run; use label:has-text(\"Monthly\") or keep Annual (the card fields are the same).",
+    "A new account first goes through the onboarding dialog (see the signup recipe); open figma.com/files after it to reach the 'See what's included' card.",
+    "Re-verified 2026-10-09 (staging proxy, verification-only key): fresh sign-in with the vault login, onboarding, upgrade route, then number/expiry/CVC in the Stripe frame answered card_fields_verified. Stopped before Next: Review."
+  ],
+  "overrides": {
+    "billingZip": "input[placeholder=\"Zip code\"]",
+    "cardFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"Secure payment input\" i]",
+    "expiry": "input[name=\"expiry\"]",
+    "expiryFrame": "iframe[title*=\"Secure payment input\" i]",
+    "nameOnCard": "input[placeholder*=\"Name on payment\" i]",
+    "placeOrder": "[role=\"button\"]:has-text(\"Next: Review\"), a:has-text(\"Next: Review\"), button:has-text(\"Next: Review\")",
+    "planSelect": "button:visible:has-text(\"Upgrade and choose seats\") >> nth=0"
+  },
+  "preconditions": ["account_required"],
+  "signIn": {
+    "route": [
+      {
+        "host": "figma.com",
+        "url": "https://www.figma.com/login"
+      }
+    ],
+    "fields": {
+      "email": "input[type=email]",
+      "password": "input[type=password]",
+      "submit": "button:has-text(\"Log in\")"
+    },
+    "signedIn": "button:has-text(\"See what\")"
+  }
+}

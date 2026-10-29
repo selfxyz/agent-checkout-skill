@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "reebok.com",
+  "kind": "signup",
+  "hosts": ["reebok.com"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-09",
+  "evidence": "2026-10-09: real signup through the Agent Vault staging proxy (pre-approved login reebok.com, plain test-inbox address). /account/login redirected to account.reebok.com; the email token filled input[type=email]; Continue (aria-label) sent a code from support@reebok.com; the code, supplied by the account owner, signed in to the account page (Orders link present, get_session_outcome success). No captcha. A fresh session repeated the sign-in with a new code and reached the same signed-in page.",
+  "gotchas": [
+    "Shopify new customer accounts: passwordless. /account/login redirects to Shopify's hosted sign-in, which asks for an email and then emails a 6-digit code; there is no password, and the same flow both creates the account and signs in.",
+    "The sign-in page also has a 'Continue with Shop' button that opens shop.app in a NEW TAB; a bare button:has-text(\"Continue\") matches it first. Use button[aria-label=\"Continue\"] for the email step.",
+    "The code goes into a single input[autocomplete=\"one-time-code\"]; it signs in on fill, with no separate submit. It is valid 15 minutes and belongs to the account owner: it is supplied by the account owner.",
+    "Signed in shows the account page with an Orders link (a[href*=\"/orders\"]).",
+    "Reebok's hosted sign-in sits on account.reebok.com (a reebok.com subdomain), so fill_login with the reebok.com login's email token works there."
+  ],
+  "overrides": {
+    "email": "input[type=\"email\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.reebok.com/account/login",
+  "stepped": true
+}

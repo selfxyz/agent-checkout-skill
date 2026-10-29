@@ -1,0 +1,44 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "pusheen.com",
+  "kind": "merchant",
+  "hosts": ["pusheen.com"],
+  "platform": "shopify",
+  "status": "unverified",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "Staging run 2026-10-16: guest-style fill of pusheen.com/checkout as a signed-in customer; card, expiry, cvv and cardholder-name frames filled. Pay clicked twice; first click stopped by the phone field, second showed alerts whose text could not be read, so no decline was proven.",
+  "cardSurface": "shopify-card-fields",
+  "gotchas": [
+    "2026-10-16: Card inputs sit in separate iframes: iframe[name*=\"card-fields-expiry\"], iframe[name*=\"card-fields-number\"], iframe[name*=\"card-fields-verification_value\"], iframe[name*=\"card-fields-name\"]; fill expiry, then number, then cvv.",
+    "2026-10-16: Fill phone as a 10-digit US number (2175550134); +15550100134 is flagged aria-invalid and Pay does nothing.",
+    "2026-10-16: Set select[name=\"countryCode\"] to US before the address fields; the state select is select[name=\"zone\"].",
+    "2026-10-16: Account creation at /account/register needs no email verification; the Create account click timed out, press Enter in customer[password] instead."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardFrame": "iframe[name*=\"card-fields-number\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "cvv": "input[name=\"verification_value\"]",
+    "placeOrder": "#checkout-pay-button"
+  },
+  "route": [
+    {
+      "host": "pusheen.com",
+      "url": "https://pusheen.com/collections/all"
+    },
+    {
+      "action": "click",
+      "host": "pusheen.com",
+      "selector": "a[href*=\"/products/\"]"
+    },
+    {
+      "action": "click",
+      "host": "pusheen.com",
+      "selector": "button[name=\"add\"]"
+    },
+    {
+      "host": "pusheen.com",
+      "url": "https://pusheen.com/checkout"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "clickup.com",
+  "kind": "merchant",
+  "hosts": ["clickup.com", "app.clickup.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://clickup.com/pricing",
+  "gotchas": [
+    "app.clickup.com can take 45-50 s to render the sign-in form or the workspace; a load that stays on the loader usually renders on a second load of https://app.clickup.com/.",
+    "Sign-in form: input[type=email], input[type=password], then button[type=submit]; the submit stays disabled until both fields are filled.",
+    "A new workspace can open a dialog with a Continue button on first load; close it before clicking Upgrade.",
+    "Upgrade (top bar) opens the plans page with Monthly/Yearly toggles and one Upgrade button per paid plan; the first one ([class*=plan] button:has-text(\"Upgrade\") >> nth=0) opened the Unlimited card dialog.",
+    "The card form is Braintree hosted fields: three iframes whose titles contain 'card number', 'expiration' and 'cvv', holding #credit-card-number, #expiration and #cvv. Fill expiry first, then number, then CVV as the very next field.",
+    "Verified 2026-10-12 through the staging proxy with the public test card under a verification-only key: expiry, number and CVV filled (card_fields_verified). Stopped before the dialog's Upgrade button."
+  ],
+  "overrides": {
+    "cardExpiry": "#expiration",
+    "cardExpiryFrame": "iframe[title*=\"expiration\" i]",
+    "cardNumber": "#credit-card-number",
+    "cardNumberFrame": "iframe[title*=\"card number\" i]",
+    "cvv": "#cvv",
+    "cvvFrame": "iframe[title*=\"cvv\" i]",
+    "placeOrder": "[role=dialog] button:has-text(\"Upgrade\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "app.clickup.com",
+      "url": "https://app.clickup.com/"
+    },
+    {
+      "action": "click",
+      "host": "app.clickup.com",
+      "selector": "button:has-text(\"Upgrade\")"
+    },
+    {
+      "action": "click",
+      "host": "app.clickup.com",
+      "selector": "button:has-text(\"Monthly\")"
+    },
+    {
+      "action": "click",
+      "host": "app.clickup.com",
+      "selector": "[class*=plan] button:has-text(\"Upgrade\") >> nth=0"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "app.clickup.com",
+        "url": "https://app.clickup.com/"
+      }
+    ],
+    "fields": {
+      "email": "input[type=email]",
+      "password": "input[type=password]",
+      "submit": "button[type=submit]"
+    },
+    "signedIn": "button:has-text(\"Upgrade\")"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "britishairways.com",
+  "kind": "signup",
+  "hosts": ["britishairways.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Registration lives at https://www.britishairways.com/nx/b/account/en/gbr/account/registration/ (header 'Log in' (#log-button) -> /account/pre-login/ -> 'Create an account'). A OneTrust cookie wall intercepts the header click first: click #onetrust-reject-all-handler.",
+    "The registration page first asks which account to create: 'Join the Club' (The British Airways Club, the loyalty scheme formerly Executive Club) or 'British Airways account only'. Pick 'Join the Club' for the loyalty account; the wizard then runs 1 Your account -> 2 Login details -> 3 Personal details -> 4 Contact details -> 5 Marketing preferences, with Continue / Previous step buttons.",
+    "Login details step: Email address and Create password only (no confirm field). Password rule: 10 to 20 characters, upper and lower case letters, at least 1 number, no spaces. Personal and contact details steps were not observed.",
+    "Input names are not plain: target the email with input[name*=\"mail\" i]; there are two inputs whose id contains 'assword', so use input[type=\"password\"] (exactly one).",
+    "'British Airways account only' path: Login details (email + password) -> Personal details (Title select[id*=\"title\" i], first/last, phone country select[id*=\"country\" i] + required phone input[type=\"tel\"][id*=\"hone\" i]) -> ...",
+    "The phone is validated (aria-invalid) and required; a whole E.164 number in the national box is refused. Needs phone_national + a country-code select."
+  ],
+  "overrides": {
+    "email": "input[name*=\"mail\" i]",
+    "firstName": "input[name*=\"first\" i]",
+    "lastName": "input[name*=\"last\" i]",
+    "password": "input[type=\"password\"]",
+    "phone": "input[type=\"tel\"][id*=\"hone\" i]",
+    "submit": "button:visible:has-text(\"Continue\")"
+  },
+  "signupUrl": "https://www.britishairways.com/nx/b/account/en/gbr/account/registration/",
+  "stepped": true
+}

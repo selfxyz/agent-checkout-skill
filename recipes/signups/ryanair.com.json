@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ryanair.com",
+  "kind": "signup",
+  "hosts": ["ryanair.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "myRyanair signup has no page of its own: on https://www.ryanair.com/gb/en click the header 'Log in' button, which opens a dialog holding an iframe (src https://www.ryanair.com/gb/en/kyc). Inside the iframe, 'Log into myRyanair' shows; click its 'Sign up' button to switch to 'New account setup'. Loading /gb/en/kyc top-level renders an empty page.",
+    "Cookie banner on load: click button[data-ref=\"cookie.no-thanks\"] ('No, thanks').",
+    "All signup fields are inside that iframe: use page.frameLocator('iframe[src*=\"/kyc\"]') with input[name=\"email\"], input[name=\"password\"] and button:has-text(\"Create account\") (each matched exactly once inside the frame). Only email + password are asked; there is no name, DOB or confirm-password field at signup. Google, Facebook and PayPal social buttons sit above the form.",
+    "Account creation sends a verification email in Ryanair's normal flow (not observed here); the 'New account setup' form was not submitted.",
+    "Password rule shown in a tooltip: at least 8 chars, one number, one lower, one upper; a 20-char password with symbols was accepted.",
+    "After 'Create account' the kyc frame shows an email verification-code screen (owner step)."
+  ],
+  "overrides": {
+    "email": "iframe[src*=\"/kyc\"] >> internal:control=enter-frame >> input[name=\"email\"]",
+    "password": "iframe[src*=\"/kyc\"] >> internal:control=enter-frame >> input[name=\"password\"]",
+    "submit": "iframe[src*=\"/kyc\"] >> internal:control=enter-frame >> button:has-text(\"Create account\")"
+  },
+  "ownerSteps": ["email_code"],
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://www.ryanair.com/gb/en"
+}

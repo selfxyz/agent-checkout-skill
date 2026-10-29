@@ -1,0 +1,53 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "roblox.com",
+  "kind": "merchant",
+  "hosts": ["roblox.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "exampleProductUrl": "https://www.roblox.com/upgrades/robux",
+  "gotchas": [
+    "Sign-in at roblox.com/login: #login-username takes the recorded handle (tokens.username), #login-password, then #login-button. On 2026-10-11 it landed signed in with no PerimeterX puzzle; when the Press & Hold (#px-captcha) does appear it is the account owner's to solve in a handoff, and Log In must be pressed again right after it.",
+    "On 2026-10-11 the first sign-in of a session did not hold: the next page load of roblox.com/upgrades/robux or /home came up signed out (login form shown). Signing in a second time held, and from then on opening /upgrades/robux directly stayed signed in. Check #nav-settings on the Robux page before choosing a package.",
+    "The Robux packages are buttons whose label is the price in the egress's local currency (CHF from a Swiss egress on 2026-10-11); the route's CHF selector is locale-specific, so on another egress pick a package button by its currency text. The first button is the smallest package.",
+    "Choosing a package opens a Stripe Payment Element on the page (one iframe titled 'Secure payment input frame' holding input[name=number], input[name=expiry], input[name=cvc]; no postal or country field showed) above a 'Pay' submit.",
+    "Verified 2026-10-11 through the staging proxy with the public test card under a verification-only key: expiry, number and CVC filled (card_fields_verified). Stopped before Pay."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[title*=\"Secure payment input\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"Secure payment input\" i]",
+    "expiryFrame": "iframe[title*=\"Secure payment input\" i]",
+    "placeOrder": "button[type=\"submit\"]:has-text(\"Pay\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "roblox.com",
+      "url": "https://www.roblox.com/upgrades/robux"
+    },
+    {
+      "action": "click",
+      "host": "roblox.com",
+      "selector": "button:has-text(\"CHF\") >> nth=0"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "roblox.com",
+        "url": "https://www.roblox.com/login"
+      }
+    ],
+    "fields": {
+      "username": "#login-username",
+      "password": "#login-password",
+      "submit": "#login-button"
+    },
+    "signedIn": "#nav-settings"
+  }
+}

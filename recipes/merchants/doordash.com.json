@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "doordash.com",
+  "kind": "merchant",
+  "hosts": ["doordash.com", "identity.doordash.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "exampleProductUrl": "https://www.doordash.com/store/mcdonalds-san-francisco-653630/?pickup=true",
+  "gotchas": [
+    "**Pickup bypass** — append `?pickup=true` to the store URL. No delivery address needed, the post-add-to-cart address dialog never appears, and `CheckoutButton` carries its own lat/lng.",
+    "**Delivery-mode address gate is unfillable** — `#HomeAddressAutocomplete` (storefront) and `[data-testid=\"AddressAutocompleteField\"]` (post-add-to-cart dialog) are controlled React comboboxes over a places-autocomplete. A programmatic fill is cleared by the page's re-render: field reads empty, no suggestion list. Signing in does not help when the account has no stored address. Use pickup instead.",
+    "**Turnstile fires every new session** — Cloudflare interstitial on first load, full block, zero page content. Clears only via challenge handoff to the account owner. Store URLs load clean afterwards for that session.",
+    "**Login has two layouts** — submit is `#login-submit-button` (`IdentityLoginSigninButton`) OR `#guided-submit-button` (`IdentityGuidedSubmitButton`). Probe for both.",
+    "**Login fields** — `[data-anchor-id=\"IdentityLoginPageEmailField\"]` + `[data-anchor-id=\"IdentityLoginPagePasswordField\"]`, same step. Enter does NOT submit. No MFA presented.",
+    "**Storefront Sign In is not clickable** — hit test times out. Go to `identity.doordash.com/auth` directly.",
+    "**Checkout stepper step 1 does not expand on click** — `[data-testid=\"Checkout-vertical-stepper-ACCOUNT_DETAILS-label\"]`. Sign in first, then return to checkout.",
+    "**Menu items have no stable selector** — match the price text, then take the nearest ancestor carrying `@data-item-id` / `@data-anchor-id` / `@role=button`.",
+    "**Proxy instability** — connection dropped 3x in one run. Each drop loses cart, login and Turnstile clearance. Budget for restarting from the store URL.",
+    "Observed 2026-10-06 (proxy, US tunnel): account signup is the \"Sign Up\" header link, which opens a dialog with an iframe (first/last name, email, mobile number with a Country Code picker defaulting to +1, password of 10+ characters, #sign-up-submit-button). Submitting sends a one-time code by TEXT to that mobile number (input[autocomplete=one-time-code]); no email alternative was found. Set the country picker to the phone's own country before filling the number — a non-US national number under the +1 default goes to an unrelated US number. With +91 (India) selected no SMS arrived, so an account needs a phone DoorDash will text (likely US)."
+  ],
+  "notes": "## Verified path (pickup)\n\n1. Open `https://www.doordash.com/store/<slug>/?pickup=true`\n2. Clear Turnstile via challenge handoff\n3. Click item: price text → nearest ancestor with `@data-item-id` / `@data-anchor-id` / `@role=button`\n4. Add: `[data-anchor-id=\"AddToCartButtonSeoOptimization\"]`\n5. Cart: `[data-anchor-id=\"HeaderOrderCart\"]`\n6. Checkout: `[data-anchor-id=\"CheckoutButton\"]` → `/consumer/checkout/?lat=..&lng=..&order_cart_id=..`\n7. Sign in at `identity.doordash.com/auth`, return to checkout\n8. Final CTA: `[data-anchor-id=\"PlaceOrderButton\"]` — disabled until account + payment steps complete\n\n## Gateway\n\n**Stripe** — confirmed by frame enumeration on `/consumer/checkout/` (`js.stripe.com/v3`, `__privateStripeController`), not inferred. Recorded as `custom` only because the registry has no `stripe` platform recipe to reference.\n\n## Not verified\n\nCard Element field selectors. The Element mounts only after the account step completes; the session dropped before the payment step opened.\n\nNo card token was filled and no order was placed.",
+  "preconditions": ["delivery_location", "account_required"]
+}

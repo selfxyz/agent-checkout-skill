@@ -1,0 +1,59 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "tumblr.com",
+  "kind": "merchant",
+  "hosts": ["www.tumblr.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "cardSurface": "stripe-payment-element",
+  "exampleProductUrl": "https://www.tumblr.com/premium",
+  "gotchas": [
+    "Sign-in is refused with 'Your email or password were incorrect' while the account's email is still unverified, even with the right password; a password reset for that address sent no mail on 2026-10-11. Fix: open the 'Verify your email address' link; its page has a reCAPTCHA ('Confirm your humanity') that is the account owner's to solve, then 'Verify Email'. After that the same vault password signed in.",
+    "From a European egress a consent iframe covers the page (buttons 'Learn More', 'Decline Non-Essential Cookies', 'I Agree!'); clicks into it time out through the proxy, but press Enter on the button with frame iframe:visible clears it. detect_challenge does not classify it.",
+    "Sign-in at /login takes email and password on one page; pressing Enter in the password field submits. Signed in shows a[href=\"/dashboard\"] and /settings/account loads without the login form.",
+    "/settings/ad-free-browsing rendered empty on 2026-10-11; the purchasable product is Tumblr Premium at /premium (Monthly / Yearly toggle, then 'Get Premium').",
+    "'Get Premium' opens a Stripe Payment Element on the page: one iframe whose title contains 'Secure' holds input[name=number], input[name=expiry], input[name=cvc]; no postal or country field showed. A 'Pay' button submits.",
+    "Verified 2026-10-11 through the staging proxy with the public test card under a verification-only key: expiry, number and CVC filled (card_fields_verified). Stopped before Pay."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardFrame": "iframe[title*=\"Secure\" i]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[title*=\"Secure\" i]",
+    "cvv": "input[name=\"cvc\"]",
+    "cvvFrame": "iframe[title*=\"Secure\" i]",
+    "expiryFrame": "iframe[title*=\"Secure\" i]",
+    "placeOrder": "button:has-text(\"Pay\")"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "www.tumblr.com",
+      "url": "https://www.tumblr.com/premium"
+    },
+    {
+      "action": "click",
+      "host": "www.tumblr.com",
+      "selector": "button:has-text(\"Monthly\")"
+    },
+    {
+      "action": "click",
+      "host": "www.tumblr.com",
+      "selector": "button:has-text(\"Get Premium\")"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "www.tumblr.com",
+        "url": "https://www.tumblr.com/login"
+      }
+    ],
+    "fields": {
+      "email": "input[name=\"email\"]",
+      "password": "input[name=\"password\"]",
+      "submit": "button:has-text(\"Log in\")"
+    },
+    "signedIn": "a[href=\"/dashboard\"]"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "kohls.com",
+  "kind": "signup",
+  "hosts": ["kohls.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-29 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: Kohl's /myaccount/signin.jsp, headed 'Sign In or Join Kohl's Rewards'. Nothing was typed or submitted. 2026-10-01: driven through the Agent Vault proxy using this recipe, with browser egress through the owner's tunnel on a US network. With a +tag test-inbox address in #signin-email, the Continue button ([data-testid=\"continue-button\"]) stayed disabled after the fill, keystrokes, Tab and a fresh load; the account owner confirmed in their own browser that it enables only once the '+' is removed. With an untagged test-inbox address Continue enabled, and clicking it showed 'We weren't able to complete your login. Make sure your browser is up to date and disable any ad blockers or privacy tools…' with no challenge (detect_challenge); a fresh load in a new session gave the same message. No account was created, so this is not verified.",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. What a NEW address is shown next (a password to set, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email or text belongs to the account owner: hand it off.",
+    "The email field does not accept a '+' in the address: Continue ([data-testid=\"continue-button\"]) stays disabled, with no error shown. Use an address without a +tag.",
+    "On 2026-10-01, through the Agent Vault proxy (US egress), Continue with a valid address answered 'We weren't able to complete your login… disable any ad blockers or privacy tools' — a refusal of the browser, not of the address."
+  ],
+  "overrides": {
+    "email": "#signin-email",
+    "submit": "button[type=\"submit\"]"
+  },
+  "signupUrl": "https://www.kohls.com/myaccount/signin.jsp",
+  "stepped": true
+}

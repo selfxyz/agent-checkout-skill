@@ -1,0 +1,19 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ana.co.jp",
+  "kind": "merchant",
+  "hosts": ["ana.co.jp"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "automation-blocked",
+    "details": "The booking engine (aswbe.ana.co.jp) answers every search from an automated proxy session with 'The document registration process could not be completed properly. Please try again later.' (R01P030-message.error.fatalError for international, R01P031 for Japan domestic). No flight list is shown, so the fare, passenger and payment steps cannot be reached."
+  },
+  "exampleProductUrl": "https://www.ana.co.jp/en/us/",
+  "gotchas": [
+    "English site: https://www.ana.co.jp/en/us/. A 'Cookie Settings' modal (dialog#ensModalWrapper) intercepts all clicks until 'Apply selection and agree' is pressed; it does not appear in the accessibility snapshot.",
+    "Booking widget (Reservations > Tickets): 'One Way' is an li[role=button]. From/To are buttons that open a popover with input[placeholder=\"Enter the city or airport\"]; type the IATA code and click the suggestion row (e.g. 'Tokyo (Haneda), Japan / Tokyo (Haneda), Japan'). The popover is not in the snapshot; use visible CSS/text selectors.",
+    "Date: click the date button (e.g. '2026/10/2'), click the day number in the first month, then 'Confirm Selection'; then the Search button.",
+    "Both an international route (HND-GMP) and a Japan domestic one (HND-ITM) entered from the US widget fail on the results page with the R01P03x fatalError, twice in a row; the five-step header (Flights, Details, Seats, Payment, Complete) shows that a guest path exists past it."
+  ]
+}

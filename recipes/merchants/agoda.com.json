@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "agoda.com",
+  "kind": "merchant",
+  "hosts": ["agoda.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "varies",
+  "exampleProductUrl": "https://www.agoda.com/best-western-cityplace-inn/hotel/dallas-tx-us.html?checkIn=2026-10-22&los=1&adults=1&rooms=1&children=0&currencyCode=USD",
+  "gotchas": [
+    "Guest checkout, no login needed. A hotel page with dates works as a deep link: /<hotel-slug>/hotel/<city-slug>.html?checkIn=YYYY-MM-DD&los=1&adults=1&rooms=1&children=0&currencyCode=USD. The slug is Agoda's own, not the hotel's name (Quality Inn & Suites Dallas-Cityplace is /best-western-cityplace-inn/); read it from a city page's hotel link (/city/<city-slug>.html). The search page's city= id is not guessable (8691 is Jakarta).",
+    "On the hotel page the room grid renders only after clicking the 'VIEW THIS DEAL' jump button (button[data-element-name=jump-nav-cheapest-room-btn], the visible one). Book buttons are button[data-element-name*=book]; the data-selenium attribute on them disappears after a re-render.",
+    "Two steps: guest details (names, email, Country/region of residence select defaulting to United States, country code combobox + input[autocomplete=tel-national]) then 'NEXT: FINAL STEP' (button[data-action=nextPage]) -> payment. 'You won't be charged yet' on step one; the cheapest rates are 'Extra low price! (non-refundable)', book and pay now.",
+    "A 'user drop-off' modal ([data-testid=bf-user-drop-off-alert-modal]) can appear over the details step after a pause and intercepts clicks on NEXT; close it with its button[aria-label*=close] first.",
+    "The card form is a hosted iframe, iframe[src*=secure.agoda.com] (title 'CCForm', /payment/index-v4.html; a hidden preload copy exists on step one), with cardholder name, number, MM/YY expiry and a REQUIRED CVC, all with standard autocomplete attributes, plus three checkboxes/radios that were left alone. Pass the frame for every card field and fill number and CVC back to back.",
+    "First fill of saved details on agoda.com raises the owner's destination approval; an expired request is not asked again in the same proxy session (open a new session to re-prompt)."
+  ],
+  "overrides": {
+    "cardFrame": "iframe[src*=\"secure.agoda.com\"]",
+    "cardName": "input[autocomplete=\"cc-name\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[autocomplete=\"email\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "firstName": "input[autocomplete=\"given-name\"]",
+    "lastName": "input[autocomplete=\"family-name\"]",
+    "phone": "input[autocomplete=\"tel-national\"]"
+  }
+}

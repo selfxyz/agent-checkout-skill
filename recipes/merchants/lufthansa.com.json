@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "lufthansa.com",
+  "kind": "merchant",
+  "hosts": ["lufthansa.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.lufthansa.com/us/en/homepage",
+  "gotchas": [
+    "Guest booking works. Flow: homepage /us/en/homepage flight search -> 'Please select your departure' -> expand the 'Economy from EUR ...' fare tab -> 'Select Economy Light and continue' -> Green Fare popup 'Continue with my selection' -> Your selection 'Continue with current fare' -> Extra services (skip) 'Enter passenger details' -> passenger form 'Confirm and continue' -> 'Continue to payment' (enabled once 'Creating your cart' finishes) -> payment hub.",
+    "Homepage search: Type of trip combobox -> 'One-way'; From/To inputs input[name=\"flightQuery.flightSegments[0].originCode\"] / [...].destinationCode (prefilled origin): clear, type the city and click the option containing the IATA code (FRA, MUC). The date picker is a modal: click the day number, then 'Continue', then 'Find flights' (the click can take ~60s to return while the booking app loads).",
+    "Passenger form: Title is a mat-select (click, then option 'Ms.'), input[formcontrolname=firstName] / [formcontrolname=lastName], input.contact-info-email-input, country calling code input[aria-describedby=countryCodes] (defaults to the egress country; type 'United States' and pick '(+1)'), input.contact-info-phone-input.",
+    "2026-10-17: the passenger form's Title mat-select is a required field; the vault has no title field yet, so the passenger step has no token for it.",
+    "Payment runs on the top-level host paymenthub.lufthansa.com (not an iframe): choose the 'Credit / Debit Card' radio, Manual Card Entry tab. Card number, name, expiry (single MM/YY text field, type it) and security code are plain inputs in the page.",
+    "Billing street input has maxlength 35 and truncated a long street line (fill_rejected); zip and city filled fine. A 'Country: no selection' button must also be set before paying.",
+    "Order total: .price-information-card-price resolves (EUR 229.63). Final button is 'Pay now' behind Terms and Privacy checkboxes - never click it.",
+    "2026-10-07 verification fill on paymenthub.lufthansa.com: card number then CVV came back verification:true with no field error; order.total on .price-information-card-price resolved 263.63 EUR.",
+    "Search form: role=combobox 'Type of trip' -> 'One-way'; one-way date field is role=textbox 'Departure'; the date modal's Continue is role=button 'Continue' (not a plain button element).",
+    "2026-10-17: search selectors re-proven: #onetrust-reject-all-handler, role=combobox[name=\"Type of trip\"] then role=option[name=\"One-way\"], the originCode/destinationCode inputs with role=option >> text=FRA / text=MUC, role=textbox[name=\"Departure\"], day buttons role=button[name=\"November 4, 2026\"] (accessible name is the full date), role=dialog >> role=button[name=\"Continue\"], role=button[name=\"Find flights\"].",
+    "Fare list: expand role=tab 'Economy from EUR ...', then the button 'Select Economy Light and continue'. Loose selectors containing 'Select' or 'Light' also match the date strip buttons and reload another day.",
+    "If the first tab hangs after 'Find flights' (screenshot and snapshot time out), open a new tab in the same browser and search again.",
+    "2026-10-17: after 'Find flights' the booking app at shop.lufthansa.com/booking/availability showed a Cloudflare 'Security Check / Verifying you are human' page (with a Ray ID) that kept reloading for 85s and never reached the fare list; detect_challenge reported no challenge on it.",
+    "2026-10-17: the header Login link (header a:has-text(\"Login\")) leads to lufthansa.miles-and-more.com/web/row/en/login.html, which showed a 'Security check / Verifying you are human' page in two fresh sessions and never rendered a password field within 80s.",
+    "Expiry is one MM/YY text field that inserts the slash: type '0830', not '08/30'.",
+    "Billing street has maxlength 35; a long street line is rejected even after abbreviation."
+  ],
+  "overrides": {
+    "cardNumber": "input.fop-number-input",
+    "cardholderName": "#cardholdername__id",
+    "city": "input[aria-labelledby=\"city-label\"]",
+    "cvv": "input[aria-labelledby=\"cvv-label\"]",
+    "expiry": "input.custom-expirydate",
+    "orderTotal": ".price-information-card-price",
+    "street1": "input[aria-labelledby=\"street-label\"]",
+    "zip": "input[aria-labelledby=\"zip-label\"]"
+  }
+}

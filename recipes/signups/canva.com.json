@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "canva.com",
+  "kind": "signup",
+  "hosts": ["canva.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe, with browser egress through the owner's tunnel on a US network. After Continue with email and the address, a Create your account step asked for a name; Continue then showed a code step. With a test-inbox address (agentmail.to) the code step said \"Temporary emails can't be used on Canva\" and no mail was sent. With an address on the owner's own domain, Canva sent a code, the account owner entered it in a handoff (outcome completed), and the session reached the signed-in Canva home (\"What will you design today\"). No password was set: sign-in is by emailed code.",
+  "gotchas": [
+    "The page opens on sign-up choices; click 'Continue with email' to show the box (the mode_toggle precondition).",
+    "The box's id is generated; its name, username, is stable, and it takes an email address or a phone number.",
+    "Stepped and passwordless: the address, then a Create your account step with a name box (role=textbox named Name), then a code sent by email. The code belongs to the account owner: hand it off. No password is set.",
+    "Canva refuses addresses it classes as temporary: on 2026-09-30 an agentmail.to address got \"Temporary emails can't be used on Canva\" on the code step, and no code was sent. The account owner's own domain was accepted."
+  ],
+  "overrides": {
+    "email": "input[name=\"username\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "preconditions": ["mode_toggle"],
+  "signupUrl": "https://www.canva.com/signup/",
+  "stepped": true
+}

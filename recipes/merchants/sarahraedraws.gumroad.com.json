@@ -2,14 +2,41 @@
   "$schema": "../../schema/recipe.schema.json",
   "id": "sarahraedraws.gumroad.com",
   "kind": "merchant",
-  "hosts": [
-    "sarahraedraws.gumroad.com"
-  ],
+  "hosts": ["sarahraedraws.gumroad.com"],
   "platform": "gumroad",
   "status": "partial",
-  "lastVerifiedAt": "2026-07-20",
-  "evidence": "Bench dry run (--test-card) reached `fill`: 'I want this!' → /checkout → Stripe Payment Element filled. No submit, so NOT purchase-verified.",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "2026-10-16 guest checkout: product page -> 'Add to cart' -> /checkout, Stripe Payment Element filled (verification-only test card), Pay clicked once, page answered 'Your card was declined. Your request was in live mode, but used a known test card.' No order created.",
   "cardSurface": "stripe-payment-element",
   "exampleProductUrl": "https://sarahraedraws.gumroad.com/l/teach-yourself-anything-notion",
-  "notes": "Fixed-price $4.00 Notion template. Fourth independent Gumroad store to reach `fill` with no selector overrides."
+  "notes": "Guest checkout, no account needed. Cheapest item is the GBP 2 PDF guide; the Flora & Fauna kit (GBP 3.99, shown as US$5.31 at checkout) was used for the proven run.",
+  "cvvTarget": "payment-frame:input[name=cvc]",
+  "gotchas": [
+    "The Teach Yourself Anything Notion template page says 'This product is not currently for sale' (2026-10-16): pick another product from the store grid.",
+    "The buy control is 'Add to cart' (a link), not 'I want this!', on in-stock products; it opens /checkout directly.",
+    "Wait for `input[name=number]` inside `iframe[title*=\"payment\" i]` before filling; expiry as '01 / 30', number, then CVV back to back.",
+    "The first open_page on a store page can render an empty tree: open it again and snapshot.",
+    "Checkout shows prices in US$ while the store shows GBP: declare no order.total hint on the price (currency_mismatch); the fill went through without one.",
+    "Test card declined: `[role=alert]` reads 'Your card was declined. Your request was in live mode, but used a known test card.' Click Pay once."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[title*=\"payment\" i]",
+    "cardNumber": "input[name=number]",
+    "cvv": "input[name=cvc]",
+    "email": "input[type=email]",
+    "fullName": "fieldset:has-text(\"Full name\") input",
+    "placeOrder": "button:has-text(\"Pay\")"
+  },
+  "route": [
+    {
+      "host": "sarahraedraws.gumroad.com",
+      "url": "https://sarahraedraws.gumroad.com/"
+    },
+    {
+      "action": "manual",
+      "host": "sarahraedraws.gumroad.com",
+      "note": "Open a product that is for sale from the store grid (the Teach Yourself Anything Notion template is marked not currently for sale), then click its 'Add to cart' link; the page becomes /checkout."
+    }
+  ]
 }

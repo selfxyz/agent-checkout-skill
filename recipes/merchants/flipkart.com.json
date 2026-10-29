@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "flipkart.com",
+  "kind": "merchant",
+  "hosts": ["flipkart.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "gotchas": [
+    "Sign-in is one-time-code only, with no password field: on /account/login click text=\"Use Email-ID\", fill input[type=\"email\"] with the login identifier, click button:has-text(\"Continue\"), and a six-box code step appears (input[type=\"number\"] x6, no name/id/autocomplete). detect_challenge does not recognise it (#732), so hand it off with request_challenge_handoff reason owner_code; the code goes to the account's email. Signed in = no 'Login' link in the header. signIn is not recorded because the schema requires a password field.",
+    "Card form is inline on the payment page, no iframe: number, a single MM/YY expiry box (fill as MM/YY), and a password-type CVV box. No cardholder-name field. Fill expiry first, then number and CVV back to back.",
+    "Use 'Buy now' on the product page rather than the cart: it checks out that item alone, so items already in the account's cart are not swept into the order.",
+    "Fees are added on top of the item price (platform fee and handling fee were about 70 INR on a 50 INR item), so the total is well above the listed price.",
+    "Flipkart class names are obfuscated; there is no stable plain-CSS selector for the order total. On this run the card fill was not denied, so the vault read the total without a hint."
+  ],
+  "notes": "2026-10-22, staging proxy, India egress. Signed in with an existing account via owner-code handoff, reached payment, filled expiry, card number and CVV (owner entered the live CVV), stopped before the pay click. No order placed.",
+  "overrides": {
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cvv": "input#cvv-input"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "flipkart.com",
+      "url": "https://www.flipkart.com/"
+    },
+    {
+      "action": "manual",
+      "host": "flipkart.com",
+      "note": "Sign in first (no guest checkout; see gotchas), then search for a cheap item and open its product page. Product links open in a new tab: switch to it."
+    },
+    {
+      "action": "click",
+      "host": "flipkart.com",
+      "selector": "text=\"Buy now\""
+    },
+    {
+      "action": "click",
+      "host": "flipkart.com",
+      "note": "Order summary step: 'Deliver to' shows the account's saved address; Continue goes to payment options.",
+      "selector": ":text(\"Continue\")"
+    },
+    {
+      "action": "click",
+      "host": "flipkart.com",
+      "note": "Opens the inline card form under the Credit / Debit / ATM Card option.",
+      "selector": ":text(\"Credit\"), :text(\"Debit\")"
+    }
+  ]
+}

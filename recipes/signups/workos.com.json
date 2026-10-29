@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "workos.com",
+  "kind": "signup",
+  "hosts": ["workos.com"],
+  "platform": "workos",
+  "status": "unverified",
+  "evidence": "Read-only discovery (enclave arm) and a DOM read on 2026-09-21: dashboard.workos.com/signup redirects to signin.workos.com/sign-up, WorkOS's own AuthKit instance. Every selector on the workos platform matched exactly one visible element there. The workos.com claim covers WorkOS's own properties only; customer AuthKit tenants live on *.authkit.app or their own domains, never under workos.com. Nothing was typed or submitted. A signup attempt on 2026-09-25 reached the password step and was refused with \"Access blocked, please contact support\"; see gotchas. Both halves were filled from vault tokens and the proxy denied no fill, so the refusal is WorkOS's rather than a selector or fill problem.",
+  "gotchas": [
+    "Signup is CONDITIONALLY blocked, not impossible. On 2026-09-25 the email step accepted an address and advanced, and submitting the password returned \"Access blocked, please contact support\" -- no field error, no challenge detected, no verification mail sent. An earlier attempt the same day from a different mailbox reached the emailed-code step instead, so the flow IS completable under some conditions and the trigger is undetermined between the mailbox domain and request velocity (both ran through the same proxy, minutes apart). On the branch that got through, the step after the password was an emailed code -- an account-owner handoff, not a wall. The blocked branch never reached it, so do not expect a code on a run that is refused here."
+  ],
+  "signupUrl": "https://dashboard.workos.com/signup"
+}

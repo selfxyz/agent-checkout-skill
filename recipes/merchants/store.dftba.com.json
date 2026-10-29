@@ -1,0 +1,55 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "store.dftba.com",
+  "kind": "merchant",
+  "hosts": ["store.dftba.com"],
+  "platform": "shopify",
+  "status": "partial",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://store.dftba.com/products/horse-theme-song-ringtone",
+  "gotchas": [
+    "The /cart/<variantId>:1 permalink 302s straight into /checkouts/cn/<token> with skip_shop_pay=true — there is no cart page hop and no Shop Pay diversion; guest card checkout is the default.",
+    "2026-10-17: confirmed; the Credit card radio is preselected, with Shop / PayPal / Google Pay express buttons above the form.",
+    "Checkout renders a duplicate hidden autofill form whose inputs carry the same name attributes (autofill_firstName, autofill_city, ...). Plain input[name=firstName] matches two elements; scope every contact/billing selector with :not([id^=autofill]).",
+    "Visible billing field ids are randomised per render (TextFieldP0-734 etc.) except #billing-address1 and #email — select by name, not id.",
+    "The CVV iframe is named card-fields-verification_value-<rand>, not card-fields-verification-<rand>.",
+    "Digital products (e.g. the $1 ringtone) skip the shipping step entirely, so checkout is a single page: contact, billing, card.",
+    "Custom domain store: detection must key on cdn.shopify.com script/link references and meta[name=shopify-checkout-api-token], not on a *.myshopify.com host.",
+    "2026-10-17: input[name=phone]:not([id^=autofill]) matches two inputs: the billing phone (required, placeholder 'Phone') and the optional Shop Pay 'Remember me' mobile phone (autocomplete=tel), which creates a Shop account when filled. The billing phone alone is input[name=phone][required]:not([id^=autofill]).",
+    "2026-10-17: picking a billing country without states (e.g. France) removes select[name=zone] from the form.",
+    "2026-10-17: each card iframe holds one input: number input[name=number], expiry input[name=expiry] (MM / YY), security code input[name=verification_value], name on card input[name=name].",
+    "2026-10-17: clicking #checkout-pay-button with every field filled raises a visible hCaptcha (iframe[src*=hcaptcha.com]) before any payment response; no decline and no confirmation appear behind it. Seen on two consecutive runs (2026-10-16 after a Shop Pay one-time-code dialog, 2026-10-17 without one)."
+  ],
+  "overrides": {
+    "address1": "#billing-address1",
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[name*=\"card-fields-number\"]",
+    "cardNumber": "input[name=number]",
+    "cardNumberFrame": "iframe[name*=\"card-fields-number\"]",
+    "cardholderName": "input[name=name]",
+    "cardholderNameFrame": "iframe[name*=\"card-fields-name\"]",
+    "city": "input[name=city]:not([id^=autofill])",
+    "country": "select[name=countryCode]",
+    "cvv": "input[name=verification_value]",
+    "cvvFrame": "iframe[name*=\"card-fields-verification_value\"]",
+    "email": "#email",
+    "expiryFrame": "iframe[name*=\"card-fields-expiry\"]",
+    "firstName": "input[name=firstName]:not([id^=autofill])",
+    "lastName": "input[name=lastName]:not([id^=autofill])",
+    "phone": "input[name=phone][required]:not([id^=autofill])",
+    "placeOrder": "#checkout-pay-button",
+    "postalCode": "input[name=postalCode]:not([id^=autofill])",
+    "zone": "select[name=zone]"
+  },
+  "route": [
+    {
+      "host": "store.dftba.com",
+      "url": "https://store.dftba.com/products/horse-theme-song-ringtone"
+    },
+    {
+      "action": "manual",
+      "host": "store.dftba.com",
+      "note": "The variant id is the variants[0].id field of /products/horse-theme-song-ringtone.js; the /cart/<variantId>:1 permalink redirects straight to the single-page checkout (contact, card, billing)."
+    }
+  ]
+}

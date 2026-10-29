@@ -1,0 +1,48 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "ihg.com",
+  "kind": "merchant",
+  "hosts": ["ihg.com"],
+  "platform": "custom",
+  "status": "partial",
+  "cardSurface": "direct-inputs",
+  "exampleProductUrl": "https://www.ihg.com/hotels/us/en/find-hotels/hotel-search?qDest=Dallas,%20TX,%20United%20States&qCiD=22&qCiMy=092026&qCoD=23&qCoMy=092026&qAdlt=1&qChld=0&qRms=1&qRtP=6CBARC&qSrt=sBR",
+  "gotchas": [
+    "Search deep link: /hotels/us/en/find-hotels/hotel-search?qDest=<City, ST, United States>&qCiD=DD&qCiMy=MMYYYY&qCoD=DD&qCoMy=MMYYYY&qAdlt=1&qChld=0&qRms=1 — the month in qCiMy/qCoMy is ZERO-BASED (October = 09). Results first render '0 Hotel Found' and then fill in after a few seconds.",
+    "Flow: search results 'Select Hotel' (same tab) -> room list -> 'View prices' on a room -> rate 'Select' -> 'Add Extras' upsell page (click 'No thanks, skip it') -> 'Complete your reservation', one page with guest details and card.",
+    "Currency follows the egress: from a non-US egress prices show in local currency (INR from India). Switch the room page's 'Select Currency' combobox to USD before going to payment.",
+    "A cookie banner ('Continue') and a language prompt ('No') appear on load; dismiss the banner first. A floating feedback-survey close button sits outside the viewport and cannot be clicked; ignore it.",
+    "The rates offered to a guest may all be 'IHG One Rewards Discount' / 'Member Exclusive' rates. On those the payment page has 'Enroll for free as you book' PRE-CHECKED, and unchecking it DISABLES EVERY FIELD on the form (names, address, card, expiry). Leave it checked to fill (an account is only created on Book), or sign in with an existing login, or pick a non-member rate.",
+    "Country/Region starts empty; selecting it reveals the State select. The address country token selects it.",
+    "Card fields are inline (not in an iframe): input[autocomplete=cc-number]; expiry is two native selects select[formcontrolname*=month i] ('01'..'12') and select[formcontrolname*=year i] with TWO-DIGIT years ('30'). No security-code field: 'You pay nothing today. A card simply holds your reservation.' Final button: 'Book for <total> USD'.",
+    "The order total ('165.14 USD' on the run) is in several [data-testid=total-price] elements, four of them hidden; no plain id/class selector for an order.total hint was found, and the proxy's own scrape read a total above a $300 per-transaction cap, so the card fill was refused (limit_reached). Find a hintable selector for the total before relying on the card fill.",
+    "Correction to the total note above: the limit_reached on the first run was the card's rolling WINDOW limit (an earlier fill on another site still counted), not a misread total. On a re-run with the window limits cleared, the card number filled with no hint declared, so the proxy's own scrape reads IHG's total correctly.",
+    "On the results page, a :has() selector for a hotel card easily matches an outer container and clicks the FIRST hotel's 'Select Hotel' (the Kimpton came up instead of the Crowne Plaza). Select by the snapshot ref, or check the room page's heading before going on. The room page and Add Extras render a few seconds after navigation; wait for them rather than chaining clicks, and click the 'No thanks, skip it' link by ref (its text does not match :text-is exactly).",
+    "2026-10-09: the TrustArc consent banner (#truste-consent-required 'Decline All') intercepts clicks on 'Select Hotel' until dismissed. Hotel buttons carry data-testid=selectHotelSID_<code> (Crowne Plaza Dallas Downtown = DALEM), which is a reliable selector. Every rate offered to a guest was still 'IHG One Rewards Discount', pay at the property; the payment page has no CVV field, so cardNumber + expiry is the whole card leg."
+  ],
+  "overrides": {
+    "cardExpiryMonth": "select[formcontrolname*=\"month\" i]",
+    "cardExpiryYear": "select[formcontrolname*=\"year\" i]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "city": "input[formcontrolname*=\"city\" i]",
+    "country": "select[formcontrolname*=\"country\" i]",
+    "email": "input[type=\"email\"]",
+    "firstName": "input[formcontrolname=\"firstName\"]",
+    "lastName": "input[formcontrolname=\"lastName\"]",
+    "phone": "input[type=\"tel\"]",
+    "state": "select[formcontrolname*=\"state\" i]",
+    "street1": "input[formcontrolname*=\"address\" i]",
+    "zip": "input[formcontrolname*=\"zip\" i]"
+  },
+  "route": [
+    {
+      "host": "www.ihg.com",
+      "url": "https://www.ihg.com/hotels/us/en/find-hotels/hotel-search"
+    },
+    {
+      "action": "manual",
+      "host": "www.ihg.com",
+      "note": "Search deep link with qDest/qCiD/qCiMy (zero-based month)/qCoD/qCoMy/qAdlt=1/qRms=1 (query dropped from route urls); Decline All on the TrustArc banner; Select Hotel ([data-testid^=selectHotelSID_]); View prices on a room; Select a rate; No thanks, skip it on Add Extras."
+    }
+  ]
+}

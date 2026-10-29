@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "airtable.com",
+  "kind": "signup",
+  "hosts": ["airtable.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "Read-only discovery on 2026-09-28 (scripts/signup-selectors.ts, session arm — windowed Chrome) and a page check the same day confirming an account signup, not a mailing list: heading \"Welcome to Airtable\", Continue beside Continue with Google and single sign-on. Nothing was typed or submitted.",
+  "gotchas": [
+    "Email-first: this screen asks for the email alone; what follows (a password, or a code sent by email) was not observed — look at the next screen before filling it. A code sent by email belongs to the account owner: hand it off.",
+    "After the email, a 'Create your profile' step asks for Full name (#fullName) and a password (input[name=\"password\"]), then 'Sign up'. Airtable then mails a 'Please confirm your email' link, which belongs to the account owner. Observed 2026-10-09 through the proxy: no CAPTCHA."
+  ],
+  "overrides": {
+    "email": "#emailSignup",
+    "password": "input[name=\"password\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_link"],
+  "signupUrl": "https://airtable.com/signup",
+  "stepped": true
+}

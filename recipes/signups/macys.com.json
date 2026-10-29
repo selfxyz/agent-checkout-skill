@@ -1,0 +1,29 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "macys.com",
+  "kind": "signup",
+  "hosts": ["macys.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe (vault-minted password), with browser egress through the owner's tunnel on a US network. All five selectors matched; the birth month and day selects were set and the phone filled; the first submit opened the 6-digit emailed-code dialog. The account owner entered the code and clicked Create Account in a handoff (outcome completed); no error was shown, and two account emails from Macy's arrived at the signup address within a minute. A second signup with the same email was then answered that an account already exists. A fresh sign-in through the proxy did not get past the sign-in form, which reported the email as not valid (see gotchas). On 2026-09-29, from the proxy's own egress, the final create answered \"Something went wrong\" every time.",
+  "gotchas": [
+    "Password: at most 16 characters (the field's maxlength), and the page rejects spaces and . , - | \\ / = _ (its own message); mint with a symbol set that excludes those.",
+    "Birth month, birth day and phone number are required; a submit without the phone marks it invalid. Birth month (#month) and day (#day) are native selects: choose an option rather than typing into them.",
+    "The email-offers box is ticked by default.",
+    "The submit button's label varies between Continue and Create Account; its id (#ca-profile-submit) is stable.",
+    "After submit, a dialog asks for a 6-digit code sent by email, in six one-digit boxes (autocomplete=one-time-code) with a Create Account button. The code belongs to the account owner: hand it off.",
+    "On 2026-09-29, from the Agent Vault proxy's own egress, Create Account answered \"Something went wrong. Please refresh the page or try again later.\" From a US egress on 2026-09-30 it went through.",
+    "On 2026-09-30 the sign-in page (/account/signin) reported \"valid email\" for the same address the signup accepted (an address with a + tag), through two fresh page loads; sign-in was not completed through the proxy."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-29 and 2026-09-30, see evidence.",
+  "overrides": {
+    "email": "#email",
+    "firstName": "#first-name",
+    "lastName": "#last-name",
+    "password": "#pwd",
+    "submit": "#ca-profile-submit"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.macys.com/account/createaccount"
+}

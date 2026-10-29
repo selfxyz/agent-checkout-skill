@@ -1,0 +1,26 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "nintendo.com",
+  "kind": "signup",
+  "hosts": ["nintendo.com"],
+  "platform": "custom",
+  "status": "partial",
+  "evidence": "2026-09-29: signup through the Agent Vault proxy using this recipe created an account (all five selectors matched; the page reported the account created and the account-creation mail arrived). The emailed code step was not completed by the account owner through a challenge handoff, so that step is not verified; re-run with the owner entering the code.",
+  "gotchas": [
+    "The form also requires a birth date, gender and country or region of residence; they are the account owner's to supply.",
+    "The nickname is a display name, not a sign-in name; the account signs in with the email.",
+    "The page has three submit buttons (Google, Sign up with Apple, Submit); the recipe's submit is the plain Submit.",
+    "Country/region and time zone default from the visitor's IP location (India through the proxy on 2026-09-29); set the country deliberately.",
+    "Submit stays disabled until every required field is filled and both agreement boxes (User Agreement, Privacy Policy) are ticked; they are image toggles inside labels, so click the image, not the label text, which is a link.",
+    "After Submit the page asks for a 4-digit code sent by email (an input whose name contains pincode). The code belongs to the account owner: hand it off."
+  ],
+  "overrides": {
+    "confirmPassword": "input[name=\"subject_password_for_confirmation\"]",
+    "email": "#email",
+    "password": "input[name=\"subject_password\"]",
+    "submit": "#register-form_pc_button_4",
+    "username": "input[name=\"nickname\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://accounts.nintendo.com/register"
+}

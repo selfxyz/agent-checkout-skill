@@ -1,0 +1,37 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "shopify-classic-accounts",
+  "kind": "signup-platform",
+  "name": "Shopify classic customer accounts",
+  "status": "partial",
+  "evidence": "Read-only discovery (enclave arm) and DOM reads on 2026-09-21 against two stores on unrelated themes: pusheen.com/account/register and kyliecosmetics.com/account/register. Element ids differed completely between them; the customer[...] field names and the form's /account action were identical. Every selector below matched exactly one visible element on both stores, except confirmPassword, present on one. On 2026-09-25 this field map drove a REAL account creation on kyliecosmetics.com, confirmed out of band by a merchant confirmation mail, so the fill and the submit are proven and the outcome below is observed rather than inferred. That run needed two gates cleared that are NOT part of this platform; they are per-theme and per-store, so they live on the host-keyed recipe for that store. Status stays `partial` rather than `verified` because one theme was submitted, not the family: pusheen.com remains a read.",
+  "detect": {
+    "selectors": [
+      "form[action$=\"/account\"] input[name=\"customer[email]\"]",
+      "form[action$=\"/account\"] input[name=\"customer[password]\"]"
+    ]
+  },
+  "fields": {
+    "confirmPassword": "form[action$=\"/account\"] input[name=\"customer[password_confirmation]\"]",
+    "email": "form[action$=\"/account\"] input[name=\"customer[email]\"]",
+    "firstName": "form[action$=\"/account\"] input[name=\"customer[first_name]\"]",
+    "lastName": "form[action$=\"/account\"] input[name=\"customer[last_name]\"]",
+    "password": "form[action$=\"/account\"] input[name=\"customer[password]\"]",
+    "submit": "form[action$=\"/account\"] [type=\"submit\"]"
+  },
+  "gotchas": [
+    "Element ids come from the theme and do not carry across stores (#RegisterEmail on one, #CreateCustomer-Email on another). The customer[...] names do.",
+    "customer[password_confirmation] exists on some themes only (one of the two observed). Skip confirmPassword when it matches nothing.",
+    "Some themes add a terms or privacy checkbox with no standard name (seen as #CreateCustomer-PrivacyPolicy). Where it exists it can be REQUIRED, not decorative: on kyliecosmetics.com an unchecked box returned \"Please agree to our Terms, Privacy Policy, and Rewards Program Terms to create an account\" and created nothing. Nothing in this field map covers it, because whether a theme has one and whether it blocks are per-store facts that belong on the host-keyed recipe. If submitting appears to do nothing, look for an unchecked box in the same form.",
+    "form[action$=\"/account\"] is the register form alone: the login form posts to /account/login and the recovery form to /account/recover.",
+    "No URL or host signal at all: classic or passwordless is a per-store Shopify setting the hostname never reveals, and *.myshopify.com URLs are collapsed to their origin before lookup, so no path could tell the two apart either. A store is reached through a host-keyed signup recipe naming this platform, which is where a per-store fact belongs. Inferring it from the host would hand password-form selectors to a store on the passwordless system.",
+    "Observe the page BEFORE the first fill. The two things that stopped the kyliecosmetics run -- a required consent box and a cookie banner over the submit -- were both visible in a snapshot taken then, and a proxy session refuses further snapshots once a mock token has been filled, so the cheap look is only available first."
+  ],
+  "notes": "One page, one form, with a password: the only Shopify account flow a vault-minted password fits. Selectors use Shopify's own customer[...] field names rather than element ids, because ids are chosen by the theme and did not survive a change of theme in discovery.",
+  "steps": {
+    "open": "Open /account/register on the store's own domain (locale-prefixed stores use /<locale>/account/register). Stores on Shopify's newer passwordless accounts send /account elsewhere; see shopify-customer-accounts.",
+    "fill": "Fill by Shopify's field names, scoped to the register form: customer[first_name], customer[last_name], customer[email], customer[password], and customer[password_confirmation] where the theme has one.",
+    "submit": "Click the register form's submit, 'Create account'. If that click reports an interception rather than a field error, an overlay is in the way (a cookie or consent banner on a fresh profile) -- dismiss it, or use a key press, which runs no hit test.",
+    "outcome": "On the one store submitted (kyliecosmetics.com, 2026-09-25) the register form was replaced by a signed-in account view and the merchant sent a confirmation mail. Themes vary, so read the page after submitting rather than assuming this shape; a store that requires email confirmation before sign-in will land somewhere else."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "aa.com",
+  "kind": "merchant",
+  "hosts": ["aa.com"],
+  "platform": "custom",
+  "status": "dead-end",
+  "deadEnd": {
+    "type": "captcha",
+    "details": "Every flight search (deep link and homepage form, two fresh proxy sessions on 2026-10-02) lands on an AA-branded 'Please confirm you're a human' / 'I'm not a robot' checkbox page before any fares. detectChallenge() reported detected:false on it."
+  },
+  "exampleProductUrl": "https://www.aa.com/homePage.do?locale=en_US",
+  "gotchas": [
+    "americanairlines.com redirects to aa.com. From a non-US connection add ?locale=en_US (homePage.do?locale=en_US); the From field pre-fills the local airport.",
+    "A OneTrust preference-centre overlay (div.onetrust-pc-dark-filter) intercepts clicks on first load; there is no #onetrust-accept-btn-handler, dismiss it with button.save-preference-btn-handler.",
+    "Trip type: click label[for=\"flightSearchForm.tripType.oneWay\"] (the radio itself is covered).",
+    "The search results page is behind a 'Please confirm you're a human' checkbox CAPTCHA, both from the homepage form and from the /booking/search?locale=en_US&type=OneWay&slices=[...] deep link. It is not flagged by detectChallenge(); check the page heading. Never solve it; hand it to the owner or stop.",
+    "Homepage fields resolve by role: role=textbox[name=/^From From/], role=textbox[name=/^To To/], role=textbox[name=/^Depart \\(date/] (mm/dd/yyyy).",
+    "The OneTrust consent can be a 'We care about your privacy' modal with Allow All / Reject All / Confirm My Choices; click role=button[name=\"Reject All\"]. Its .onetrust-pc-dark-filter intercepts every click until then.",
+    "Results: click 'Main One way from $..' to open fare options, then 'Select ... Basic Economy fare'; a 'Move to Main' modal follows, 'Accept restrictions' keeps Basic. Trip summary: 'Continue as guest'.",
+    "Passengers: 'Enter new passenger' opens a dialog: First name, Last name, DOB selects (month / 'day of birth month' / year), Gender, Country / region of residence and then State / Province (required, 'Residency' error otherwise), Save. Then Primary email + Confirm, Primary phone number (required).",
+    "2026-10-07 sign-in form (for when the CAPTCHA wall lifts): https://www.aa.com/login?locale=en_US, username role=textbox[name=\"AAdvantage® # or username\"] (takes the email token), password role=textbox[name=\"Password\"], submit role=button[name=\"Log in\"]. Wrong credentials read 'Check your login information and try again.'"
+  ]
+}

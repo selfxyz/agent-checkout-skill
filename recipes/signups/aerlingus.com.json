@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "aerlingus.com",
+  "kind": "signup",
+  "hosts": ["aerlingus.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "gotchas": [
+    "Route: locale modal Confirm -> button[data-test-id=\"test_header_login_button\"] -> Auth0 login (hCaptcha frame) -> 'Create an AerClub account' -> 'Join AerClub'.",
+    "Title select[id*=\"title\" i]; DOB is Day and Month comboboxes (input[id*=\"day\" i], input[id*=\"month\" i]: type, then click the listbox option) plus input[id*=\"year\" i]; confirm email is input[type=email] nth 1.",
+    "'Request Email' sends an OTP before any password is asked; the code is an owner step."
+  ],
+  "overrides": {
+    "dateOfBirth": "input[id*=\"year\" i]",
+    "email": "input[type=email] >> nth=0",
+    "firstName": "input[id*=\"first\" i]",
+    "gender": "select[id*=\"gender\" i]",
+    "lastName": "input[id*=\"last\" i]",
+    "submit": "button:has-text(\"Request Email\")"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://www.aerlingus.com/html/en-GB/home.html"
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "dropbox.com",
+  "kind": "merchant",
+  "hosts": ["dropbox.com"],
+  "platform": "custom",
+  "status": "partial",
+  "exampleProductUrl": "https://www.dropbox.com/buy",
+  "gotchas": [
+    "Use /buy (signed out, plan buttons are links, e.g. a[aria-label=\"Buy now: Plus\"]). /plans renders them as buttons behind a cookie banner in an iframe (press Enter on Decline inside iframe[src*=\"consent\"]).",
+    "The checkout page (/checkout) opens a \"Log in or sign up\" dialog over it. Its email field submits on Enter. Do not target button:has-text(\"Continue\") — it also matches \"Continue with Apple\"/Microsoft and opens a third-party popup. Email then password, each submitted with Enter.",
+    "Signing in from a new browser sent a one-time code (input[autocomplete=one-time-code]); that is the account owner's handoff. Purchase needs the account.",
+    "2026-10-17: no one-time code step after sign-in at /login from a fresh proxy browser; the password submit went straight to the signed-in app.",
+    "Card fields are in Dropbox's own iframe (iframe[name=\"cc_iframe\"], cf.dropboxpayments.com) as plain autocomplete inputs (cc-number, cc-exp MM/YY, cc-csc); Country and Billing ZIP are on the page under it. Credit card is the default radio; PayPal is the alternative. A dropboxcaptcha.com frame is present.",
+    "Verified 2026-10-06 through the proxy (US tunnel) with the public test card under a verification-only key: the cc_iframe fields filled with no error (filled while the login dialog was still open; the code step was not completed). Stopped before Purchase.",
+    "Observed 2026-10-07 (proxy, US tunnel): signing in first at dropbox.com/login (email + Enter, password + Enter) asked for no code this time. Signed in, /buy shows no \"Buy now: Plus\" control; open /plans and click the first visible a:has-text(\"Buy now\"). The checkout then has Postal Code on the page (role=textbox name Postal Code) and the same cc_iframe; the public test card filled with no error while signed in. A signed-out /checkout may show the card form with no login dialog until Purchase.",
+    "Verified 2026-10-11 through the staging proxy (default egress, no VPN) with a verification-only key, right after a fresh signup: the new account lands on a plan picker whose plan CTAs are links a:has-text(\"Try free\"); the first (nth=0) is Plus and opens the checkout. Card number/expiry/CVC are cc-number / cc-exp / cc-csc inside the iframe matching iframe[title*=card i] (the same Dropbox card frame); Country (select[name*=country i]) and ZIP (input[name*=zip i]) are on the page — fill them in an earlier call. Expiry, then number, then CVC returned card_fields_verified. Stopped before payment (the button reads 'Start…' on the trial).",
+    "2026-10-17: /login is email-first: input[name=\"susi_email\"] and the page's single button[type=\"submit\"] (Continue), then input[name=\"login_password\"] and the same button[type=\"submit\"]. No cookie banner appeared.",
+    "2026-10-17: signed in, /plans shows plan CTAs as links a[aria-label=\"Upgrade now: Plus\"] (two on the page; the first opens the Plus checkout). No \"Buy now\" or \"Try free\" link is on /plans for this existing account.",
+    "2026-10-17: the checkout's billing fields are select[autocomplete=\"country\"] (also name=\"country_code\") and input[autocomplete=\"postal-code\"] (also name=\"zip\"), on the page above the card frame. Country and ZIP from the address tokens, then expiry, number and CVC in cc_iframe returned card_fields_verified with no aria-invalid field. The Purchase control is button:has-text(\"Purchase\") (a single match); Pay was not clicked this run because an earlier run already saw the decline."
+  ],
+  "overrides": {
+    "billingCountry": "select[autocomplete=\"country\"]",
+    "billingZip": "input[autocomplete=\"postal-code\"]",
+    "cardFrame": "iframe[name=\"cc_iframe\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardNumberFrame": "iframe[name=\"cc_iframe\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "cvvFrame": "iframe[name=\"cc_iframe\"]",
+    "expiry": "input[autocomplete=\"cc-exp\"]",
+    "expiryFrame": "iframe[name=\"cc_iframe\"]",
+    "placeOrder": "button:has-text(\"Purchase\")",
+    "planSelect": "a[aria-label=\"Buy now: Plus\"]",
+    "planSelectSignedIn": "a[aria-label=\"Upgrade now: Plus\"] >> nth=0"
+  },
+  "preconditions": ["account_required"],
+  "route": [
+    {
+      "host": "www.dropbox.com",
+      "url": "https://www.dropbox.com/plans"
+    },
+    {
+      "action": "click",
+      "host": "www.dropbox.com",
+      "selector": "a[aria-label=\"Upgrade now: Plus\"] >> nth=0"
+    },
+    {
+      "action": "wait",
+      "host": "www.dropbox.com",
+      "selector": "iframe[name=\"cc_iframe\"]"
+    }
+  ],
+  "signIn": {
+    "route": [
+      {
+        "host": "www.dropbox.com",
+        "url": "https://www.dropbox.com/login"
+      }
+    ],
+    "fields": {
+      "email": "input[name=\"susi_email\"]",
+      "password": "input[name=\"login_password\"]",
+      "continue": "button[type=\"submit\"]",
+      "submit": "button[type=\"submit\"]"
+    },
+    "signedIn": "a[aria-label=\"Upgrade now: Plus\"]"
+  }
+}

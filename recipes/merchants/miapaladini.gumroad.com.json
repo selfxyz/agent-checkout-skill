@@ -2,14 +2,48 @@
   "$schema": "../../schema/recipe.schema.json",
   "id": "miapaladini.gumroad.com",
   "kind": "merchant",
-  "hosts": [
-    "miapaladini.gumroad.com"
-  ],
+  "hosts": ["miapaladini.gumroad.com"],
   "platform": "gumroad",
   "status": "partial",
-  "lastVerifiedAt": "2026-07-20",
-  "evidence": "Bench dry run (--test-card) reached `fill`: driven product → /checkout → Stripe Payment Element filled. No submit, so NOT purchase-verified.",
+  "lastVerifiedAt": "2026-10-16",
+  "evidence": "2026-10-16 guest run: product page → 'Buy this' → gumroad.com/checkout; country, email and full name filled from vault tokens, Stripe Payment Element expiry/number/CVC filled in one batch, Pay clicked once, the verification test card was declined ('Your card was declined'). No order placed.",
   "cardSurface": "stripe-payment-element",
   "exampleProductUrl": "https://miapaladini.gumroad.com/l/xjtlb",
-  "notes": "Fixed-price $2.99 digital product (no pay-what-you-want price input to set), so the entry URL goes straight to 'I want this!' → the /checkout link. Reaching checkout is what the generic Gumroad playbook already does; no selector overrides were needed."
+  "notes": "Fixed-price digital product, no pay-what-you-want input, no shipping address. Guest checkout; no account needed. Price shows in the visitor's detected currency.",
+  "cvvTarget": "payment-frame:input[name=cvc]",
+  "gotchas": [
+    "The 'Buy this' link leaves the store host: the checkout form lives on gumroad.com/checkout, a single page with contact fields, the Stripe frame and Pay together.",
+    "Email (`input[type=email]`, identity email token), full name (`fieldset:has(legend:has-text(\"Full name\")) input`, identity full_name token) and country (`select[id$=\"country\"]` as a select, the address country token) are the only required non-card fields; no address or phone. Fill country first in its own call: it recomputes VAT and the total.",
+    "Field ids are React-generated (`:rN:-email`); match by type, legend or id suffix, never the full id.",
+    "Declare the total with `footer h4 + *` (reads e.g. 'CHF 2.69'); `:has` is refused in a hint.",
+    "Card fields sit in `iframe[title=\"Secure payment input frame\"]`: `input[name=expiry]` first, then `input[name=number]` and `input[name=cvc]` back to back. Pay stays disabled until they are filled.",
+    "After the email fill, Stripe Link may show a one-time-code prompt inside the card frame for an email that has a Link account; the code is the account owner's. To pay by card instead, press Enter on `button[aria-label*=\"Close\"]` in the card frame; the card fields stay filled.",
+    "Test card declined (2026-10-16): after Pay, `[role=alert]` reads 'Your card was declined' (the alert node is visually hidden; detect it with count, not visibility).",
+    "The page carries reCAPTCHA Enterprise (invisible); it did not challenge on 2026-10-16."
+  ],
+  "overrides": {
+    "addToCart": "article a[href*=\"/checkout\"]",
+    "cardExpiry": "input[name=expiry]",
+    "cardFrame": "iframe[title=\"Secure payment input frame\"]",
+    "cardNumber": "input[name=number]",
+    "country": "select[id$=\"country\"]",
+    "cvv": "input[name=cvc]",
+    "declineMessage": "[role=alert]",
+    "email": "input[type=email]",
+    "fullName": "fieldset:has(legend:has-text(\"Full name\")) input",
+    "linkDismiss": "button[aria-label*=\"Close\"]",
+    "orderTotal": "footer h4 + *",
+    "placeOrder": "button:text-is(\"Pay\")"
+  },
+  "route": [
+    {
+      "host": "miapaladini.gumroad.com",
+      "url": "https://miapaladini.gumroad.com/l/xjtlb"
+    },
+    {
+      "action": "click",
+      "host": "miapaladini.gumroad.com",
+      "selector": "article a[href*=\"/checkout\"]"
+    }
+  ]
 }

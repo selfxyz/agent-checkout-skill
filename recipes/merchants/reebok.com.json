@@ -1,0 +1,61 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "reebok.com",
+  "kind": "merchant",
+  "hosts": ["reebok.com"],
+  "platform": "shopify",
+  "status": "unverified",
+  "cardSurface": "shopify-card-fields",
+  "exampleProductUrl": "https://www.reebok.com/products/reebok-zone-cushion-mid-crew-socks-3-pairs-black-116281",
+  "gotchas": [
+    "Reebok US is a Shopify store (cdn.shopify.com scripts) on its own domain, so host detection by *.myshopify.com does not match; this recipe names the platform.",
+    "Guest path: /search?q=… -> product -> button[name=\"add\"] -> /cart -> button[name=\"checkout\"] -> Shopify one-page checkout. No account prompt.",
+    "On load the search page shows a cookie banner and an SMS-offer popup inside an iframe ('Dismiss this popup'); dismiss it before clicking products.",
+    "One-page checkout: contact email, delivery address (input[name=firstName|lastName|address1|city|postalCode|phone], select[name=zone], select[name=countryCode]) and the payment section with Shopify card-fields iframes (number, expiry, verification, name) are all on screen at once. Two sets of name/address inputs are visible (delivery and billing); scope fills to the first (delivery) set.",
+    "Card frames and #checkout-pay-button were confirmed present read-only on 2026-10-06; nothing was filled, so the recipe is unverified.",
+    "Through the proxy from a US tunnel on 2026-10-06 no bot wall or challenge appeared.",
+    "2026-10-09 (staging proxy, egress outside the US): a SpiceGems country-redirect modal (#sg_country_redirect_mod) covers every page and intercepts clicks; click its 'No' link (#sg_country_redirect_mod a:has-text(\"No\")) after each navigation.",
+    "2026-10-09: pick a size first (button[aria-label*=\"size option:\"][aria-label*=\"is available\"]) or button[name=add] adds nothing; /cart.js shows item_count. Opening /checkout directly from a non-empty cart lands on the one-page Shopify checkout.",
+    "2026-10-09: the checkout is heavy enough that snapshot_page times out; work from count probes. Set select[name=countryCode] to US before the address fields (it defaults to the egress country). order.total resolves on strong.notranslate (24.07 USD for a  item).",
+    "2026-10-09: card filled through the four card-fields iframes (name and expiry literals marked cardField, then number and CVV tokens): card_fields_verified with the public test card, no aria-invalid; stopped before #checkout-pay-button."
+  ],
+  "overrides": {
+    "cardExpiry": "input[name=\"expiry\"]",
+    "cardExpiryFrame": "iframe[name*=\"card-fields-expiry\"]",
+    "cardNumber": "input[name=\"number\"]",
+    "cardNumberFrame": "iframe[name*=\"card-fields-number\"]",
+    "city": "input[name=\"city\"] >> nth=0",
+    "country": "select[name=\"countryCode\"]",
+    "cvv": "input[name=\"verification_value\"]",
+    "cvvFrame": "iframe[name*=\"card-fields-verification\"]",
+    "email": "#email",
+    "firstName": "input[name=\"firstName\"] >> nth=0",
+    "lastName": "input[name=\"lastName\"] >> nth=0",
+    "orderTotal": "strong.notranslate",
+    "phone": "input[name=\"phone\"] >> nth=0",
+    "placeOrder": "#checkout-pay-button",
+    "state": "select[name=\"zone\"]",
+    "street1": "input[name=\"address1\"] >> nth=0",
+    "zip": "input[name=\"postalCode\"] >> nth=0"
+  },
+  "route": [
+    {
+      "host": "reebok.com",
+      "url": "https://www.reebok.com/products/reebok-zone-cushion-mid-crew-socks-3-pairs-black-116281"
+    },
+    {
+      "action": "click",
+      "host": "reebok.com",
+      "selector": "button[aria-label*=\"size option: S/M is available\"]"
+    },
+    {
+      "action": "click",
+      "host": "reebok.com",
+      "selector": "button[name=\"add\"] >> visible=true"
+    },
+    {
+      "host": "reebok.com",
+      "url": "https://www.reebok.com/checkout"
+    }
+  ]
+}

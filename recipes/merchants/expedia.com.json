@@ -1,0 +1,54 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "expedia.com",
+  "kind": "merchant",
+  "hosts": ["www.expedia.com"],
+  "platform": "custom",
+  "status": "partial",
+  "lastVerifiedAt": "2026-10-17",
+  "evidence": "Driven through the proxy on 2026-10-17 as a guest: Las Vegas hotel search sorted by price, property page in a new tab, Reserve on the first room, checkout session page reached. First name, last name, email, phone (national number token) and billing ZIP filled from vault tokens; the card iframe took cardholder name, expiry, number and security code (verification-only key, public test card). The phone-country select could not be set from the vault, the phone stayed invalid, and Book now did not submit. No booking was made.",
+  "cardSurface": "direct-inputs",
+  "cvvTarget": "input[autocomplete=\"cc-csc\"] inside iframe[title*=\"Number\"]",
+  "gotchas": [
+    "2026-10-17: Hotel checkout is guest-capable: a room's Reserve button (button[data-stid=\"submit-hotel-reserve\"], one per room offer) lands directly on a single 'Secure booking' page at /checkout/session/<id> with guest details, payment and the Book now button together.",
+    "2026-10-17: The search results page opens with a 'We include taxes and fees' dialog; its 'Got it' button closes it.",
+    "2026-10-17: Card name, number, expiry (one MM/YY box, autocomplete cc-exp) and security code share ONE iframe, matched by iframe[title*=\"Number\"], with standard autocomplete attributes (cc-name, cc-number, cc-exp, cc-csc). Billing ZIP is on the main page. A hidden 3DS iframe (name threedsIframe, static.pay.expedia.com) is present from page load.",
+    "2026-10-17: The price panel splits 'Pay today' (charged at booking) from 'Due at property' (resort fee and tax on fees); some rates are 'Reserve now, pay later' and charge nothing at booking.",
+    "2026-10-17: Phone is a 'Phone country/region' select (two selects match select[id*=\"phone\" i]; the real one is the one without aria-hidden) beside input[type=\"tel\"]. The select's options read '<Country> +<code>' (e.g. 'United States of America +1') and default to the US. The vault's phone_country token did not select an option (fill timed out, twice). With the US default, the full E.164 phone fails validation and a non-US national number is marked aria-invalid on blur.",
+    "2026-10-17: A visually hidden 'Loading' live region sits on every page of the site (search, property, checkout) permanently; it is not a stalled page.",
+    "2026-10-17: The Book now button (button:has-text(\"Book now\")) was clicked with the phone field still invalid; the click timed out at 30s with no navigation, no alert and no error text, and the page stayed on 'Secure booking'. The decline path is not yet observed."
+  ],
+  "overrides": {
+    "billingZip": "input[name*=\"zip\" i]",
+    "cardExpiry": "input[autocomplete=\"cc-exp\"]",
+    "cardFrame": "iframe[title*=\"Number\"]",
+    "cardNumber": "input[autocomplete=\"cc-number\"]",
+    "cardholderName": "input[autocomplete=\"cc-name\"]",
+    "cvv": "input[autocomplete=\"cc-csc\"]",
+    "email": "input[type=\"email\"]",
+    "firstName": "input[id*=\"first_name\"]",
+    "lastName": "input[id*=\"last_name\"]",
+    "phone": "input[type=\"tel\"]"
+  },
+  "route": [
+    {
+      "host": "www.expedia.com",
+      "url": "https://www.expedia.com/Hotel-Search"
+    },
+    {
+      "action": "manual",
+      "host": "www.expedia.com",
+      "note": "Hotel search needs a destination, check-in/check-out dates and travelers (query parameters destination, startDate, endDate, adults, rooms; sort=PRICE_LOW_TO_HIGH orders by price). Each result card has a 'More information about <property>' link that opens the property page in a new tab."
+    },
+    {
+      "action": "click",
+      "host": "www.expedia.com",
+      "selector": "button[data-stid=\"submit-hotel-reserve\"]"
+    },
+    {
+      "action": "wait",
+      "host": "www.expedia.com",
+      "selector": "input[type=\"email\"]"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "gitlab.com",
+  "kind": "signup",
+  "hosts": ["gitlab.com"],
+  "platform": "custom",
+  "status": "unverified",
+  "evidence": "2026-09-30: driven through the Agent Vault proxy with this recipe, with browser egress through the owner's tunnel on a US network; all six selectors matched. Continue brought up an Arkose Labs CAPTCHA, which the account owner completed; GitLab then sent a code to the signup address (a test-inbox address was accepted), and the owner entered it. GitLab then asked for phone verification by text message together with another CAPTCHA, and after that for credit card verification. The run was stopped there, so no account was confirmed and this is not verified.",
+  "gotchas": [
+    "The form carries a honeypot text box labelled \"If you are human, please ignore this field.\"; leave it empty.",
+    "Continue on the form brings up an Arkose Labs CAPTCHA (arkoselabs.com), which belongs to the account owner: hand it off.",
+    "After the CAPTCHA, a code is sent to the signup address; it belongs to the account owner: hand it off.",
+    "On 2026-09-30, after the email code, GitLab asked for phone verification by text message (a phone box beside a country picker that defaulted to US +1) together with another CAPTCHA, and then for credit card verification; all of them belong to the account owner."
+  ],
+  "notes": "Discovered by scripts/signup-selectors.ts (session arm); driven through the Agent Vault proxy on 2026-09-30, see evidence.",
+  "overrides": {
+    "email": "#new_user_email",
+    "firstName": "#firstname",
+    "lastName": "#new_user_last_name",
+    "password": "#new_user_password",
+    "submit": "#new_new_user button[type=\"submit\"]",
+    "username": "#new_user_username"
+  },
+  "signupUrl": "https://gitlab.com/users/sign_up"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../schema/recipe.schema.json",
+  "id": "theguardian.com",
+  "kind": "signup",
+  "hosts": ["theguardian.com"],
+  "platform": "custom",
+  "status": "verified",
+  "lastVerifiedAt": "2026-09-30",
+  "evidence": "2026-09-30: real signup through the Agent Vault proxy using this recipe; both selectors matched. For a new address the page asked for a code sent by email; the account owner entered it through a challenge handoff (outcome solved). A consent step followed, and the session then opened manage.theguardian.com signed in (account overview). The Guardian's code mail arrived at the signup address; no password was set (sign-in is by emailed code).",
+  "gotchas": [
+    "One page for both signing in and signing up: it asks for the email first and decides from it. A NEW address is sent a code by email (the account owner's: hand it off), and no password is set; sign-in is by emailed code, with a password optional later.",
+    "After the code, a consent step shows two marketing checkboxes that are ticked by default."
+  ],
+  "overrides": {
+    "email": "input[name=\"email\"]",
+    "submit": "button[type=\"submit\"]"
+  },
+  "ownerSteps": ["email_code"],
+  "signupUrl": "https://profile.theguardian.com/signin",
+  "stepped": true
+}
